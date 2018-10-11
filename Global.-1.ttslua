@@ -221,10 +221,6 @@ function onload()
     {
       name = "card_shield",
       url = "http://cloud-3.steamusercontent.com/ugc/952959316956336450/435B327FE88014C1537D79BE7C14AFE2DFD8D8E0/"
-    },
-    {
-      name = "card_damage",
-      url = "http://cloud-3.steamusercontent.com/ugc/952959316956327073/77138A8358F3B5A0DD96FBE1EB931FC32FCF1841/"
     }
   }
   self.UI.setCustomAssets(resourceAssets)
@@ -239,14 +235,6 @@ function onload()
   self.createButton({
     click_function="shieldPlus", function_owner=self,
     position={ 0.655, 1.060, -3.205}, width=430, height=430, font_size=72, color={0,0,0,0}
-  })
-  self.createButton({
-    click_function="damagePlus", function_owner=self,
-    position={ 2.845, 1.060, -0.907}, width=430, height=430, font_size=72, color={0,0,0,0}
-  })
-  self.createButton({
-    click_function="damageMinus", function_owner=self,
-    position={ 2.845, 1.060, 1.195}, width=430, height=430, font_size=72, color={0,0,0,0}
   })
 
   self.locked = true
@@ -283,40 +271,6 @@ function shieldPlus(buttonObject, playerColor, altClick)
     else
       self.UI.setAttribute("shields_underline", "text", "")
       self.UI.setAttribute("opponent_view_shields_underline", "text", "")
-    end
-  end
-end
-
-function damageMinus(buttonObject, playerColor, altClick)
-  if ((playerColor == owner) and (altClick == false)) then
-    if (damage > 0) then
-      damage = (damage - 1)
-      self.UI.setAttribute("damage", "text", damage)
-      self.UI.setAttribute("opponent_view_damage", "text", damage)
-
-      if ((damage == 6) or (damage == 9)) then
-        self.UI.setAttribute("damage_underline", "text", "_")
-        self.UI.setAttribute("opponent_view_damage_underline", "text", "_")
-      else
-        self.UI.setAttribute("damage_underline", "text", "")
-        self.UI.setAttribute("opponent_view_damage_underline", "text", "")
-      end
-    end
-  end
-end
-
-function damagePlus(buttonObject, playerColor, altClick)
-  if ((playerColor == owner) and (altClick == false)) then
-    damage = (damage + 1)
-    self.UI.setAttribute("damage", "text", damage)
-    self.UI.setAttribute("opponent_view_damage", "text", damage)
-
-    if ((damage == 6) or (damage == 9)) then
-      self.UI.setAttribute("damage_underline", "text", "_")
-      self.UI.setAttribute("opponent_view_damage_underline", "text", "_")
-    else
-      self.UI.setAttribute("damage_underline", "text", "")
-      self.UI.setAttribute("opponent_view_damage_underline", "text", "")
     end
   end
 end
@@ -370,43 +324,6 @@ characterGUIXMLScript = [[
    image="card_shield"
    raycastTarget="false"
 ></Image>
-<Image
-   offsetXY="284 390"
-   width="80"
-   height="80"
-   image="card_damage"
-   raycastTarget="false"
-></Image>
-<Button
-   offsetXY="284 290"
-   width="80"
-   height="80"
-   image="card_plus_button"
-   raycastTarget="false"
-></Button>
-<Text
-   id="damage_underline"
-   offsetXY="284 185"
-   scale="1.5 1.5"
-   fontStyle="Bold"
-   fontSize="72"
-   color="#FFFFFF"
-></Text>
-<Text
-   id="damage"
-   offsetXY="284 185"
-   scale="1.5 1.5"
-   fontStyle="Bold"
-   fontSize="72"
-   color="#FFFFFF"
->0</Text>
-<Button
-   offsetXY="284 80"
-   width="80"
-   height="80"
-   image="card_minus_button"
-   raycastTarget="false"
-></Button>
 </Panel>
 
 <Panel
@@ -437,42 +354,12 @@ characterGUIXMLScript = [[
    fontSize="72"
    color="#FFFFFF"
 >0</Text>
-<Text
-   id="opponent_view_damage_underline"
-   offsetXY="280 185"
-   width="100"
-   height="100"
-   rotation="0 0 180"
-   scale="1.5 1.5"
-   fontStyle="Bold"
-   fontSize="72"
-   color="#FFFFFF"
-></Text>
-<Text
-   id="opponent_view_damage"
-   offsetXY="280 185"
-   width="100"
-   height="100"
-   rotation="0 0 180"
-   scale="1.5 1.5"
-   fontStyle="Bold"
-   fontSize="72"
-   color="#FFFFFF"
->0</Text>
 <Image
    offsetXY="55 520"
    rotation="0 0 180"
    width="80"
    height="80"
    image="card_shield"
-   raycastTarget="false"
-></Image>
-<Image
-   offsetXY="280 285"
-   rotation="0 0 180"
-   width="80"
-   height="80"
-   image="card_damage"
    raycastTarget="false"
 ></Image>
 </Panel>
