@@ -16,24 +16,24 @@ function onload()
   trashBagAGuid               = 'dbae5f'
   trashBagBGuid               = 'a5d1bd'
 
-  -- Rivals setup.
-  numWinchesterPlayers     = 0
-  limboCheckEnabled        = false
-  periodicLimboCheckWaitID = nil
-  pleaseWaitBoardGuid      = '251e70'
-  passLeftBoardGuid        = '652fd2'
-  passRightBoardGuid       = 'fbdc80'
-  winchesterBoardGuid      = 'b12301'
-  winchesterStockZones     = {}
-  winchesterDraftZones     = {}
-  winchesterBasePositions  = {}
-  winchesterNumZoneCards   = {}
-  -- NOTE:  The number of Winchester packs should be a multiple of 4 or things may break and/or be unbalanced (like more first dice picks).
-  -- NOTE:  The number of Winchester packs MUST be a multiple of 2, or else the final card may not be dealt correctly.
-  numWinchesterPacks       = 8
-  winchesterPickCount      = 0
-  winchesterPickCountText  = nil
-  dealHeight               = 0
+  ---- Rivals setup.
+  --numWinchesterPlayers     = 0
+  --limboCheckEnabled        = false
+  --periodicLimboCheckWaitID = nil
+  --pleaseWaitBoardGuid      = '251e70'
+  --passLeftBoardGuid        = '652fd2'
+  --passRightBoardGuid       = 'fbdc80'
+  --winchesterBoardGuid      = 'b12301'
+  --winchesterStockZones     = {}
+  --winchesterDraftZones     = {}
+  --winchesterBasePositions  = {}
+  --winchesterNumZoneCards   = {}
+  ---- NOTE:  The number of Winchester packs should be a multiple of 4 or things may break and/or be unbalanced (like more first dice picks).
+  ---- NOTE:  The number of Winchester packs MUST be a multiple of 2, or else the final card may not be dealt correctly.
+  --numWinchesterPacks       = 8
+  --winchesterPickCount      = 0
+  --winchesterPickCountText  = nil
+  --dealHeight               = 0
 
   -- The please wait board already exists in the world.
   pleaseWaitBoard          = getObjectFromGUID(pleaseWaitBoardGuid)
@@ -1640,11 +1640,11 @@ function onObjectDrop(playerColor, dropObject)
   if (dropObject.tag == "Card") then
     dropObject.setVar("curLiftingPlayer", nil)
 
-    -- If the card was already in a spawning zone, handle spawning the GUI and/or dice.  This also handles updating the GUI position.
+    -- If the card was already in a spawning zone, handle spawning the GUI.  This also handles updating the GUI position.
     if ((dropObject.getVar("curMatZone") == "Blue") or (dropObject.getVar("curBattlefieldZone") == "Blue")) then
-      blueBoardsPrefab.call('handlePossibleDiceSpawn', {cardObject=dropObject})
+      blueBoardsPrefab.call('handlePossibleBotSpawn', {cardObject=dropObject})
     elseif ((dropObject.getVar("curMatZone") == "Red") or (dropObject.getVar("curBattlefieldZone") == "Red")) then
-      redBoardsPrefab.call('handlePossibleDiceSpawn', {cardObject=dropObject})
+      redBoardsPrefab.call('handlePossibleBotSpawn', {cardObject=dropObject})
     else
       -- Nothing needs done.
     end
@@ -1669,37 +1669,28 @@ function onObjectEnterScriptingZone(zone, enterObject)
   if ((normalGameStarted == true) and (modernInterfaceActive == true)) then
     -- Only check cards.
     if (enterObject.tag == "Card") then
-      -- Check if the card is face up.
-      if ((rotationZ > 357) or (rotationZ < 3)) then
-        -- Check if the zone should spawn dice.
-        if (zone == blueMatZone) then
-          enterObject.setVar("curMatZone", "Blue")
-          print("blue zone")
-          spawnBluePerspective = true
-        elseif (zone == blueBattlefieldZone) then
-          enterObject.setVar("curBattlefieldZone", "Blue")
-          spawnBluePerspective = true
-        elseif (zone == redMatZone) then
-          enterObject.setVar("curMatZone", "Red")
-          spawnRedPerspective = true
-        elseif (zone == redBattlefieldZone) then
-          enterObject.setVar("curBattlefieldZone", "Red")
-          spawnRedPerspective = true
-        end
+      -- Check if the zone should spawn dice.
+      if (zone == blueMatZone) then
+        enterObject.setVar("curMatZone", "Blue")
+        print("blue zone")
+        spawnBluePerspective = true
+      elseif (zone == redMatZone) then
+        enterObject.setVar("curMatZone", "Red")
+        spawnRedPerspective = true
+      end
 
-        -- Only check for spawning here if no one is currently lifting the card.
-        if (spawnBluePerspective == true) then
-          if (enterObject.getVar("curLiftingPlayer") == nil) then
-            print("do blue spawn")
-            blueBoardsPrefab.call('handlePossibleDiceSpawn', {cardObject=enterObject})
-          end
-        elseif (spawnRedPerspective == true) then
-          if (enterObject.getVar("curLiftingPlayer") == nil) then
-            redBoardsPrefab.call('handlePossibleDiceSpawn', {cardObject=enterObject})
-          end
-        else
-          -- Nothing needs done.
+      -- Only check for spawning here if no one is currently lifting the card.
+      if (spawnBluePerspective == true) then
+        if (enterObject.getVar("curLiftingPlayer") == nil) then
+          print("do blue spawn")
+          blueBoardsPrefab.call('handlePossibleBotSpawn', {cardObject=enterObject})
         end
+      elseif (spawnRedPerspective == true) then
+        if (enterObject.getVar("curLiftingPlayer") == nil) then
+          redBoardsPrefab.call('handlePossibleBotSpawn', {cardObject=enterObject})
+        end
+      else
+        -- Nothing needs done.
       end
     end
   end
@@ -1719,13 +1710,6 @@ function onObjectLeaveScriptingZone(zone, leaveObject)
           linkedGUIHolder.UI.setAttribute("card_gui", "active", false)
           linkedGUIHolder.UI.setAttribute("opponent_card_gui", "active", false)
         end
-      end
-
-      -- Check if the card is leaving a battlefield zone.
-      if ((zone == blueBattlefieldZone) or (zone == redBattlefieldZone)) then
-        leaveObject.setVar("curBattlefieldZone", nil)
-
-        -- Do not hide the GUI when leaving a battlefield zone in case of rare overlap between the two zones.
       end
     end
   end
@@ -2777,72 +2761,72 @@ function update ()
     --[[ print('Update loop!') --]]
 end
 
-function fixCardName(params)
-  local possiblyBrokenName = params[1]
-  local fixedName = possiblyBrokenName
+--function fixCardName(params)
+--  local possiblyBrokenName = params[1]
+--  local fixedName = possiblyBrokenName
+--
+--  for testIndex,testFix in ipairs(cardNameFixes) do
+--    if possiblyBrokenName == testFix.brokenName then
+--      fixedName = testFix.fixedName
+--      break
+--    end
+--  end
+--
+--  return fixedName
+--end
 
-  for testIndex,testFix in ipairs(cardNameFixes) do
-    if possiblyBrokenName == testFix.brokenName then
-      fixedName = testFix.fixedName
-      break
-    end
-  end
-
-  return fixedName
-end
-
--- NOTE:  These are just a few card names to fix legacy exports.
---        This list is not complete, and a new export from SWDDB should be used instead, since it will generate dice correctly for all cards.
-cardNameFixes = {
-}
-
--- UPDATE CARDS TABLE
-cardstable = {
--- Wave 1
-  {  cardname = 'Arcee', cardsubname = 'Skilled Fighter', cost = '5', type = 'Character', rarity = 'RT', number = '01', set = 'T40'  },
-  {  cardname = 'Autobot Cosmos', cardsubname = 'Recon & Communication', cost = '11', type = 'Character', rarity = 'RT', number = '02', set = 'T40'  },
-  {  cardname = 'Autobot Hound', cardsubname = 'Long Range Scout', cost = '8', type = 'Character', rarity = 'CT', number = '03', set = 'T40'  },
-  {  cardname = 'Autobot Jazz', cardsubname = 'Special Ops', cost = '6', type = 'Character', rarity = 'UT', number = '04', set = 'T40'  },
-  {  cardname = 'Autobot Mirage', cardsubname = 'Lone Wolf', cost = '9', type = 'Character', rarity = 'UT', number = '05', set = 'T40'  },
-  {  cardname = 'Barrage', cardsubname = 'Merciless Insecticon', cost = '7', type = 'Character', rarity = 'CT', number = '06', set = 'T40'  },
-  {  cardname = 'Bombshell', cardsubname = 'Insecticon Mind-Controller', cost = '8', type = 'Character', rarity = 'CT', number = '07', set = 'T40'  },
-  {  cardname = 'Bumblebee', cardsubname = 'Courageous Scout', cost = '9', type = 'Character', rarity = 'CT', number = '08', set = 'T40'  },
-  {  cardname = 'Bumblebee', cardsubname = 'Legendary Warrior', cost = '10', type = 'Character', rarity = 'SRT', number = '09', set = 'T40'  },
-  {  cardname = 'Chop Shop', cardsubname = 'Sneaky Insecticon', cost = '6', type = 'Character', rarity = 'UT', number = '10', set = 'T40'  },
-  {  cardname = 'Chromia', cardsubname = 'Special Ops', cost = '8', type = 'Character', rarity = 'RT', number = '11', set = 'T40'  },
-  {  cardname = 'Darkmount', cardsubname = 'Cruel Overlord', cost = '9', type = 'Character', rarity = 'RT', number = '12', set = 'T40'  },
-  {  cardname = 'Deadlock', cardsubname = 'Bounty Hunter', cost = '8', type = 'Character', rarity = 'UT', number = '13', set = 'T40'  },
-  {  cardname = 'Decepticon Shockwave', cardsubname = 'Cybertron Commander', cost = '11', type = 'Character', rarity = 'RT', number = '14', set = 'T40'  },
-  {  cardname = 'Demolisher', cardsubname = 'Devoted Decepticon�', cost = '6', type = 'Character', rarity = 'UT', number = '15', set = 'T40'  },
-  {  cardname = 'Dinobot Sludge', cardsubname = 'Mighty Stomper', cost = '8', type = 'Character', rarity = 'UT', number = '16', set = 'T40'  },
-  {  cardname = 'Dinobot Slug', cardsubname = 'Hot-Header Warrior', cost = '9', type = 'Character', rarity = 'CT', number = '17', set = 'T40'  },
-  {  cardname = 'Dinobot Snarl', cardsubname = 'Desert Warrior', cost = '7', type = 'Character', rarity = 'UT', number = '18', set = 'T40'  },
-  {  cardname = 'Dinobot Swoop', cardsubname = 'Fearsome Flyer', cost = '6', type = 'Character', rarity = 'CT', number = '19', set = 'T40'  },
-  {  cardname = 'Flamewar', cardsubname = 'Veteran Decepticon', cost = '5', type = 'Character', rarity = 'CT', number = '20', set = 'T40'  },
-  {  cardname = 'Grimlock', cardsubname = 'Dinobot Leader', cost = '10', type = 'Character', rarity = 'RT', number = '21', set = 'T40'  },
-  {  cardname = 'Inferno', cardsubname = 'Fearless Firefighter', cost = '12', type = 'Character', rarity = 'UT', number = '22', set = 'T40'  },
-  {  cardname = 'Insecticon Skrapnet', cardsubname = 'Insecticon Leader', cost = '7', type = 'Character', rarity = 'RT', number = '23', set = 'T40'  },
-  {  cardname = 'Jetfire', cardsubname = 'Air Guardian', cost = '10', type = 'Character', rarity = 'UT', number = '24', set = 'T40'  },
-  {  cardname = 'Kickback', cardsubname = 'Cunning Insecticon', cost = '5', type = 'Character', rarity = 'UT', number = '25', set = 'T40'  },
-  {  cardname = 'Megatron', cardsubname = 'Decepticon Leader', cost = '10', type = 'Character', rarity = 'CT', number = '26', set = 'T40'  },
-  {  cardname = 'Megatron', cardsubname = 'Living Weapon', cost = '13', type = 'Character', rarity = 'RT', number = '27', set = 'T40'  },
-  {  cardname = 'Nemesis Prime', cardsubname = 'Dark Clone', cost = '12', type = 'Character', rarity = 'SRT', number = '28', set = 'T40'  },
-  {  cardname = 'Optimus Prime', cardsubname = 'Battlefield Legend', cost = '13', type = 'Character', rarity = 'RT', number = '29', set = 'T40'  },
-  {  cardname = 'Optimus Prime', cardsubname = 'Freedom Fighter', cost = '12', type = 'Character', rarity = 'CT', number = '30', set = 'T40'  },
-  {  cardname = 'Prowl', cardsubname = 'Military Strategist', cost = '6', type = 'Character', rarity = 'UT', number = '31', set = 'T40'  },
-  {  cardname = 'Ramjet', cardsubname = 'Sky Smasher', cost = '10', type = 'Character', rarity = 'CT', number = '32', set = 'T40'  },
-  {  cardname = 'Ransack', cardsubname = '�Insecticon Commando', cost = '6', type = 'Character', rarity = 'UT', number = '33', set = 'T40'  },
-  {  cardname = 'Sergeant Kup', cardsubname = 'Veteran Sergeant', cost = '7', type = 'Character', rarity = 'CT', number = '34', set = 'T40'  },
-  {  cardname = 'Skywarp', cardsubname = 'Sneaky Prankster', cost = '6', type = 'Character', rarity = 'UT', number = '35', set = 'T40'  },
-  {  cardname = 'Starscream', cardsubname = 'Air Commander', cost = '11', type = 'Character', rarity = 'UT', number = '36', set = 'T40'  },
-  {  cardname = 'Starscream', cardsubname = 'Scheming Second-In-Command', cost = '10', type = 'Character', rarity = 'CT', number = '37', set = 'T40'  },
-  {  cardname = 'Sunstorm', cardsubname = 'Fusion Flyer', cost = '11', type = 'Character', rarity = 'RT', number = '38', set = 'T40'  },
-  {  cardname = 'Thundercracker', cardsubname = 'Mach Warrior', cost = '8', type = 'Character', rarity = 'UT', number = '39', set = 'T40'  },
-  {  cardname = 'Wheeljack', cardsubname = 'Weapons Inventor', cost = '9', type = 'Character', rarity = 'UT', number = '40', set = 'T40'  },
-  {  cardname = 'Bumblebee', cardsubname = 'Brave Warrior', cost = '6', type = 'Character', rarity = 'RT', number = 'T01', set = 'T04'  },
-  {  cardname = 'Ironhide', cardsubname = 'Veteran Autobot', cost = '6', type = 'Character', rarity = 'RT', number = 'T02', set = 'T04'  },
-  {  cardname = 'Optimus Prime', cardsubname = 'Autobot Leader', cost = '7', type = 'Character', rarity = 'RT', number = 'T03', set = 'T04'  },
-  {  cardname = 'Red Alert', cardsubname = 'Security Chief', cost = '6', type = 'Character', rarity = 'RT', number = 'T04', set = 'T04'  },
-  {  cardname = 'CliffJumper', cardsubname = 'Renegade Warrior', cost = '8', type = 'Character', rarity = 'SRT', number = 'T01', set = 'T02'  },
-  {  cardname = 'Slipstream', cardsubname = 'Strategic Seeker', cost = '8', type = 'Character', rarity = 'SRT', number = 'T02', set = 'T02'  }
-}
+---- NOTE:  These are just a few card names to fix legacy exports.
+----        This list is not complete, and a new export from SWDDB should be used instead, since it will generate dice correctly for all cards.
+--cardNameFixes = {
+--}
+--
+---- UPDATE CARDS TABLE
+--cardstable = {
+---- Wave 1
+--  {  cardname = 'Arcee', cardsubname = 'Skilled Fighter', cost = '5', type = 'Character', rarity = 'RT', number = '01', set = 'T40'  },
+--  {  cardname = 'Autobot Cosmos', cardsubname = 'Recon & Communication', cost = '11', type = 'Character', rarity = 'RT', number = '02', set = 'T40'  },
+--  {  cardname = 'Autobot Hound', cardsubname = 'Long Range Scout', cost = '8', type = 'Character', rarity = 'CT', number = '03', set = 'T40'  },
+--  {  cardname = 'Autobot Jazz', cardsubname = 'Special Ops', cost = '6', type = 'Character', rarity = 'UT', number = '04', set = 'T40'  },
+--  {  cardname = 'Autobot Mirage', cardsubname = 'Lone Wolf', cost = '9', type = 'Character', rarity = 'UT', number = '05', set = 'T40'  },
+--  {  cardname = 'Barrage', cardsubname = 'Merciless Insecticon', cost = '7', type = 'Character', rarity = 'CT', number = '06', set = 'T40'  },
+--  {  cardname = 'Bombshell', cardsubname = 'Insecticon Mind-Controller', cost = '8', type = 'Character', rarity = 'CT', number = '07', set = 'T40'  },
+--  {  cardname = 'Bumblebee', cardsubname = 'Courageous Scout', cost = '9', type = 'Character', rarity = 'CT', number = '08', set = 'T40'  },
+--  {  cardname = 'Bumblebee', cardsubname = 'Legendary Warrior', cost = '10', type = 'Character', rarity = 'SRT', number = '09', set = 'T40'  },
+--  {  cardname = 'Chop Shop', cardsubname = 'Sneaky Insecticon', cost = '6', type = 'Character', rarity = 'UT', number = '10', set = 'T40'  },
+--  {  cardname = 'Chromia', cardsubname = 'Special Ops', cost = '8', type = 'Character', rarity = 'RT', number = '11', set = 'T40'  },
+--  {  cardname = 'Darkmount', cardsubname = 'Cruel Overlord', cost = '9', type = 'Character', rarity = 'RT', number = '12', set = 'T40'  },
+--  {  cardname = 'Deadlock', cardsubname = 'Bounty Hunter', cost = '8', type = 'Character', rarity = 'UT', number = '13', set = 'T40'  },
+--  {  cardname = 'Decepticon Shockwave', cardsubname = 'Cybertron Commander', cost = '11', type = 'Character', rarity = 'RT', number = '14', set = 'T40'  },
+--  {  cardname = 'Demolisher', cardsubname = 'Devoted Decepticon�', cost = '6', type = 'Character', rarity = 'UT', number = '15', set = 'T40'  },
+--  {  cardname = 'Dinobot Sludge', cardsubname = 'Mighty Stomper', cost = '8', type = 'Character', rarity = 'UT', number = '16', set = 'T40'  },
+--  {  cardname = 'Dinobot Slug', cardsubname = 'Hot-Header Warrior', cost = '9', type = 'Character', rarity = 'CT', number = '17', set = 'T40'  },
+--  {  cardname = 'Dinobot Snarl', cardsubname = 'Desert Warrior', cost = '7', type = 'Character', rarity = 'UT', number = '18', set = 'T40'  },
+--  {  cardname = 'Dinobot Swoop', cardsubname = 'Fearsome Flyer', cost = '6', type = 'Character', rarity = 'CT', number = '19', set = 'T40'  },
+--  {  cardname = 'Flamewar', cardsubname = 'Veteran Decepticon', cost = '5', type = 'Character', rarity = 'CT', number = '20', set = 'T40'  },
+--  {  cardname = 'Grimlock', cardsubname = 'Dinobot Leader', cost = '10', type = 'Character', rarity = 'RT', number = '21', set = 'T40'  },
+--  {  cardname = 'Inferno', cardsubname = 'Fearless Firefighter', cost = '12', type = 'Character', rarity = 'UT', number = '22', set = 'T40'  },
+--  {  cardname = 'Insecticon Skrapnet', cardsubname = 'Insecticon Leader', cost = '7', type = 'Character', rarity = 'RT', number = '23', set = 'T40'  },
+--  {  cardname = 'Jetfire', cardsubname = 'Air Guardian', cost = '10', type = 'Character', rarity = 'UT', number = '24', set = 'T40'  },
+--  {  cardname = 'Kickback', cardsubname = 'Cunning Insecticon', cost = '5', type = 'Character', rarity = 'UT', number = '25', set = 'T40'  },
+--  {  cardname = 'Megatron', cardsubname = 'Decepticon Leader', cost = '10', type = 'Character', rarity = 'CT', number = '26', set = 'T40'  },
+--  {  cardname = 'Megatron', cardsubname = 'Living Weapon', cost = '13', type = 'Character', rarity = 'RT', number = '27', set = 'T40'  },
+--  {  cardname = 'Nemesis Prime', cardsubname = 'Dark Clone', cost = '12', type = 'Character', rarity = 'SRT', number = '28', set = 'T40'  },
+--  {  cardname = 'Optimus Prime', cardsubname = 'Battlefield Legend', cost = '13', type = 'Character', rarity = 'RT', number = '29', set = 'T40'  },
+--  {  cardname = 'Optimus Prime', cardsubname = 'Freedom Fighter', cost = '12', type = 'Character', rarity = 'CT', number = '30', set = 'T40'  },
+--  {  cardname = 'Prowl', cardsubname = 'Military Strategist', cost = '6', type = 'Character', rarity = 'UT', number = '31', set = 'T40'  },
+--  {  cardname = 'Ramjet', cardsubname = 'Sky Smasher', cost = '10', type = 'Character', rarity = 'CT', number = '32', set = 'T40'  },
+--  {  cardname = 'Ransack', cardsubname = '�Insecticon Commando', cost = '6', type = 'Character', rarity = 'UT', number = '33', set = 'T40'  },
+--  {  cardname = 'Sergeant Kup', cardsubname = 'Veteran Sergeant', cost = '7', type = 'Character', rarity = 'CT', number = '34', set = 'T40'  },
+--  {  cardname = 'Skywarp', cardsubname = 'Sneaky Prankster', cost = '6', type = 'Character', rarity = 'UT', number = '35', set = 'T40'  },
+--  {  cardname = 'Starscream', cardsubname = 'Air Commander', cost = '11', type = 'Character', rarity = 'UT', number = '36', set = 'T40'  },
+--  {  cardname = 'Starscream', cardsubname = 'Scheming Second-In-Command', cost = '10', type = 'Character', rarity = 'CT', number = '37', set = 'T40'  },
+--  {  cardname = 'Sunstorm', cardsubname = 'Fusion Flyer', cost = '11', type = 'Character', rarity = 'RT', number = '38', set = 'T40'  },
+--  {  cardname = 'Thundercracker', cardsubname = 'Mach Warrior', cost = '8', type = 'Character', rarity = 'UT', number = '39', set = 'T40'  },
+--  {  cardname = 'Wheeljack', cardsubname = 'Weapons Inventor', cost = '9', type = 'Character', rarity = 'UT', number = '40', set = 'T40'  },
+--  {  cardname = 'Bumblebee', cardsubname = 'Brave Warrior', cost = '6', type = 'Character', rarity = 'RT', number = 'T01', set = 'T04'  },
+--  {  cardname = 'Ironhide', cardsubname = 'Veteran Autobot', cost = '6', type = 'Character', rarity = 'RT', number = 'T02', set = 'T04'  },
+--  {  cardname = 'Optimus Prime', cardsubname = 'Autobot Leader', cost = '7', type = 'Character', rarity = 'RT', number = 'T03', set = 'T04'  },
+--  {  cardname = 'Red Alert', cardsubname = 'Security Chief', cost = '6', type = 'Character', rarity = 'RT', number = 'T04', set = 'T04'  },
+--  {  cardname = 'CliffJumper', cardsubname = 'Renegade Warrior', cost = '8', type = 'Character', rarity = 'SRT', number = 'T01', set = 'T02'  },
+--  {  cardname = 'Slipstream', cardsubname = 'Strategic Seeker', cost = '8', type = 'Character', rarity = 'SRT', number = 'T02', set = 'T02'  }
+--}

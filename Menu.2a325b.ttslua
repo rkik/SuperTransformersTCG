@@ -1,4 +1,4 @@
--- Modified by AgentElrond in 2018 for draft experiments.
+-- Modified by Rkik in 2018 for Transformers TCG.
 
 function onLoad()
   math.randomseed(os.time())
@@ -7,39 +7,39 @@ function onLoad()
   math.random()
   math.random()
 
-  allExpansionLegendaries  = {}
-  allExpansionRares        = {}
-  allExpansionUncommons    = {}
-  allExpansionCommons      = {}
+  --allExpansionLegendaries  = {}
+  --allExpansionRares        = {}
+  --allExpansionUncommons    = {}
+  --allExpansionCommons      = {}
 
   -- Awakenings, Spirit of Rebellion, Empire at War, Legacies
-  expansions               = { 'AW', 'SoR', 'EaW', 'LEG', 'WotF' }
-  numExpansions            = #expansions
+  --expansions               = { 'AW', 'SoR', 'EaW', 'LEG', 'WotF' }
+  --numExpansions            = #expansions
 
-  draftOriginDeckZone      = nil
-  rivalsDummyCardGuid      = '72db11'
-  rivalsDummyCard          = getObjectFromGUID(rivalsDummyCardGuid)
-  rivalsDummyCard.setLock(true)
-  rivalsDummyCard.interactable = false
-  awakeningsCycleDeckGuid  = '60e044'
-  legaciesCycleDeckGuid    = '4e9040'
-  allCardsDeckGuid         = '9fdb61'
-  rivalsDeckZoneGuid       = '2410f1'
-  rivalsDeckGuid           = 'fd83c6'
-  cubeBoardGuid            = 'c51c41'
-  cubeDeckZoneGuid         = 'b9d302'
-  cubeBoard                = getObjectFromGUID(cubeBoardGuid)
-  cubeBoard.interactable   = false
-  cubeDeckZone             = getObjectFromGUID(cubeDeckZoneGuid)
-  cubeDeck                 = nil
-  cubeCompatibilityMode    = false
-  allCardsPulledDeck       = nil
-  packSelections           = { 'WotF', 'WotF', 'WotF', 'WotF', 'WotF', 'WotF', 'WotF', 'WotF' }
-  packSelectButtons        = nil
-  numPacksPerPlayer        = 6
-  rivalsExpansion          = nil
-  nextExpansionIndex       = {}
-  rivalsExpansionPacks     = {}
+  --draftOriginDeckZone      = nil
+  --rivalsDummyCardGuid      = '72db11'
+  --rivalsDummyCard          = getObjectFromGUID(rivalsDummyCardGuid)
+  --rivalsDummyCard.setLock(true)
+  --rivalsDummyCard.interactable = false
+  --awakeningsCycleDeckGuid  = '60e044'
+  --legaciesCycleDeckGuid    = '4e9040'
+  --allCardsDeckGuid         = '9fdb61'
+  --rivalsDeckZoneGuid       = '2410f1'
+  --rivalsDeckGuid           = 'fd83c6'
+  --cubeBoardGuid            = 'c51c41'
+  --cubeDeckZoneGuid         = 'b9d302'
+  --cubeBoard                = getObjectFromGUID(cubeBoardGuid)
+  --cubeBoard.interactable   = false
+  --cubeDeckZone             = getObjectFromGUID(cubeDeckZoneGuid)
+  --cubeDeck                 = nil
+  --cubeCompatibilityMode    = false
+  --allCardsPulledDeck       = nil
+  --packSelections           = { 'WotF', 'WotF', 'WotF', 'WotF', 'WotF', 'WotF', 'WotF', 'WotF' }
+  --packSelectButtons        = nil
+  --numPacksPerPlayer        = 6
+  --rivalsExpansion          = nil
+  --nextExpansionIndex       = {}
+  --rivalsExpansionPacks     = {}
 
   Global.setVar("rivalsDeckZoneGuid", rivalsDeckZoneGuid)
 
@@ -47,28 +47,28 @@ function onLoad()
 
   blueBoardsPrefab         = nil
   redBoardsPrefab          = nil
-  blueResourceZone         = nil
-  blueBattlefieldZone      = nil
+  --blueResourceZone         = nil
+  --blueBattlefieldZone      = nil
   blueMatZone              = nil
-  redResourceZone          = nil
-  redBattlefieldZone       = nil
+  --redResourceZone          = nil
+  --redBattlefieldZone       = nil
   redMatZone               = nil
 
   setupObject = getObjectFromGUID(setupBagGuid)
 
   spawnditems              = {}
   mainMenu()
-  affiliationselect        = 'Hero'
-  affiliationselect2       = 'villain'
-  affiliationselect3       = 'Neutral'
-  typeselect               = 'Character'
-  typeselect2              = 'Upgrade'
-  typeselect3              = 'Support'
-  typeselect4              = 'Event'
-  colorselect              = 'Red'
-  colorselect2             = 'Blue'
-  colorselect3             = 'Yellow'
-  colorselect4             = 'Gray'
+  --affiliationselect        = 'Hero'
+  --affiliationselect2       = 'villain'
+  --affiliationselect3       = 'Neutral'
+  --typeselect               = 'Character'
+  --typeselect2              = 'Upgrade'
+  --typeselect3              = 'Support'
+  --typeselect4              = 'Event'
+  --colorselect              = 'Red'
+  --colorselect2             = 'Blue'
+  --colorselect3             = 'Yellow'
+  --colorselect4             = 'Gray'
 
   -- Make the main menu GUI panel visible.
   Global.UI.setAttribute("main_menu_panel", "active", true)
@@ -247,18 +247,18 @@ function modernSetupCoroutine()
   -- At this point, a normal game is considered to have started.
   Global.call("handleNormalGameStarted")
 
-  -- Create a scripting zone for resources.
-  obj_parameters.type = 'ScriptingTrigger'
-  obj_parameters.position = {-23.00, -4.00, 0.32}
-  obj_parameters.rotation = {0.00, 0.00, 0.00}
-  obj_parameters.scale = {5.50, 5.10, 8.00}
-  blueResourceZone = spawnObject(obj_parameters)
-  -- Create a scripting zone for the battlefield.
-  obj_parameters.type = 'ScriptingTrigger'
-  obj_parameters.position = {-18.39, -4.00, 0.27}
-  obj_parameters.rotation = {0.00, 0.00, 0.00}
-  obj_parameters.scale = {4.60, 5.10, 3.40}
-  blueBattlefieldZone = spawnObject(obj_parameters)
+  ---- Create a scripting zone for resources.
+  --obj_parameters.type = 'ScriptingTrigger'
+  --obj_parameters.position = {-23.00, -4.00, 0.32}
+  --obj_parameters.rotation = {0.00, 0.00, 0.00}
+  --obj_parameters.scale = {5.50, 5.10, 8.00}
+  --blueResourceZone = spawnObject(obj_parameters)
+  ---- Create a scripting zone for the battlefield.
+  --obj_parameters.type = 'ScriptingTrigger'
+  --obj_parameters.position = {-18.39, -4.00, 0.27}
+  --obj_parameters.rotation = {0.00, 0.00, 0.00}
+  --obj_parameters.scale = {4.60, 5.10, 3.40}
+  --blueBattlefieldZone = spawnObject(obj_parameters)
   -- Create a scripting zone for the mat.
   obj_parameters.type = 'ScriptingTrigger'
   obj_parameters.position = {4.82, -4.00, 10.20}
@@ -277,23 +277,23 @@ function modernSetupCoroutine()
   blueBoardsPrefab.setName("Blue")
   blueBoardsPrefab.tooltip = false
   blueBoardsPrefab.setLuaScript(modernBoardsScript)
-  blueBoardsPrefab.createButton({
-    click_function="blueClaimBattlefield", function_owner=Global,
-    position={2.56, 0.14, 6.89}, width=1400, height=720, font_size=72, color={0,0,0,0}
-  })
+  --blueBoardsPrefab.createButton({
+  --  click_function="blueClaimBattlefield", function_owner=Global,
+  --  position={2.56, 0.14, 6.89}, width=1400, height=720, font_size=72, color={0,0,0,0}
+  --})
 
-  -- Create a scripting zone for resources.
-  obj_parameters.type = 'ScriptingTrigger'
-  obj_parameters.position = {23.00, -4.00, -0.32}
-  obj_parameters.rotation = {0.00, 0.00, 0.00}
-  obj_parameters.scale = {5.50, 5.10, 8.00}
-  redResourceZone = spawnObject(obj_parameters)
-  -- Create a scripting zone for the battlefield.
-  obj_parameters.type = 'ScriptingTrigger'
-  obj_parameters.position = {18.39, -4.00, -0.27}
-  obj_parameters.rotation = {0.00, 0.00, 0.00}
-  obj_parameters.scale = {4.60, 5.10, 3.40}
-  redBattlefieldZone = spawnObject(obj_parameters)
+  ---- Create a scripting zone for resources.
+  --obj_parameters.type = 'ScriptingTrigger'
+  --obj_parameters.position = {23.00, -4.00, -0.32}
+  --obj_parameters.rotation = {0.00, 0.00, 0.00}
+  --obj_parameters.scale = {5.50, 5.10, 8.00}
+  --redResourceZone = spawnObject(obj_parameters)
+  ---- Create a scripting zone for the battlefield.
+  --obj_parameters.type = 'ScriptingTrigger'
+  --obj_parameters.position = {18.39, -4.00, -0.27}
+  --obj_parameters.rotation = {0.00, 0.00, 0.00}
+  --obj_parameters.scale = {4.60, 5.10, 3.40}
+  --redBattlefieldZone = spawnObject(obj_parameters)
   -- Create a scripting zone for the mat.
   obj_parameters.type = 'ScriptingTrigger'
   obj_parameters.position = {-4.82, -4.00, -10.20}
@@ -312,10 +312,10 @@ function modernSetupCoroutine()
   redBoardsPrefab.setName("Red")
   redBoardsPrefab.tooltip = false
   redBoardsPrefab.setLuaScript(modernBoardsScript)
-  redBoardsPrefab.createButton({
-    click_function="redClaimBattlefield", function_owner=Global,
-    position={2.56, 0.14, 6.89}, width=1400, height=720, font_size=72, color={0,0,0,0}
-  })
+  --redBoardsPrefab.createButton({
+  --  click_function="redClaimBattlefield", function_owner=Global,
+  --  position={2.56, 0.14, 6.89}, width=1400, height=720, font_size=72, color={0,0,0,0}
+  --})
 
   coroutine.yield(0)
   coroutine.yield(0)
@@ -325,9 +325,9 @@ function modernSetupCoroutine()
   setupObject.destruct()
   self.destruct()
 
-  if starterGame == true then
-    startLuaCoroutine(self, 'spawnStarter')
-  end
+  --if starterGame == true then
+  --  startLuaCoroutine(self, 'spawnStarter')
+  --end
 
   return 1
 end
@@ -337,14 +337,6 @@ modernBoardsScript = [=[
 function onload()
   -- Load inside the script since global images do not work for players who join late.
   local resourceAssets = {
-    {
-      name = "blue_battlefield_claim",
-      url = "http://cloud-3.steamusercontent.com/ugc/952959000918851189/EE82D1A6844C4548CDA3AA486D91D00BE7FFE048/"
-    },
-    {
-      name = "red_battlefield_claim",
-      url = "http://cloud-3.steamusercontent.com/ugc/952959000918850667/5CBF41F8886AC21025405DE4568BE998F478165E/"
-    },
     {
       name = "ingame_gui_background",
       url = "http://cloud-3.steamusercontent.com/ugc/948454725666385380/A47369F346253BDE02F44153C4940D47AA0E6E67/"
@@ -360,14 +352,6 @@ function onload()
     {
       name = "ingame_gui_maximize",
       url = "http://cloud-3.steamusercontent.com/ugc/948454725666387411/82FAD658AECC1F80A3413BEB32A2971FF168E4BF/"
-    },
-    {
-      name = "ingame_gui_resource",
-      url = "http://cloud-3.steamusercontent.com/ugc/948454725666388925/ACEB3703278FB7DFB707BFE2DE931571529BD372/"
-    },
-    {
-      name = "ingame_gui_pass",
-      url = "http://cloud-3.steamusercontent.com/ugc/948454725666388357/43FDE0C7B097A67D681F9D35D91535A8EA66F3EE/"
     },
     {
       name = "ingame_gui_shuffle",
@@ -391,19 +375,6 @@ function onload()
 
   if owner == 'Blue' then
     self.UI.setXml([[
-<Button
-  id="blue_claim_button"
-  visibility="Blue"
-  active="true"
-  position="-255 690 -3"
-  rotation="0 0 0"
-  scale="3.5 3.5"
-  fontSize="20"
-  width="80"
-  height="40"
-  image="blue_battlefield_claim"
-  raycastTarget="false"
-></Button>
 <Panel
    id="blue_panel"
    visibility="Blue"
@@ -440,42 +411,12 @@ function onload()
    fontSize="36"
    color="#FFFFFF"
 >0</Text>
-<Text
-   id="blue_panel_red_resources"
-   scale="0.3 0.3"
-   offsetXY="24 39"
-   fontStyle="Bold"
-   fontSize="36"
-   color="#FFFFFF"
->0</Text>
-<Text
-   id="blue_panel_blue_resources"
-   scale="0.3 0.3"
-   offsetXY="24 29"
-   fontStyle="Bold"
-   fontSize="36"
-   color="#FFFFFF"
->0</Text>
 <Button
    offsetXY="30 56"
    width="10"
    height="10"
    onClick="Global/guiToggle"
    image="ingame_gui_maximize"
-></Button>
-<Button
-   offsetXY="-18 7"
-   width="28"
-   height="28"
-   onClick="Global/guiResource"
-   image="ingame_gui_resource"
-></Button>
-<Button
-   offsetXY="18 7"
-   width="28"
-   height="28"
-   onClick="Global/guiPass"
-   image="ingame_gui_pass"
 ></Button>
 <Button
    offsetXY="-18 -28"
@@ -497,19 +438,6 @@ function onload()
 ]])
   else
     self.UI.setXml([[
-<Button
-  id="red_claim_button"
-  visibility="Red"
-  active="true"
-  position="-255 690 -3"
-  rotation="0 0 0"
-  scale="3.5 3.5"
-  fontSize="20"
-  width="80"
-  height="40"
-  image="red_battlefield_claim"
-  raycastTarget="false"
-></Button>
 <Panel
    id="red_panel"
    visibility="Red"
@@ -546,42 +474,12 @@ function onload()
    fontSize="36"
    color="#FFFFFF"
 >0</Text>
-<Text
-   id="red_panel_blue_resources"
-   scale="0.3 0.3"
-   offsetXY="24 39"
-   fontStyle="Bold"
-   fontSize="36"
-   color="#FFFFFF"
->0</Text>
-<Text
-   id="red_panel_red_resources"
-   scale="0.3 0.3"
-   offsetXY="24 29"
-   fontStyle="Bold"
-   fontSize="36"
-   color="#FFFFFF"
->0</Text>
 <Button
    offsetXY="30 56"
    width="10"
    height="10"
    onClick="Global/guiToggle"
    image="ingame_gui_maximize"
-></Button>
-<Button
-   offsetXY="-18 7"
-   width="28"
-   height="28"
-   onClick="Global/guiResource"
-   image="ingame_gui_resource"
-></Button>
-<Button
-   offsetXY="18 7"
-   width="28"
-   height="28"
-   onClick="Global/guiPass"
-   image="ingame_gui_pass"
 ></Button>
 <Button
    offsetXY="-18 -28"
@@ -607,71 +505,71 @@ function onload()
   discardCounter = 0
 end
 
-function passButton()
-  if owner == 'Blue' then
-    broadcastToAll('Pass', {0.1,0.5,1.0})
-  else
-    broadcastToAll('Pass', {0.8,0.1,0.1})
-  end
-end
+--function passButton()
+--  if owner == 'Blue' then
+--    broadcastToAll('Pass', {0.1,0.5,1.0})
+--  else
+--    broadcastToAll('Pass', {0.8,0.1,0.1})
+--  end
+--end
 
-function resourceSpawned(newResource)
-  newResource.setName("1 resource")
-  newResource.tooltip = false
-end
+--function resourceSpawned(newResource)
+--  newResource.setName("1 resource")
+--  newResource.tooltip = false
+--end
 
-function spawnResource()
-  local zoneObject = nil
-  local zonePosition = {}
-  local spawnReference = {x=0, y=0, z=0}
-  local obj_parameters = {}
-  local custom = {}
-  local token = nil
-  local xFactor = 1
-  local zFactor = 1
-
-  if owner == 'Blue' then
-    zoneObject = Global.getVar("blueResourceZone")
-    if (zoneObject != nil) then
-      zonePosition = zoneObject.getPosition()
-      spawnReference = {x = (zonePosition.x + 1.54), y = (zonePosition.y - 1.00), z = (zonePosition.z + 1.29)}
-    end
-
-    xFactor = (-1)
-    zFactor = (-1)
-  else
-    zoneObject = Global.getVar("redResourceZone")
-    if (zoneObject != nil) then
-      zonePosition = zoneObject.getPosition()
-      spawnReference = {x = (zonePosition.x - 1.54), y = (zonePosition.y - 1.00), z = (zonePosition.z - 1.29)}
-    end
-
-    xFactor = 1
-    zFactor = 1
-  end
-
-  obj_parameters.type = 'Custom_Token'
-  obj_parameters.callback_function = resourceSpawned
-  obj_parameters.position = {}
-  obj_parameters.position.x = (spawnReference.x + (xFactor * (resourceSpawnIndex % 4)))
-  obj_parameters.position.y = spawnReference.y
-  obj_parameters.position.z = (spawnReference.z + (zFactor * math.floor(resourceSpawnIndex / 4)))
-  obj_parameters.rotation = {0,0,0}
-
-  custom.image = tokenplayerone.resource
-  custom.thickness = 0.1
-  custom.merge_distance = 5.0
-  custom.stackable = false
-
-  token = spawnObject(obj_parameters)
-  token.setCustomObject(custom)
-  token.scale {0.23, 1.00, 0.23}
-
-  resourceSpawnIndex = (resourceSpawnIndex + 1)
-  if resourceSpawnIndex >= 20 then
-    resourceSpawnIndex = 0
-  end
-end
+--function spawnResource()
+--  local zoneObject = nil
+--  local zonePosition = {}
+--  local spawnReference = {x=0, y=0, z=0}
+--  local obj_parameters = {}
+--  local custom = {}
+--  local token = nil
+--  local xFactor = 1
+--  local zFactor = 1
+--
+--  if owner == 'Blue' then
+--    zoneObject = Global.getVar("blueResourceZone")
+--    if (zoneObject != nil) then
+--      zonePosition = zoneObject.getPosition()
+--      spawnReference = {x = (zonePosition.x + 1.54), y = (zonePosition.y - 1.00), z = (zonePosition.z + 1.29)}
+--    end
+--
+--    xFactor = (-1)
+--    zFactor = (-1)
+--  else
+--    zoneObject = Global.getVar("redResourceZone")
+--    if (zoneObject != nil) then
+--      zonePosition = zoneObject.getPosition()
+--      spawnReference = {x = (zonePosition.x - 1.54), y = (zonePosition.y - 1.00), z = (zonePosition.z - 1.29)}
+--    end
+--
+--    xFactor = 1
+--    zFactor = 1
+--  end
+--
+--  obj_parameters.type = 'Custom_Token'
+--  obj_parameters.callback_function = resourceSpawned
+--  obj_parameters.position = {}
+--  obj_parameters.position.x = (spawnReference.x + (xFactor * (resourceSpawnIndex % 4)))
+--  obj_parameters.position.y = spawnReference.y
+--  obj_parameters.position.z = (spawnReference.z + (zFactor * math.floor(resourceSpawnIndex / 4)))
+--  obj_parameters.rotation = {0,0,0}
+--
+--  custom.image = tokenplayerone.resource
+--  custom.thickness = 0.1
+--  custom.merge_distance = 5.0
+--  custom.stackable = false
+--
+--  token = spawnObject(obj_parameters)
+--  token.setCustomObject(custom)
+--  token.scale {0.23, 1.00, 0.23}
+--
+--  resourceSpawnIndex = (resourceSpawnIndex + 1)
+--  if resourceSpawnIndex >= 20 then
+--    resourceSpawnIndex = 0
+--  end
+--end
 
 function randomDiscard()
   local handObjects = Player[owner].getHandObjects()
@@ -732,40 +630,40 @@ end
 
 function onDrop(playerColor)
   local objectPosition = self.getPosition()
-  local battlefieldZone = nil
-  local resourceZone = nil
+  --local battlefieldZone = nil
+  --local resourceZone = nil
   local matZone = nil
 
   -- Update zones to match the board position.
 
   if (owner == 'Blue') then
-    battlefieldZone = Global.getVar("blueBattlefieldZone")
-    resourceZone = Global.getVar("blueResourceZone")
+    --battlefieldZone = Global.getVar("blueBattlefieldZone")
+    --resourceZone = Global.getVar("blueResourceZone")
     matZone = Global.getVar("blueMatZone")
 
-    if battlefieldZone != nil then
-      battlefieldZone.setPosition({x = (objectPosition.x + 2.43), y = (objectPosition.y + 1.50), z = (objectPosition.z - 9.73)})
-    end
-
-    if resourceZone != nil then
-      resourceZone.setPosition({x = (objectPosition.x - 2.18), y = (objectPosition.y + 1.50), z = (objectPosition.z - 9.68)})
-    end
+    --if battlefieldZone != nil then
+    --  battlefieldZone.setPosition({x = (objectPosition.x + 2.43), y = (objectPosition.y + 1.50), z = (objectPosition.z - 9.73)})
+    --end
+    --
+    --if resourceZone != nil then
+    --  resourceZone.setPosition({x = (objectPosition.x - 2.18), y = (objectPosition.y + 1.50), z = (objectPosition.z - 9.68)})
+    --end
 
     if matZone != nil then
       matZone.setPosition({x = (objectPosition.x + 25.64), y = (objectPosition.y + 2.50), z = (objectPosition.z + 0.20)})
     end
   else
-    battlefieldZone = Global.getVar("redBattlefieldZone")
-    resourceZone = Global.getVar("redResourceZone")
+    --battlefieldZone = Global.getVar("redBattlefieldZone")
+    --resourceZone = Global.getVar("redResourceZone")
     matZone = Global.getVar("redMatZone")
 
-    if battlefieldZone != nil then
-      battlefieldZone.setPosition({x = (objectPosition.x - 2.43), y = (objectPosition.y + 1.50), z = (objectPosition.z + 9.73)})
-    end
-
-    if resourceZone != nil then
-      resourceZone.setPosition({x = (objectPosition.x + 2.18), y = (objectPosition.y + 1.50), z = (objectPosition.z + 9.68)})
-    end
+    --if battlefieldZone != nil then
+    --  battlefieldZone.setPosition({x = (objectPosition.x - 2.43), y = (objectPosition.y + 1.50), z = (objectPosition.z + 9.73)})
+    --end
+    --
+    --if resourceZone != nil then
+    --  resourceZone.setPosition({x = (objectPosition.x + 2.18), y = (objectPosition.y + 1.50), z = (objectPosition.z + 9.68)})
+    --end
 
     if matZone != nil then
       matZone.setPosition({x = (objectPosition.x - 25.64), y = (objectPosition.y + 2.50), z = (objectPosition.z - 0.20)})
@@ -773,45 +671,31 @@ function onDrop(playerColor)
   end
 end
 
-function handlePossibleDiceSpawn(params)
+function handlePossibleBotSpawn(params)
   local position = self.getPosition()
   local object = params.cardObject
   local obj_parameters = {}
   local custom = {}
-  obj_parameters.type = 'Custom_Dice'
   obj_parameters.scale = {1.7,1.7,1.7}
   obj_parameters.position = {object.getPosition()[1],object.getPosition()[2]+1,object.getPosition()[3]}
   obj_parameters.rotation = {0,object.getRotation()[2]+180,0}
-  local datatable = Global.getTable("cardstable")
 
   if ((object.getVar("spawned") ~= true) and
       (object.tag == 'Card') and
       (Global.getVar("loadDelayFinished") == true)) then
-    local cardFound = false
-    local isDiceCard = false
-    local isCharacterCard = false
+    local isBotCard = false
     local cardDescription = object.getDescription()
     local cardDescriptionLength = 0
     local testCardType = nil
-    local dataTableIndex = 1
-    local fixedCardName = ''
-    local isElite = false
 
     print(cardDescription)
 
-    if cardDescription != nil then
-      cardDescriptionLength = string.len(cardDescription)
-      if string.sub(cardDescription, 1, 5) == 'elite' then
-        isElite = true
-      end
-    end
-
     if cardDescription == 'Bot' then
-      isCharacterCard = true
+      isBotCard = true
     end
 
-    -- For character cards, create XML GUI when the dice spawn.
-    if (isCharacterCard == true) then
+    -- For bot cards, create XML GUI
+    if (isBotCard == true) then
       -- Since attaching the GUI directly to the card would cause the GUI to rotate when the card rotates, use a GUI holder object.
       obj_parameters.type = 'BlockSquare'
       obj_parameters.position = {object.getPosition()[1], 0.02, object.getPosition()[3]}
@@ -822,7 +706,7 @@ function handlePossibleDiceSpawn(params)
       end
       obj_parameters.scale = {1, 1, 1}
       obj_parameters.sound = false
-      -- Note that both the character card and the GUI holder objects have scripts.
+      -- Note that both the bot card and the GUI holder objects have scripts.
       obj_parameters.callback_function = function(newObject) initGUIHolder(object, newObject) end
 
       local cardGUIObject = spawnObject(obj_parameters)
@@ -898,194 +782,194 @@ function clearSpawnedItems()
   spawnditems={}
 end
 
-function generatePacksAwakenings(buttonObject, playerColor)
-  generatePacks(playerColor, 'AW')
-end
+--function generatePacksAwakenings(buttonObject, playerColor)
+--  generatePacks(playerColor, 'AW')
+--end
+--
+--function generatePacksSpirit(buttonObject, playerColor)
+--  generatePacks(playerColor, 'SoR')
+--end
+--
+--function generatePacksEmpire(buttonObject, playerColor)
+--  generatePacks(playerColor, 'EaW')
+--end
+--
+--function generatePacksLegacies(buttonObject, playerColor)
+--  generatePacks(playerColor, 'LEG')
+--end
+--
+--function generatePacksWay(buttonObject, playerColor)
+--  generatePacks(playerColor, 'WotF')
+--end
+--
+--function generateMixedPacks(buttonObject, playerColor)
+--  generatePacks(playerColor, 'Mixed')
+--end
+--
+--function readyForRivals()
+--  rivalsDummyCard.destruct()
+--
+--  startLuaCoroutine(self, 'spawnRivalsCards')
+--end
 
-function generatePacksSpirit(buttonObject, playerColor)
-  generatePacks(playerColor, 'SoR')
-end
+--function draftReadyForDeal(oldAllCardsDeck)
+--  local mixedPacksDeck = nil
+--
+--  -- If not cube drafting, destruct the old deck that had all Destiny cards in it.
+--  if rivalsExpansion != 'Cube' then
+--    oldAllCardsDeck.destruct()
+--    oldAllCardsDeck = nil
+--  end
+--
+--  -- Find the mixed packs deck and make it uninteractable.
+--  local scriptZoneObjects = draftOriginDeckZone.getObjects()
+--  for deckIndex,curDeck in ipairs(scriptZoneObjects) do
+--    if curDeck.tag == "Deck" then
+--      mixedPacksDeck = curDeck
+--      mixedPacksDeck.interactable = false
+--      mixedPacksDeck.setLock(true)
+--      break
+--    end
+--  end
+--
+--  -- Make the table of pack selections available so the main game script can use it.
+--  Global.setTable("packSelections", packSelections)
+--  -- Set up a table of expansion indices for dealing cards.
+--  Global.setTable("nextExpansionIndex", nextExpansionIndex)
+--  -- Make the table of packs available so the main game script can use it.
+--  Global.setTable("rivalsExpansionPacks", rivalsExpansionPacks)
+--  -- Set a reference to the deck so the main game script can use and destruct it.
+--  Global.setVar("mixedPacksDeck", mixedPacksDeck)
+--  -- Set whether the cube compatibility mode is active.
+--  Global.setVar("cubeCompatibilityMode", cubeCompatibilityMode)
+--
+--  -- Deal cards.
+--  printToAll("Dealing cards...", {1,1,1})
+--  Global.call("draftReadyForDeal")
+--
+--  -- The menu is no longer needed.
+--  self.destruct()
+--end
 
-function generatePacksEmpire(buttonObject, playerColor)
-  generatePacks(playerColor, 'EaW')
-end
+--function draftZoneReady()
+--  local databank = Global.getTable("cardstable")
+--  local rarity
+--  local index
+--  spawnd = 0
+--  cardPulledCount = 0
+--
+--  -- Move the script zone for the draft origin deck.
+--  draftOriginDeckZone.setPosition({6,2,-0.5})
+--
+--  if rivalsExpansion != 'Cube' then
+--    -- Pull a deck that contains all draft/sealed cards.
+--    setupObject.takeObject({position={6,2,6}, rotation={0,0,180}, guid=allCardsDeckGuid, flip=false, smooth=false, callback='allCardsDeckPulled', callback_owner=self})
+--  else
+--    -- For a cube, the deck is already available.
+--    allCardsDeckPulled(cubeDeck)
+--  end
+--end
 
-function generatePacksLegacies(buttonObject, playerColor)
-  generatePacks(playerColor, 'LEG')
-end
+--function spawnRivalsCards()
+--  coroutine.yield(0)
+--
+--  -- Pull the Rivals deck.
+--  setupObject.takeObject({position={14,2.0,-0.9}, rotation={0,0,0}, guid=rivalsDeckGuid, flip=false, smooth=false})
+--
+--  -- Create a script zone for the dummy card plus the cube deck.  This is created under the table to avoid a white flash.
+--  local obj_parameters = {}
+--
+--  obj_parameters.type = 'ScriptingTrigger'
+--  obj_parameters.scale = { 5.0, 5.0, 6.0 }
+--  obj_parameters.position = { 6.000,-4.000, 0.500 }
+--  obj_parameters.rotation = { 0.000, 0.000, 0.000 }
+--  draftOriginDeckZone = spawnObject(obj_parameters)
+--
+--  -- Sleep briefly to let the draft zone spawn.
+--  Wait.time(draftZoneReady, 0.5)
+--
+--  return 1
+--end
 
-function generatePacksWay(buttonObject, playerColor)
-  generatePacks(playerColor, 'WotF')
-end
+--function spawndb()
+--  for i in ipairs(spawnditems) do
+--    if getObjectFromGUID(spawnditems[i]) != nil then
+--      getObjectFromGUID(spawnditems[i]).destruct()
+--    end
+--  end
+--  spawnditems={}
+--  startLuaCoroutine(self, 'spawnDeckbuilding')
+--end
 
-function generateMixedPacks(buttonObject, playerColor)
-  generatePacks(playerColor, 'Mixed')
-end
-
-function readyForRivals()
-  rivalsDummyCard.destruct()
-
-  startLuaCoroutine(self, 'spawnRivalsCards')
-end
-
-function draftReadyForDeal(oldAllCardsDeck)
-  local mixedPacksDeck = nil
-
-  -- If not cube drafting, destruct the old deck that had all Destiny cards in it.
-  if rivalsExpansion != 'Cube' then
-    oldAllCardsDeck.destruct()
-    oldAllCardsDeck = nil
-  end
-
-  -- Find the mixed packs deck and make it uninteractable.
-  local scriptZoneObjects = draftOriginDeckZone.getObjects()
-  for deckIndex,curDeck in ipairs(scriptZoneObjects) do
-    if curDeck.tag == "Deck" then
-      mixedPacksDeck = curDeck
-      mixedPacksDeck.interactable = false
-      mixedPacksDeck.setLock(true)
-      break
-    end
-  end
-
-  -- Make the table of pack selections available so the main game script can use it.
-  Global.setTable("packSelections", packSelections)
-  -- Set up a table of expansion indices for dealing cards.
-  Global.setTable("nextExpansionIndex", nextExpansionIndex)
-  -- Make the table of packs available so the main game script can use it.
-  Global.setTable("rivalsExpansionPacks", rivalsExpansionPacks)
-  -- Set a reference to the deck so the main game script can use and destruct it.
-  Global.setVar("mixedPacksDeck", mixedPacksDeck)
-  -- Set whether the cube compatibility mode is active.
-  Global.setVar("cubeCompatibilityMode", cubeCompatibilityMode)
-
-  -- Deal cards.
-  printToAll("Dealing cards...", {1,1,1})
-  Global.call("draftReadyForDeal")
-
-  -- The menu is no longer needed.
-  self.destruct()
-end
-
-function draftZoneReady()
-  local databank = Global.getTable("cardstable")
-  local rarity
-  local index
-  spawnd = 0
-  cardPulledCount = 0
-
-  -- Move the script zone for the draft origin deck.
-  draftOriginDeckZone.setPosition({6,2,-0.5})
-
-  if rivalsExpansion != 'Cube' then
-    -- Pull a deck that contains all draft/sealed cards.
-    setupObject.takeObject({position={6,2,6}, rotation={0,0,180}, guid=allCardsDeckGuid, flip=false, smooth=false, callback='allCardsDeckPulled', callback_owner=self})
-  else
-    -- For a cube, the deck is already available.
-    allCardsDeckPulled(cubeDeck)
-  end
-end
-
-function spawnRivalsCards()
-  coroutine.yield(0)
-
-  -- Pull the Rivals deck.
-  setupObject.takeObject({position={14,2.0,-0.9}, rotation={0,0,0}, guid=rivalsDeckGuid, flip=false, smooth=false})
-
-  -- Create a script zone for the dummy card plus the cube deck.  This is created under the table to avoid a white flash.
-  local obj_parameters = {}
-
-  obj_parameters.type = 'ScriptingTrigger'
-  obj_parameters.scale = { 5.0, 5.0, 6.0 }
-  obj_parameters.position = { 6.000,-4.000, 0.500 }
-  obj_parameters.rotation = { 0.000, 0.000, 0.000 }
-  draftOriginDeckZone = spawnObject(obj_parameters)
-
-  -- Sleep briefly to let the draft zone spawn.
-  Wait.time(draftZoneReady, 0.5)
-
-  return 1
-end
-
-function spawndb()
-  for i in ipairs(spawnditems) do
-    if getObjectFromGUID(spawnditems[i]) != nil then
-      getObjectFromGUID(spawnditems[i]).destruct()
-    end
-  end
-  spawnditems={}
-  startLuaCoroutine(self, 'spawnDeckbuilding')
-end
-
-function spawnDeckbuilding()
-  coroutine.yield(0)
-  local object = getObjectFromGUID('1cc719').clone({position={28,1,20}})
-  coroutine.yield(0)
-  --getObjectFromGUID('a47a8c').takeObject({position={28,1,-8}})
-  cards = {}
-  cards = object.getObjects()
-  spawnCards(cards,object)
-  return 1
-end
-
-function searchCardinDB(card)
-  local databank = Global.getTable("cardstable")
-  for i in ipairs(databank) do
-    if databank[i]["cardname"] == card then
-      return i
-    end
-  end
-  return false
-end
-
-function spawnCards(cards,object)
-  local databank = Global.getTable("cardstable")
-  spawnd = 1
-  height = 0
-  for i in ipairs(cards) do
-    index = searchCardinDB(cards[i].nickname)
-    if index != false then
-      if databank[index]["affiliation"] == affiliationselect or databank[index]["affiliation"] == affiliationselect2 or databank[index]["affiliation"] == affiliationselect3 then
-        if databank[index]["type"] == typeselect or databank[index]["type"] == typeselect2 or databank[index]["type"] == typeselect3 or databank[index]["type"] == typeselect4 then
-          if databank[index]["color"] == colorselect or databank[index]["color"] == colorselect2 or databank[index]["color"] == colorselect3 or databank[index]["color"] == colorselect4 then
-            if spawnd==164 then coroutine.yield(0) getObjectFromGUID(cards[i].guid).setPosition({27.5-((spawnd-150)*3.5),1,22.5}) table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({-27.5,1,24.5}) height=0 end
-            if spawnd<164 and spawnd>150 then object.takeObject({position={27.5-((spawnd-150)*3.5),1,22.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({-27.5,1,24.5}) height=0 end
-            if spawnd<151 and spawnd>135 then object.takeObject({position={27.5-((spawnd-135)*3.5),1,17.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,24.5}) height=1 end
-            if spawnd<136 and spawnd>120 then object.takeObject({position={27.5-((spawnd-120)*3.5),1,12.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,19.5}) height=2 end
-            if spawnd<121 and spawnd>105 then object.takeObject({position={27.5-((spawnd-105)*3.5),1,7.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,14.5}) height=3 end
-            if spawnd<106 and spawnd>90 then object.takeObject({position={27.5-((spawnd-90)*3.5),1,2.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,9.5}) height=4 end
-            if spawnd<91 and spawnd>75 then object.takeObject({position={27.5-((spawnd-75)*3.5),1,-2.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,4.5}) height=5  end
-            if spawnd<76 and spawnd>60 then object.takeObject({position={27.5-((spawnd-60)*3.5),1,-7.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,-0.5}) height=6 end
-            if spawnd<61 and spawnd>45 then object.takeObject({position={27.5-((spawnd-45)*3.5),1,-12.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,-5.5}) height=7 end
-            if spawnd<46 and spawnd>30 then object.takeObject({position={27.5-((spawnd-30)*3.5),1,-17.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,-10.5}) height=8 end
-            if spawnd<31 and spawnd>15 then object.takeObject({position={27.5-((spawnd-15)*3.5),1,-22.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,-15.5}) height=9 end
-            if spawnd<16 then object.takeObject({position={27.5-(spawnd*3.5),1,-27.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,-20.5}) height=10  end
-          end
-        end
-      end
-    end
-
-
-  end
-
-  if battlefieldbutton == true then
-    local battlefield = getObjectFromGUID('cf8e15').clone({position={28,1,-1.5}})
-    battlefieldcards = battlefield.getObjects()
-    for i in ipairs (battlefieldcards) do
-      if i==10 then coroutine.yield(0) getObjectFromGUID(battlefieldcards[i].guid).setPosition({29-(i*5),1,27-(height*5)}) getObjectFromGUID(battlefieldcards[i].guid).setRotation({0,-90,0}) table.insert(spawnditems, battlefieldcards[i].guid) end
-      if i<10 then battlefield.takeObject({position={29-(i*5),1,27-(height*5)},rotation={0,-90,0},guid=battlefieldcards[i].guid}) table.insert(spawnditems, battlefieldcards[i].guid) if height != 0 then getObjectFromGUID('2a325b').setPosition({21.5,1,33.5-(height*5)}) end end
-    end
-    if battlefield != nil then battlefield.destruct() end
-  end
-  if object!= nil then object.destruct() end
-end
+--function spawnDeckbuilding()
+--  coroutine.yield(0)
+--  local object = getObjectFromGUID('1cc719').clone({position={28,1,20}})
+--  coroutine.yield(0)
+--  --getObjectFromGUID('a47a8c').takeObject({position={28,1,-8}})
+--  cards = {}
+--  cards = object.getObjects()
+--  spawnCards(cards,object)
+--  return 1
+--end
+--
+--function searchCardinDB(card)
+--  local databank = Global.getTable("cardstable")
+--  for i in ipairs(databank) do
+--    if databank[i]["cardname"] == card then
+--      return i
+--    end
+--  end
+--  return false
+--end
+--
+--function spawnCards(cards,object)
+--  local databank = Global.getTable("cardstable")
+--  spawnd = 1
+--  height = 0
+--  for i in ipairs(cards) do
+--    index = searchCardinDB(cards[i].nickname)
+--    if index != false then
+--      if databank[index]["affiliation"] == affiliationselect or databank[index]["affiliation"] == affiliationselect2 or databank[index]["affiliation"] == affiliationselect3 then
+--        if databank[index]["type"] == typeselect or databank[index]["type"] == typeselect2 or databank[index]["type"] == typeselect3 or databank[index]["type"] == typeselect4 then
+--          if databank[index]["color"] == colorselect or databank[index]["color"] == colorselect2 or databank[index]["color"] == colorselect3 or databank[index]["color"] == colorselect4 then
+--            if spawnd==164 then coroutine.yield(0) getObjectFromGUID(cards[i].guid).setPosition({27.5-((spawnd-150)*3.5),1,22.5}) table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({-27.5,1,24.5}) height=0 end
+--            if spawnd<164 and spawnd>150 then object.takeObject({position={27.5-((spawnd-150)*3.5),1,22.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({-27.5,1,24.5}) height=0 end
+--            if spawnd<151 and spawnd>135 then object.takeObject({position={27.5-((spawnd-135)*3.5),1,17.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,24.5}) height=1 end
+--            if spawnd<136 and spawnd>120 then object.takeObject({position={27.5-((spawnd-120)*3.5),1,12.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,19.5}) height=2 end
+--            if spawnd<121 and spawnd>105 then object.takeObject({position={27.5-((spawnd-105)*3.5),1,7.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,14.5}) height=3 end
+--            if spawnd<106 and spawnd>90 then object.takeObject({position={27.5-((spawnd-90)*3.5),1,2.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,9.5}) height=4 end
+--            if spawnd<91 and spawnd>75 then object.takeObject({position={27.5-((spawnd-75)*3.5),1,-2.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,4.5}) height=5  end
+--            if spawnd<76 and spawnd>60 then object.takeObject({position={27.5-((spawnd-60)*3.5),1,-7.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,-0.5}) height=6 end
+--            if spawnd<61 and spawnd>45 then object.takeObject({position={27.5-((spawnd-45)*3.5),1,-12.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,-5.5}) height=7 end
+--            if spawnd<46 and spawnd>30 then object.takeObject({position={27.5-((spawnd-30)*3.5),1,-17.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,-10.5}) height=8 end
+--            if spawnd<31 and spawnd>15 then object.takeObject({position={27.5-((spawnd-15)*3.5),1,-22.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,-15.5}) height=9 end
+--            if spawnd<16 then object.takeObject({position={27.5-(spawnd*3.5),1,-27.5},guid=cards[i].guid}) spawnd=spawnd+1 table.insert(spawnditems, cards[i].guid) getObjectFromGUID('2a325b').setPosition({21.5,1,-20.5}) height=10  end
+--          end
+--        end
+--      end
+--    end
+--
+--
+--  end
+--
+--  if battlefieldbutton == true then
+--    local battlefield = getObjectFromGUID('cf8e15').clone({position={28,1,-1.5}})
+--    battlefieldcards = battlefield.getObjects()
+--    for i in ipairs (battlefieldcards) do
+--      if i==10 then coroutine.yield(0) getObjectFromGUID(battlefieldcards[i].guid).setPosition({29-(i*5),1,27-(height*5)}) getObjectFromGUID(battlefieldcards[i].guid).setRotation({0,-90,0}) table.insert(spawnditems, battlefieldcards[i].guid) end
+--      if i<10 then battlefield.takeObject({position={29-(i*5),1,27-(height*5)},rotation={0,-90,0},guid=battlefieldcards[i].guid}) table.insert(spawnditems, battlefieldcards[i].guid) if height != 0 then getObjectFromGUID('2a325b').setPosition({21.5,1,33.5-(height*5)}) end end
+--    end
+--    if battlefield != nil then battlefield.destruct() end
+--  end
+--  if object!= nil then object.destruct() end
+--end
 
 function mainMenu()
   self.clearButtons()
-  self.createButton({
-    label='Starter Deck Game', click_function="setupStarter", function_owner=self,
-    position={0,0.1,-0.3}, width=900, height=150, font_size=100
-  })
+  --self.createButton({
+  --  label='Starter Deck Game', click_function="setupStarter", function_owner=self,
+  --  position={0,0.1,-0.3}, width=900, height=150, font_size=100
+  --})
 
   self.createButton({
     label='2 Player Modern', click_function="twoPlayerModernFromClassic", function_owner=self,
@@ -1097,60 +981,60 @@ function mainMenu()
     position={0,0.1,0.3}, width=900, height=150, font_size=100
   })
 
-  self.createButton({
-    label='Normal Draft', click_function="setupDraftNormal", function_owner=self,
-    position={0,0.1,0.6}, width=900, height=150, font_size=100
-  })
-
-  self.createButton({
-    label='Winchester Draft', click_function="setupDraftWinchester", function_owner=self,
-    position={0,0.1,0.9}, width=900, height=150, font_size=100
-  })
-
-  self.createButton({
-    label='Cube Draft', click_function="setupDraftCube", function_owner=self,
-    position={0,0.1,1.2}, width=900, height=150, font_size=100
-  })
-
-  self.createButton({
-    label='Sealed Game', click_function="setupSealed", function_owner=self,
-    position={0,0.1,1.5}, width=900, height=150, font_size=100
-  })
+  --self.createButton({
+  --  label='Normal Draft', click_function="setupDraftNormal", function_owner=self,
+  --  position={0,0.1,0.6}, width=900, height=150, font_size=100
+  --})
+  --
+  --self.createButton({
+  --  label='Winchester Draft', click_function="setupDraftWinchester", function_owner=self,
+  --  position={0,0.1,0.9}, width=900, height=150, font_size=100
+  --})
+  --
+  --self.createButton({
+  --  label='Cube Draft', click_function="setupDraftCube", function_owner=self,
+  --  position={0,0.1,1.2}, width=900, height=150, font_size=100
+  --})
+  --
+  --self.createButton({
+  --  label='Sealed Game', click_function="setupSealed", function_owner=self,
+  --  position={0,0.1,1.5}, width=900, height=150, font_size=100
+  --})
 end
 
-function setupStarter(buttonObject, playerColor)
-  -- Zoom camera back out to the normal perspective for that player.
-  zoomCameraBackOut(playerColor)
+--function setupStarter(buttonObject, playerColor)
+--  -- Zoom camera back out to the normal perspective for that player.
+--  zoomCameraBackOut(playerColor)
+--
+--  -- Delay slightly so camera movement does not feel too sudden.
+--  Wait.time(function() setupStarterAfterDelay(playerColor) end, 0.2)
+--end
+--
+--function setupStarterAfterDelay(playerColor)
+--  red = 2
+--  blue = 2
+--  starterGame = true
+--  startLuaCoroutine(self, 'spawnSetupCoroutine')
+--end
 
-  -- Delay slightly so camera movement does not feel too sudden.
-  Wait.time(function() setupStarterAfterDelay(playerColor) end, 0.2)
-end
-
-function setupStarterAfterDelay(playerColor)
-  red = 2
-  blue = 2
-  starterGame = true
-  startLuaCoroutine(self, 'spawnSetupCoroutine')
-end
-
-function spawnStarter()
-  setupObject.takeObject({position={11.9,2,-7.9},rotation={5,180,180},guid='086cb2'})
-  setupObject.takeObject({position={-11.9,2,7.9},rotation={5,360,180},guid='11ea1a'})
-  setupObject.takeObject({position={-2,2,8.4},guid='0a61f2'})
-  setupObject.takeObject({position={8.5,2,8.4},guid='5d54d1'})
-  setupObject.takeObject({position={2,2,-8.4},rotation={360,180,360},guid='ccf866'})
-  setupObject.takeObject({position={-8.5,2,-8.4},rotation={360,180,360},guid='48f820'})
-  setupObject.takeObject({position={-14,1,1.5}, rotation={360,270,360}, guid='05bfd4'})
-  setupObject.takeObject({position={14,1,-1.5}, rotation={360,90,360}, guid='499c42'})
-  setupObject.takeObject({position={-20,1,7.9}, rotation={360,0,360}, guid='5d3305'})
-  setupObject.takeObject({position={20,1,-7.9}, rotation={360,180,360}, guid='eafe7f'})
-  coroutine.yield(0)
-  coroutine.yield(0)
-  getObjectFromGUID('086cb2').shuffle()
-  getObjectFromGUID('11ea1a').shuffle()
-
-  return 1
-end
+--function spawnStarter()
+--  setupObject.takeObject({position={11.9,2,-7.9},rotation={5,180,180},guid='086cb2'})
+--  setupObject.takeObject({position={-11.9,2,7.9},rotation={5,360,180},guid='11ea1a'})
+--  setupObject.takeObject({position={-2,2,8.4},guid='0a61f2'})
+--  setupObject.takeObject({position={8.5,2,8.4},guid='5d54d1'})
+--  setupObject.takeObject({position={2,2,-8.4},rotation={360,180,360},guid='ccf866'})
+--  setupObject.takeObject({position={-8.5,2,-8.4},rotation={360,180,360},guid='48f820'})
+--  setupObject.takeObject({position={-14,1,1.5}, rotation={360,270,360}, guid='05bfd4'})
+--  setupObject.takeObject({position={14,1,-1.5}, rotation={360,90,360}, guid='499c42'})
+--  setupObject.takeObject({position={-20,1,7.9}, rotation={360,0,360}, guid='5d3305'})
+--  setupObject.takeObject({position={20,1,-7.9}, rotation={360,180,360}, guid='eafe7f'})
+--  coroutine.yield(0)
+--  coroutine.yield(0)
+--  getObjectFromGUID('086cb2').shuffle()
+--  getObjectFromGUID('11ea1a').shuffle()
+--
+--  return 1
+--end
 
 function twoPlayerClassic(buttonObject, playerColor)
   red = 0
@@ -1209,1437 +1093,1437 @@ function twoPlayerClassic(buttonObject, playerColor)
   })
 end
 
-function setupDraftNormal()
-  Global.setVar("rivalsMode", "Normal Draft")
-  setupPacksMenu()
-end
-
-function setupDraftWinchester()
-  Global.setVar("rivalsMode", "Winchester Draft")
-  setupPacksMenu()
-end
-
-function setupDraftCube()
-  Global.setVar("rivalsMode", "Cube Draft")
-  setupCubeMenu()
-end
-
-function setupSealed()
-  Global.setVar("rivalsMode", "Normal Sealed")
-  setupPacksMenu()
-end
-
-function setupCubeMenu()
-  -- Move the cube board and cube deck zone up.
-  cubeBoard.setPosition({-9.5,1,0})
-  cubeDeckZone.setPosition({-9.5,1,0})
-
-  self.clearButtons()
-
-  self.createButton({
-    label='Back',click_function="closeCubeMenu",function_owner=self,
-    position={1.3,0.1,1.6},width = 400, height = 150, font_size = 100
-  })
-
-  self.createButton({
-    label='Process Cube', click_function="processCube", function_owner=self,
-    position={0,0.1,0}, width=1400, height=500, font_size=200
-  })
-end
-
-function closeCubeMenu()
-  -- Hide the cube board and cube deck zone.
-  cubeBoard.setPosition({-9.5,-4,0})
-  cubeDeckZone.setPosition({-9.5,-4,0})
-
-  mainMenu()
-end
-
-function processCube(buttonObject, playerColor)
-  -- Zoom camera back out to the normal perspective for that player.
-  zoomCameraBackOut(playerColor)
-
-  -- Delay slightly so camera movement does not feel too sudden.
-  Wait.time(function() processCubeAfterDelay(playerColor) end, 0.2)
-end
-
-function processCubeAfterDelay(playerColor)
-  -- Move player mats up before things start dropping on them.
-  Global.call("moveAllMatsUp")
-
-  cubeDeck = nil
-  local scriptZoneObjects = cubeDeckZone.getObjects()
-  for i,curDeck in ipairs(scriptZoneObjects) do
-    if curDeck.tag == "Deck" then
-      cubeDeck = curDeck
-      break
-    end
-  end
-
-  -- Make sure the cube has enough cards.
-  if cubeDeck != nil then
-    local seatedPlayers = getSeatedPlayers()
-    local numSeatedPlayers = 0
-    for i,somePlayer in pairs(seatedPlayers) do
-      numSeatedPlayers = numSeatedPlayers + 1
-    end
-
-    -- Each player will need 6 packs of 5 cards each.
-    local cubeCards = #(cubeDeck.getObjects())
-    local minCubeCards = (numSeatedPlayers * 6 * 5)
-    if cubeCards < minCubeCards then
-      printToAll("Error, for " .. numSeatedPlayers .. " player(s), the cube must contain at least " .. minCubeCards .. " cards.", {1,0,0})
-      return
-    end
-  end
-
-  if cubeDeck != nil then
-    -- Spawn the "please wait" message board.
-    Global.call("showPleaseWait")
-
-    -- Get the rotation of the cube deck.
-    cubeDeckRotation = cubeDeck.getRotation()
-
-    -- Flip the deck upside down if needed.
-    if ((cubeDeckRotation.z < 160) or (cubeDeckRotation.z > 200)) then
-      cubeDeck.setRotation({0, 0, 180})
-    end
-
-    -- Process the cube cards and create packs.
-    createCubePacks()
-
-    self.setPosition({0, -4, 0})
-
-    clearSpawnedItems()
-    rivalsExpansion = 'Cube'
-
-    -- Delete the cube board and cube deck zone.
-    cubeBoard.destruct()
-    cubeDeckZone.destruct()
-
-    -- Go ahead and move the dummy card so that other cards will fall on top of it.
-    -- The move is done with no collision, and it is done fast.  Also, clone the
-    -- dummy card, so that if the cube is dealt out entirely, what is left will
-    -- still be a deck.
-    rivalsDummyCard.setLock(false)
-    rivalsDummyCard.clone({position={6,6,-0.9}})
-    rivalsDummyCard.clone({position={6,7,-0.9}})
-    rivalsDummyCard.setLock(true)
-
-    Global.call("initBoards")
-
-    -- The cube is moved after a small delay since otherwise it ends up crooked, probably because of the dummy cards.
-    Wait.time(handleCubeMove, 0.5)
-
-    printToAll("Processing cube...", {1,1,1})
-  else
-    printToAll("Error, please put a deck in the cube zone.", {1,0,0})
-  end
-end
-
-function handleCubeMove()
-  -- To fix a strange bug where other people hosting the mod fail to move the cube deck, teleport it first.
-  local cubeDeckPosition = cubeDeck.getPosition()
-  cubeDeck.setPosition({x = cubeDeckPosition.x, y = (cubeDeckPosition.y + 4), z = cubeDeckPosition.z})
-
-  -- Move the cube without collision and move it fast.
-  cubeDeck.drag = 0.001
-  cubeDeck.angular_drag = 0.001
-  cubeDeck.dynamic_friction = 0.8
-  cubeDeck.bounciness = 0
-  cubeDeck.interactable = false
-  cubeDeck.setPositionSmooth({6,3,-0.9}, false, true)
-
-  Wait.time(readyForRivals, 1.0)
-end
-
-function createCubePacks()
-  local databank = Global.getTable("cardstable")
-  local cubeObjects = cubeDeck.getObjects()
-
-  allExpansionLegendaries['Cube']   = {}
-  allExpansionRares['Cube']         = {}
-  allExpansionUncommons['Cube']     = {}
-  allExpansionCommons['Cube']       = {}
-
-  -- Process the cube to create lists of cards by rarity.
-  for cubeIndex,cubeCard in ipairs(cubeObjects) do
-    local cubeCardDescription = cubeCard.description
-
-    for index,curCard in ipairs(databank) do
-      local setAndNumber = (curCard["set"] .. ' ' .. curCard["number"])
-
-      if ((cubeCardDescription != nil) and (cubeCardDescription != '')) then
-        -- The new description format is used.
-        if (cubeCardDescription == setAndNumber) then
-          local rarity = curCard["rarity"]
-
-          if "Legendary" == rarity then
-            table.insert(allExpansionLegendaries['Cube'], setAndNumber)
-          elseif "Rare" == rarity then
-            table.insert(allExpansionRares['Cube'], setAndNumber)
-          elseif "Uncommon" == rarity then
-            table.insert(allExpansionUncommons['Cube'], setAndNumber)
-          elseif "Common" == rarity then
-            table.insert(allExpansionCommons['Cube'], setAndNumber)
-          else
-            -- Nothing needs done.
-          end
-
-          break
-        end
-      else
-        -- The old name system is used.
-        cubeCompatibilityMode = true
-        if cubeCard.nickname == curCard["cardname"] then
-          local rarity = curCard["rarity"]
-
-          if "Legendary" == rarity then
-            table.insert(allExpansionLegendaries['Cube'], cubeCard.nickname)
-          elseif "Rare" == rarity then
-            table.insert(allExpansionRares['Cube'], cubeCard.nickname)
-          elseif "Uncommon" == rarity then
-              table.insert(allExpansionUncommons['Cube'], cubeCard.nickname)
-          elseif "Common" == rarity then
-            table.insert(allExpansionCommons['Cube'], cubeCard.nickname)
-          else
-            -- Nothing needs done.
-          end
-
-          break
-        end
-      end
-
-    end
-  end
-
-  local expansionDiceCards  = {}
-  local expansionUncommons  = {}
-  local expansionCommons    = {}
-
-  local diceCards          = {}
-  local uncommonCards      = {}
-  local commonCards        = {}
-
-  -- Combine the legendaries and rares.
-  local numLegendaries = #(allExpansionLegendaries['Cube'])
-  local numRares = #(allExpansionRares['Cube'])
-  for legendaryIndex=1,numLegendaries do
-    table.insert(diceCards, allExpansionLegendaries['Cube'][legendaryIndex])
-  end
-  for rareIndex=1,numRares do
-    table.insert(diceCards, allExpansionRares['Cube'][rareIndex])
-  end
-
-  -- Make a copy of the uncommon and common tables.
-  local numUncommons = #(allExpansionUncommons['Cube'])
-  local numCommons = #(allExpansionCommons['Cube'])
-  for uncommonIndex=1,numUncommons do
-    table.insert(uncommonCards, allExpansionUncommons['Cube'][uncommonIndex])
-  end
-  for commonIndex=1,numCommons do
-    table.insert(commonCards, allExpansionCommons['Cube'][commonIndex])
-  end
-
-  -- Randomize the dice cards.
-  local totalDiceCards = (numLegendaries + numRares)
-  local diceCardsLeftToRandomize = totalDiceCards
-  for i=1,totalDiceCards do
-    local randomIndex = math.random(1,diceCardsLeftToRandomize)
-    table.insert(expansionDiceCards, table.remove(diceCards, randomIndex))
-    diceCardsLeftToRandomize = diceCardsLeftToRandomize - 1
-  end
-
-  -- Randomize the uncommon cards.
-  local totalUncommonCards = #(allExpansionUncommons['Cube'])
-  local uncommonCardsLeftToRandomize = totalUncommonCards
-  for i=1,totalUncommonCards do
-    local randomIndex = math.random(1,uncommonCardsLeftToRandomize)
-    table.insert(expansionUncommons, table.remove(uncommonCards, randomIndex))
-    uncommonCardsLeftToRandomize = uncommonCardsLeftToRandomize - 1
-  end
-
-  -- Randomize the common cards.
-  local totalCommonCards = #(allExpansionCommons['Cube'])
-  local commonCardsLeftToRandomize = totalCommonCards
-  for i=1,totalCommonCards do
-    local randomIndex = math.random(1,commonCardsLeftToRandomize)
-    table.insert(expansionCommons, table.remove(commonCards, randomIndex))
-    commonCardsLeftToRandomize = commonCardsLeftToRandomize - 1
-  end
-
-  -- Determine how many packs can be created.  Note that this may require substituting commons for uncommons or similar.
-  local numCubePacks = math.floor((totalDiceCards + totalUncommonCards + totalCommonCards) / 5)
-
-  local numDiceCardsLeft   = totalDiceCards
-  local numUncommonsLeft   = totalUncommonCards
-  local numCommonsLeft     = totalCommonCards
-  local nextDiceCardIndex  = 1
-  local nextUncommonIndex  = 1
-  local nextCommonIndex    = 1
-
-  -- At this point, all cards have been processed and randomized, so packs can be created.
-  rivalsExpansionPacks['Cube'] = {}
-  nextExpansionIndex['Cube'] = 1
-  for packIndex = 1,numCubePacks do
-    -- The packs are created in reverse order so that dice cards end up on top of decks.
-    for cardIndex=1,3 do
-      if numCommonsLeft > 0 then
-        table.insert(rivalsExpansionPacks['Cube'], expansionCommons[nextCommonIndex])
-        nextCommonIndex = nextCommonIndex + 1
-        numCommonsLeft = numCommonsLeft - 1
-      elseif numUncommonsLeft > 0 then
-        -- Substitute uncommons for commons.
-        table.insert(rivalsExpansionPacks['Cube'], expansionUncommons[nextUncommonIndex])
-        nextUncommonIndex = nextUncommonIndex + 1
-        numUncommonsLeft = numUncommonsLeft - 1
-      elseif numDiceCardsLeft > 0 then
-        -- Substitute rares/legendaries for uncommons.
-        table.insert(rivalsExpansionPacks['Cube'], expansionDiceCards[nextDiceCardIndex])
-        nextDiceCardIndex = nextDiceCardIndex + 1
-        numDiceCardsLeft = numDiceCardsLeft - 1
-      else
-        printToAll("Error, not enough cards in cube.", {1,0,0})
-        Global.call("cleanupTable")
-        return
-      end
-    end
-
-    if numUncommonsLeft > 0 then
-      table.insert(rivalsExpansionPacks['Cube'], expansionUncommons[nextUncommonIndex])
-      nextUncommonIndex = nextUncommonIndex + 1
-      numUncommonsLeft = numUncommonsLeft - 1
-    elseif numCommonsLeft > 0 then
-      -- Substitute commons for uncommons.
-      table.insert(rivalsExpansionPacks['Cube'], expansionCommons[nextCommonIndex])
-      nextCommonIndex = nextCommonIndex + 1
-      numCommonsLeft = numCommonsLeft - 1
-    elseif numDiceCardsLeft > 0 then
-      -- Substitute rares/legendaries for commons.
-      table.insert(rivalsExpansionPacks['Cube'], expansionDiceCards[nextDiceCardIndex])
-      nextDiceCardIndex = nextDiceCardIndex + 1
-      numDiceCardsLeft = numDiceCardsLeft - 1
-    else
-      printToAll("Error, not enough cards in cube.", {1,0,0})
-      Global.call("cleanupTable")
-      return
-    end
-
-    if numDiceCardsLeft > 0 then
-      table.insert(rivalsExpansionPacks['Cube'], expansionDiceCards[nextDiceCardIndex])
-      nextDiceCardIndex = nextDiceCardIndex + 1
-      numDiceCardsLeft = numDiceCardsLeft - 1
-    elseif numUncommonsLeft > 0 then
-      -- Substitute uncommons for rares/legendaries.
-      table.insert(rivalsExpansionPacks['Cube'], expansionUncommons[nextUncommonIndex])
-      nextUncommonIndex = nextUncommonIndex + 1
-      numUncommonsLeft = numUncommonsLeft - 1
-    elseif numCommonsLeft > 0 then
-      -- Substitute commons for uncommons.
-      table.insert(rivalsExpansionPacks['Cube'], expansionCommons[nextCommonIndex])
-      nextCommonIndex = nextCommonIndex + 1
-      numCommonsLeft = numCommonsLeft - 1
-    else
-      printToAll("Error, not enough cards in cube.", {1,0,0})
-      Global.call("cleanupTable")
-      return
-    end
-  end
-end
-
-function setupPacksMenu()
-  local rivalsMode = Global.getVar("rivalsMode")
-
-  if rivalsMode == "Winchester Draft" then
-    numPacksPerPlayer = 8
-  elseif rivalsMode == "Normal Sealed" then
-    numPacksPerPlayer = 8
-  else
-    numPacksPerPlayer = 6
-  end
-
-  packSelectButtons = nil
-
-  self.clearButtons()
-
-  self.createButton({
-    label='Back',click_function="mainMenu",function_owner=self,
-    position={1.3,0.1,1.6},width = 400, height = 150, font_size = 100
-  })
-
-  self.createButton({
-    label='Awakenings', click_function="generatePacksAwakenings", function_owner=self,
-    position={0,0.1,-0.9}, width=1100, height=150, font_size=100
-  })
-
-  self.createButton({
-    label='Spirit of Rebellion',click_function="generatePacksSpirit",function_owner=self,
-    position={0,0.1,-0.6}, width=1100, height=150, font_size=100
-  })
-
-  self.createButton({
-    label='Empire at War',click_function="generatePacksEmpire",function_owner=self,
-    position={0,0.1,-0.3}, width=1100, height=150, font_size=100
-  })
-
-  self.createButton({
-    label='Legacies',click_function="generatePacksLegacies",function_owner=self,
-    position={0,0.1,0}, width=1100, height=150, font_size=100
-  })
-
-  self.createButton({
-    label='Way of the Force',click_function="generatePacksWay",function_owner=self,
-    position={0,0.1,0.3}, width=1100, height=150, font_size=100
-  })
-
-  self.createButton({
-    label='Mix Expansions',click_function="mixExpansionsMenu",function_owner=self,
-    position={0,0.1,0.9}, width=1100, height=150, font_size=100
-  })
-end
-
-function mixExpansionsMenu()
-  local offsetX = (-1.4)
-  local offsetY = (0.1)
-  local offsetZ = (-1.2)
-
-  self.clearButtons()
-
-  -- Create buttons for each expansion.
-  for i=1,numPacksPerPlayer do
-    self.createButton({
-      label='AW', click_function="packAW"..i, function_owner=self,
-      position={ offsetX + 0.0, offsetY, (offsetZ + (i*0.3)) }, width=320, height=150, font_size=100, color={0,0,0}, font_color={1,1,1}
-    })
-
-    self.createButton({
-      label='SoR',click_function="packSoR"..i,function_owner=self,
-      position={ offsetX + 0.7, offsetY, (offsetZ + (i*0.3)) }, width=320, height=150, font_size=100, color={0,0,0}, font_color={1,1,1}
-    })
-
-    self.createButton({
-      label='EaW',click_function="packEaW"..i,function_owner=self,
-      position={ offsetX + 1.4, offsetY, (offsetZ + (i*0.3)) }, width=320, height=150, font_size=100, color={0,0,0}, font_color={1,1,1}
-    })
-
-    self.createButton({
-      label='LEG',click_function="packLEG"..i,function_owner=self,
-      position={ offsetX + 2.1, offsetY, (offsetZ + (i*0.3)) }, width=320, height=150, font_size=100, color={0,0,0}, font_color={1,1,1}
-    })
-
-    self.createButton({
-      label='WotF',click_function="packWotF"..i,function_owner=self,
-      position={ offsetX + 2.8, offsetY, (offsetZ + (i*0.3)) }, width=320, height=150, font_size=100, color={1,1,1}, font_color={0,0,0}
-    })
-  end
-
-  -- Create buttons that just act as labels.
-  for i=1,numPacksPerPlayer do
-    self.createButton({
-      label=i, click_function="doNothing", function_owner=self,
-      position={-2.0, 0.1, ((-1.2)+(i*0.3))}, width=0, height=0, font_size=100, color={0,0,0}, font_color={1,1,1}
-    })
-  end
-
-  self.createButton({
-    label='Play',click_function="generateMixedPacks",function_owner=self,
-    position={-1.3,0.1,1.7}, width=400, height=150, font_size=100
-  })
-
-  self.createButton({
-    label='Back',click_function="setupPacksMenu",function_owner=self,
-    position={1.3,0.1,1.7}, width=400, height=150, font_size=100
-  })
-
-  -- Get all the buttons for quick access later.
-  packSelectButtons = self.getButtons()
-end
+--function setupDraftNormal()
+--  Global.setVar("rivalsMode", "Normal Draft")
+--  setupPacksMenu()
+--end
+--
+--function setupDraftWinchester()
+--  Global.setVar("rivalsMode", "Winchester Draft")
+--  setupPacksMenu()
+--end
+--
+--function setupDraftCube()
+--  Global.setVar("rivalsMode", "Cube Draft")
+--  setupCubeMenu()
+--end
+--
+--function setupSealed()
+--  Global.setVar("rivalsMode", "Normal Sealed")
+--  setupPacksMenu()
+--end
+
+--function setupCubeMenu()
+--  -- Move the cube board and cube deck zone up.
+--  cubeBoard.setPosition({-9.5,1,0})
+--  cubeDeckZone.setPosition({-9.5,1,0})
+--
+--  self.clearButtons()
+--
+--  self.createButton({
+--    label='Back',click_function="closeCubeMenu",function_owner=self,
+--    position={1.3,0.1,1.6},width = 400, height = 150, font_size = 100
+--  })
+--
+--  self.createButton({
+--    label='Process Cube', click_function="processCube", function_owner=self,
+--    position={0,0.1,0}, width=1400, height=500, font_size=200
+--  })
+--end
+
+--function closeCubeMenu()
+--  -- Hide the cube board and cube deck zone.
+--  cubeBoard.setPosition({-9.5,-4,0})
+--  cubeDeckZone.setPosition({-9.5,-4,0})
+--
+--  mainMenu()
+--end
+
+--function processCube(buttonObject, playerColor)
+--  -- Zoom camera back out to the normal perspective for that player.
+--  zoomCameraBackOut(playerColor)
+--
+--  -- Delay slightly so camera movement does not feel too sudden.
+--  Wait.time(function() processCubeAfterDelay(playerColor) end, 0.2)
+--end
+
+--function processCubeAfterDelay(playerColor)
+--  -- Move player mats up before things start dropping on them.
+--  Global.call("moveAllMatsUp")
+--
+--  cubeDeck = nil
+--  local scriptZoneObjects = cubeDeckZone.getObjects()
+--  for i,curDeck in ipairs(scriptZoneObjects) do
+--    if curDeck.tag == "Deck" then
+--      cubeDeck = curDeck
+--      break
+--    end
+--  end
+--
+--  -- Make sure the cube has enough cards.
+--  if cubeDeck != nil then
+--    local seatedPlayers = getSeatedPlayers()
+--    local numSeatedPlayers = 0
+--    for i,somePlayer in pairs(seatedPlayers) do
+--      numSeatedPlayers = numSeatedPlayers + 1
+--    end
+--
+--    -- Each player will need 6 packs of 5 cards each.
+--    local cubeCards = #(cubeDeck.getObjects())
+--    local minCubeCards = (numSeatedPlayers * 6 * 5)
+--    if cubeCards < minCubeCards then
+--      printToAll("Error, for " .. numSeatedPlayers .. " player(s), the cube must contain at least " .. minCubeCards .. " cards.", {1,0,0})
+--      return
+--    end
+--  end
+--
+--  if cubeDeck != nil then
+--    -- Spawn the "please wait" message board.
+--    Global.call("showPleaseWait")
+--
+--    -- Get the rotation of the cube deck.
+--    cubeDeckRotation = cubeDeck.getRotation()
+--
+--    -- Flip the deck upside down if needed.
+--    if ((cubeDeckRotation.z < 160) or (cubeDeckRotation.z > 200)) then
+--      cubeDeck.setRotation({0, 0, 180})
+--    end
+--
+--    -- Process the cube cards and create packs.
+--    createCubePacks()
+--
+--    self.setPosition({0, -4, 0})
+--
+--    clearSpawnedItems()
+--    rivalsExpansion = 'Cube'
+--
+--    -- Delete the cube board and cube deck zone.
+--    cubeBoard.destruct()
+--    cubeDeckZone.destruct()
+--
+--    -- Go ahead and move the dummy card so that other cards will fall on top of it.
+--    -- The move is done with no collision, and it is done fast.  Also, clone the
+--    -- dummy card, so that if the cube is dealt out entirely, what is left will
+--    -- still be a deck.
+--    rivalsDummyCard.setLock(false)
+--    rivalsDummyCard.clone({position={6,6,-0.9}})
+--    rivalsDummyCard.clone({position={6,7,-0.9}})
+--    rivalsDummyCard.setLock(true)
+--
+--    Global.call("initBoards")
+--
+--    -- The cube is moved after a small delay since otherwise it ends up crooked, probably because of the dummy cards.
+--    Wait.time(handleCubeMove, 0.5)
+--
+--    printToAll("Processing cube...", {1,1,1})
+--  else
+--    printToAll("Error, please put a deck in the cube zone.", {1,0,0})
+--  end
+--end
+
+--function handleCubeMove()
+--  -- To fix a strange bug where other people hosting the mod fail to move the cube deck, teleport it first.
+--  local cubeDeckPosition = cubeDeck.getPosition()
+--  cubeDeck.setPosition({x = cubeDeckPosition.x, y = (cubeDeckPosition.y + 4), z = cubeDeckPosition.z})
+--
+--  -- Move the cube without collision and move it fast.
+--  cubeDeck.drag = 0.001
+--  cubeDeck.angular_drag = 0.001
+--  cubeDeck.dynamic_friction = 0.8
+--  cubeDeck.bounciness = 0
+--  cubeDeck.interactable = false
+--  cubeDeck.setPositionSmooth({6,3,-0.9}, false, true)
+--
+--  Wait.time(readyForRivals, 1.0)
+--end
+
+--function createCubePacks()
+--  local databank = Global.getTable("cardstable")
+--  local cubeObjects = cubeDeck.getObjects()
+--
+--  allExpansionLegendaries['Cube']   = {}
+--  allExpansionRares['Cube']         = {}
+--  allExpansionUncommons['Cube']     = {}
+--  allExpansionCommons['Cube']       = {}
+--
+--  -- Process the cube to create lists of cards by rarity.
+--  for cubeIndex,cubeCard in ipairs(cubeObjects) do
+--    local cubeCardDescription = cubeCard.description
+--
+--    for index,curCard in ipairs(databank) do
+--      local setAndNumber = (curCard["set"] .. ' ' .. curCard["number"])
+--
+--      if ((cubeCardDescription != nil) and (cubeCardDescription != '')) then
+--        -- The new description format is used.
+--        if (cubeCardDescription == setAndNumber) then
+--          local rarity = curCard["rarity"]
+--
+--          if "Legendary" == rarity then
+--            table.insert(allExpansionLegendaries['Cube'], setAndNumber)
+--          elseif "Rare" == rarity then
+--            table.insert(allExpansionRares['Cube'], setAndNumber)
+--          elseif "Uncommon" == rarity then
+--            table.insert(allExpansionUncommons['Cube'], setAndNumber)
+--          elseif "Common" == rarity then
+--            table.insert(allExpansionCommons['Cube'], setAndNumber)
+--          else
+--            -- Nothing needs done.
+--          end
+--
+--          break
+--        end
+--      else
+--        -- The old name system is used.
+--        cubeCompatibilityMode = true
+--        if cubeCard.nickname == curCard["cardname"] then
+--          local rarity = curCard["rarity"]
+--
+--          if "Legendary" == rarity then
+--            table.insert(allExpansionLegendaries['Cube'], cubeCard.nickname)
+--          elseif "Rare" == rarity then
+--            table.insert(allExpansionRares['Cube'], cubeCard.nickname)
+--          elseif "Uncommon" == rarity then
+--              table.insert(allExpansionUncommons['Cube'], cubeCard.nickname)
+--          elseif "Common" == rarity then
+--            table.insert(allExpansionCommons['Cube'], cubeCard.nickname)
+--          else
+--            -- Nothing needs done.
+--          end
+--
+--          break
+--        end
+--      end
+--
+--    end
+--  end
+--
+--  local expansionDiceCards  = {}
+--  local expansionUncommons  = {}
+--  local expansionCommons    = {}
+--
+--  local diceCards          = {}
+--  local uncommonCards      = {}
+--  local commonCards        = {}
+--
+--  -- Combine the legendaries and rares.
+--  local numLegendaries = #(allExpansionLegendaries['Cube'])
+--  local numRares = #(allExpansionRares['Cube'])
+--  for legendaryIndex=1,numLegendaries do
+--    table.insert(diceCards, allExpansionLegendaries['Cube'][legendaryIndex])
+--  end
+--  for rareIndex=1,numRares do
+--    table.insert(diceCards, allExpansionRares['Cube'][rareIndex])
+--  end
+--
+--  -- Make a copy of the uncommon and common tables.
+--  local numUncommons = #(allExpansionUncommons['Cube'])
+--  local numCommons = #(allExpansionCommons['Cube'])
+--  for uncommonIndex=1,numUncommons do
+--    table.insert(uncommonCards, allExpansionUncommons['Cube'][uncommonIndex])
+--  end
+--  for commonIndex=1,numCommons do
+--    table.insert(commonCards, allExpansionCommons['Cube'][commonIndex])
+--  end
+--
+--  -- Randomize the dice cards.
+--  local totalDiceCards = (numLegendaries + numRares)
+--  local diceCardsLeftToRandomize = totalDiceCards
+--  for i=1,totalDiceCards do
+--    local randomIndex = math.random(1,diceCardsLeftToRandomize)
+--    table.insert(expansionDiceCards, table.remove(diceCards, randomIndex))
+--    diceCardsLeftToRandomize = diceCardsLeftToRandomize - 1
+--  end
+--
+--  -- Randomize the uncommon cards.
+--  local totalUncommonCards = #(allExpansionUncommons['Cube'])
+--  local uncommonCardsLeftToRandomize = totalUncommonCards
+--  for i=1,totalUncommonCards do
+--    local randomIndex = math.random(1,uncommonCardsLeftToRandomize)
+--    table.insert(expansionUncommons, table.remove(uncommonCards, randomIndex))
+--    uncommonCardsLeftToRandomize = uncommonCardsLeftToRandomize - 1
+--  end
+--
+--  -- Randomize the common cards.
+--  local totalCommonCards = #(allExpansionCommons['Cube'])
+--  local commonCardsLeftToRandomize = totalCommonCards
+--  for i=1,totalCommonCards do
+--    local randomIndex = math.random(1,commonCardsLeftToRandomize)
+--    table.insert(expansionCommons, table.remove(commonCards, randomIndex))
+--    commonCardsLeftToRandomize = commonCardsLeftToRandomize - 1
+--  end
+--
+--  -- Determine how many packs can be created.  Note that this may require substituting commons for uncommons or similar.
+--  local numCubePacks = math.floor((totalDiceCards + totalUncommonCards + totalCommonCards) / 5)
+--
+--  local numDiceCardsLeft   = totalDiceCards
+--  local numUncommonsLeft   = totalUncommonCards
+--  local numCommonsLeft     = totalCommonCards
+--  local nextDiceCardIndex  = 1
+--  local nextUncommonIndex  = 1
+--  local nextCommonIndex    = 1
+--
+--  -- At this point, all cards have been processed and randomized, so packs can be created.
+--  rivalsExpansionPacks['Cube'] = {}
+--  nextExpansionIndex['Cube'] = 1
+--  for packIndex = 1,numCubePacks do
+--    -- The packs are created in reverse order so that dice cards end up on top of decks.
+--    for cardIndex=1,3 do
+--      if numCommonsLeft > 0 then
+--        table.insert(rivalsExpansionPacks['Cube'], expansionCommons[nextCommonIndex])
+--        nextCommonIndex = nextCommonIndex + 1
+--        numCommonsLeft = numCommonsLeft - 1
+--      elseif numUncommonsLeft > 0 then
+--        -- Substitute uncommons for commons.
+--        table.insert(rivalsExpansionPacks['Cube'], expansionUncommons[nextUncommonIndex])
+--        nextUncommonIndex = nextUncommonIndex + 1
+--        numUncommonsLeft = numUncommonsLeft - 1
+--      elseif numDiceCardsLeft > 0 then
+--        -- Substitute rares/legendaries for uncommons.
+--        table.insert(rivalsExpansionPacks['Cube'], expansionDiceCards[nextDiceCardIndex])
+--        nextDiceCardIndex = nextDiceCardIndex + 1
+--        numDiceCardsLeft = numDiceCardsLeft - 1
+--      else
+--        printToAll("Error, not enough cards in cube.", {1,0,0})
+--        Global.call("cleanupTable")
+--        return
+--      end
+--    end
+--
+--    if numUncommonsLeft > 0 then
+--      table.insert(rivalsExpansionPacks['Cube'], expansionUncommons[nextUncommonIndex])
+--      nextUncommonIndex = nextUncommonIndex + 1
+--      numUncommonsLeft = numUncommonsLeft - 1
+--    elseif numCommonsLeft > 0 then
+--      -- Substitute commons for uncommons.
+--      table.insert(rivalsExpansionPacks['Cube'], expansionCommons[nextCommonIndex])
+--      nextCommonIndex = nextCommonIndex + 1
+--      numCommonsLeft = numCommonsLeft - 1
+--    elseif numDiceCardsLeft > 0 then
+--      -- Substitute rares/legendaries for commons.
+--      table.insert(rivalsExpansionPacks['Cube'], expansionDiceCards[nextDiceCardIndex])
+--      nextDiceCardIndex = nextDiceCardIndex + 1
+--      numDiceCardsLeft = numDiceCardsLeft - 1
+--    else
+--      printToAll("Error, not enough cards in cube.", {1,0,0})
+--      Global.call("cleanupTable")
+--      return
+--    end
+--
+--    if numDiceCardsLeft > 0 then
+--      table.insert(rivalsExpansionPacks['Cube'], expansionDiceCards[nextDiceCardIndex])
+--      nextDiceCardIndex = nextDiceCardIndex + 1
+--      numDiceCardsLeft = numDiceCardsLeft - 1
+--    elseif numUncommonsLeft > 0 then
+--      -- Substitute uncommons for rares/legendaries.
+--      table.insert(rivalsExpansionPacks['Cube'], expansionUncommons[nextUncommonIndex])
+--      nextUncommonIndex = nextUncommonIndex + 1
+--      numUncommonsLeft = numUncommonsLeft - 1
+--    elseif numCommonsLeft > 0 then
+--      -- Substitute commons for uncommons.
+--      table.insert(rivalsExpansionPacks['Cube'], expansionCommons[nextCommonIndex])
+--      nextCommonIndex = nextCommonIndex + 1
+--      numCommonsLeft = numCommonsLeft - 1
+--    else
+--      printToAll("Error, not enough cards in cube.", {1,0,0})
+--      Global.call("cleanupTable")
+--      return
+--    end
+--  end
+--end
+
+--function setupPacksMenu()
+--  local rivalsMode = Global.getVar("rivalsMode")
+--
+--  if rivalsMode == "Winchester Draft" then
+--    numPacksPerPlayer = 8
+--  elseif rivalsMode == "Normal Sealed" then
+--    numPacksPerPlayer = 8
+--  else
+--    numPacksPerPlayer = 6
+--  end
+--
+--  packSelectButtons = nil
+--
+--  self.clearButtons()
+--
+--  self.createButton({
+--    label='Back',click_function="mainMenu",function_owner=self,
+--    position={1.3,0.1,1.6},width = 400, height = 150, font_size = 100
+--  })
+--
+--  self.createButton({
+--    label='Awakenings', click_function="generatePacksAwakenings", function_owner=self,
+--    position={0,0.1,-0.9}, width=1100, height=150, font_size=100
+--  })
+--
+--  self.createButton({
+--    label='Spirit of Rebellion',click_function="generatePacksSpirit",function_owner=self,
+--    position={0,0.1,-0.6}, width=1100, height=150, font_size=100
+--  })
+--
+--  self.createButton({
+--    label='Empire at War',click_function="generatePacksEmpire",function_owner=self,
+--    position={0,0.1,-0.3}, width=1100, height=150, font_size=100
+--  })
+--
+--  self.createButton({
+--    label='Legacies',click_function="generatePacksLegacies",function_owner=self,
+--    position={0,0.1,0}, width=1100, height=150, font_size=100
+--  })
+--
+--  self.createButton({
+--    label='Way of the Force',click_function="generatePacksWay",function_owner=self,
+--    position={0,0.1,0.3}, width=1100, height=150, font_size=100
+--  })
+--
+--  self.createButton({
+--    label='Mix Expansions',click_function="mixExpansionsMenu",function_owner=self,
+--    position={0,0.1,0.9}, width=1100, height=150, font_size=100
+--  })
+--end
+
+--function mixExpansionsMenu()
+--  local offsetX = (-1.4)
+--  local offsetY = (0.1)
+--  local offsetZ = (-1.2)
+--
+--  self.clearButtons()
+--
+--  -- Create buttons for each expansion.
+--  for i=1,numPacksPerPlayer do
+--    self.createButton({
+--      label='AW', click_function="packAW"..i, function_owner=self,
+--      position={ offsetX + 0.0, offsetY, (offsetZ + (i*0.3)) }, width=320, height=150, font_size=100, color={0,0,0}, font_color={1,1,1}
+--    })
+--
+--    self.createButton({
+--      label='SoR',click_function="packSoR"..i,function_owner=self,
+--      position={ offsetX + 0.7, offsetY, (offsetZ + (i*0.3)) }, width=320, height=150, font_size=100, color={0,0,0}, font_color={1,1,1}
+--    })
+--
+--    self.createButton({
+--      label='EaW',click_function="packEaW"..i,function_owner=self,
+--      position={ offsetX + 1.4, offsetY, (offsetZ + (i*0.3)) }, width=320, height=150, font_size=100, color={0,0,0}, font_color={1,1,1}
+--    })
+--
+--    self.createButton({
+--      label='LEG',click_function="packLEG"..i,function_owner=self,
+--      position={ offsetX + 2.1, offsetY, (offsetZ + (i*0.3)) }, width=320, height=150, font_size=100, color={0,0,0}, font_color={1,1,1}
+--    })
+--
+--    self.createButton({
+--      label='WotF',click_function="packWotF"..i,function_owner=self,
+--      position={ offsetX + 2.8, offsetY, (offsetZ + (i*0.3)) }, width=320, height=150, font_size=100, color={1,1,1}, font_color={0,0,0}
+--    })
+--  end
+--
+--  -- Create buttons that just act as labels.
+--  for i=1,numPacksPerPlayer do
+--    self.createButton({
+--      label=i, click_function="doNothing", function_owner=self,
+--      position={-2.0, 0.1, ((-1.2)+(i*0.3))}, width=0, height=0, font_size=100, color={0,0,0}, font_color={1,1,1}
+--    })
+--  end
+--
+--  self.createButton({
+--    label='Play',click_function="generateMixedPacks",function_owner=self,
+--    position={-1.3,0.1,1.7}, width=400, height=150, font_size=100
+--  })
+--
+--  self.createButton({
+--    label='Back',click_function="setupPacksMenu",function_owner=self,
+--    position={1.3,0.1,1.7}, width=400, height=150, font_size=100
+--  })
+--
+--  -- Get all the buttons for quick access later.
+--  packSelectButtons = self.getButtons()
+--end
 
 function doNothing()
 end
 
-function generatePacks(playerColor, expansion)
-  -- Zoom camera back out to the normal perspective for that player.
-  zoomCameraBackOut(playerColor)
-
-  -- Move player mats up before things start dropping on them.
-  Global.call("moveAllMatsUp")
-
-  local rivalsMode = Global.getVar("rivalsMode")
-
-  -- Lock and make the decks uninteractable so players cannot cheat.  Also move them into the sky so no one can see them.
-  -- Move them to the side so they do not cause a reflection on the table.
-  -- It is important to keep them loaded, because otherwise when cards start getting pulled for dealing, huge loading
-  -- delays can result that may break draft timing.
-  local deckToLock = nil
-  local oldPosition = nil
-
-  deckToLock = getObjectFromGUID(awakeningsCycleDeckGuid)
-  if deckToLock != nil then
-    deckToLock.locked = true
-    deckToLock.interactable = false
-    oldPosition = deckToLock.getPosition()
-    deckToLock.setPosition({(oldPosition.x - 10), (oldPosition.y + 160), oldPosition.z})
-  end
-
-  deckToLock = getObjectFromGUID(legaciesCycleDeckGuid)
-  if deckToLock != nil then
-    deckToLock.locked = true
-    deckToLock.interactable = false
-    oldPosition = deckToLock.getPosition()
-    deckToLock.setPosition({(oldPosition.x - 10), (oldPosition.y + 160), oldPosition.z})
-  end
-
-  -- Sanity check player count before starting Winchester mode.
-  if rivalsMode == "Winchester Draft" then
-    local seatedPlayers = getSeatedPlayers()
-    local numSeatedPlayers = 0
-    for i,somePlayer in pairs(seatedPlayers) do
-      numSeatedPlayers = numSeatedPlayers + 1
-    end
-
-    if ((numSeatedPlayers == 1) or (numSeatedPlayers == 2)) then
-      local firstPlayerToAssign = nil
-      local secondPlayerToAssign = nil
-      local blueUsed = false
-      local greenUsed = false
-      local colorChangeNeeded = false
-      for i,somePlayer in pairs(seatedPlayers) do
-        if somePlayer == "Blue" then
-          blueUsed = true
-        elseif somePlayer == "Green" then
-          greenUsed = true
-        else
-          if firstPlayerToAssign == nil then
-            firstPlayerToAssign = somePlayer
-            colorChangeNeeded = true
-          else
-            secondPlayerToAssign = somePlayer
-            colorChangeNeeded = true
-          end
-        end
-      end
-
-      -- If either or both players are not blue/green, change their color(s).
-
-      if firstPlayerToAssign != nil then
-        if blueUsed == false then
-          Player[firstPlayerToAssign].changeColor("Blue")
-          blueUsed = true
-        else
-          -- If blue is used, then green must not be used, otherwise firstPlayerToAssign would be nil.
-          Player[firstPlayerToAssign].changeColor("Green")
-          greenUsed = true
-        end
-      end
-
-      if secondPlayerToAssign != nil then
-        -- If neither player was blue or green, the first player got assigned to blue, so this one should be green.
-        Player[secondPlayerToAssign].changeColor("Green")
-        greenUsed = true
-      end
-
-      if colorChangeNeeded == true then
-        printToAll("Winchester draft only uses the Blue and Green seats.", {1,1,1})
-      end
-    else
-      printToAll("Error, Winchester draft only supports 2 seated players.", {1,0,0})
-
-      return
-    end
-  end
-
-  self.setPosition({0, -4, 0})
-  clearSpawnedItems()
-  rivalsExpansion = expansion
-
-  -- Spawn the "please wait" message board.
-  Global.call("showPleaseWait")
-
-  -- Report progress.
-  printToAll("Preparing to generate expansion cards...", {1,1,1})
-
-  -- Spawn boards and get ready to continue setup.
-  Global.call("initBoards")
-  Wait.time(readyForRivals, 1.0)
-end
-
-function generateBoxes()
-  printToAll("Generating boxes...", {1,1,1})
-
-  -- Generate 6 legendaries and 30 rares for each box.
-  for i,curExpansion in pairs(expansions) do
-    local expansionDiceCards  = {}
-    local expansionUncommons  = {}
-    local expansionCommons    = {}
-
-    for boxIndex=1,2 do
-      local boxDiceCards = {}
-      local randomIndex = 1
-      local numBoxLegendaries = 0
-
-      -- Prevent duplicate legendaries inside a box.
-      for legendaryIndex=1,6 do
-        local isDuplicate = true
-        while isDuplicate == true do
-          randomIndex = math.random(1, #(allExpansionLegendaries[curExpansion]))
-          isDuplicate = false
-          for previousLegendaryIndex=1,numBoxLegendaries do
-            if allExpansionLegendaries[curExpansion][randomIndex] == boxDiceCards[previousLegendaryIndex] then
-              isDuplicate = true
-            end
-          end
-        end
-        table.insert(boxDiceCards, allExpansionLegendaries[curExpansion][randomIndex])
-        numBoxLegendaries = numBoxLegendaries + 1
-      end
-
-      -- Rares can have duplicates inside a box.
-      for rareIndex=1,30 do
-        randomIndex = math.random(1, #(allExpansionRares[curExpansion]))
-        table.insert(boxDiceCards, allExpansionRares[curExpansion][randomIndex])
-      end
-
-      -- At this point, there are 36 dice cards that need randomized.
-      local diceCardsLeftToRandomize = 36
-      for i=1,36 do
-        randomIndex = math.random(1,diceCardsLeftToRandomize)
-        table.insert(expansionDiceCards, table.remove(boxDiceCards, randomIndex))
-        diceCardsLeftToRandomize = diceCardsLeftToRandomize - 1
-      end
-
-      -- Uncommons can have duplicates inside a box.
-      for uncommonIndex=1,36 do
-        randomIndex = math.random(1, #(allExpansionUncommons[curExpansion]))
-        table.insert(expansionUncommons, allExpansionUncommons[curExpansion][randomIndex])
-      end
-
-      -- Commons can have duplicates inside a box.
-      for commonIndex=1,108 do
-        randomIndex = math.random(1, #(allExpansionCommons[curExpansion]))
-        table.insert(expansionCommons, allExpansionCommons[curExpansion][randomIndex])
-      end
-    end
-
-    -- At this point, 2 boxes have been generated for the current expansion.  All 72 packs can now be saved.
-    local nextDiceCardIndex = 1
-    local nextUncommonIndex = 1
-    local nextCommonIndex = 1
-    nextExpansionIndex[curExpansion] = 1
-    rivalsExpansionPacks[curExpansion] = {}
-    for packIndex = 1,72 do
-      -- The packs are created in reverse order so that dice cards end up on top of decks.
-      table.insert(rivalsExpansionPacks[curExpansion], expansionCommons[nextCommonIndex])
-      nextCommonIndex = nextCommonIndex + 1
-      table.insert(rivalsExpansionPacks[curExpansion], expansionCommons[nextCommonIndex])
-      nextCommonIndex = nextCommonIndex + 1
-      table.insert(rivalsExpansionPacks[curExpansion], expansionCommons[nextCommonIndex])
-      nextCommonIndex = nextCommonIndex + 1
-
-      table.insert(rivalsExpansionPacks[curExpansion], expansionUncommons[nextUncommonIndex])
-      nextUncommonIndex = nextUncommonIndex + 1
-
-      table.insert(rivalsExpansionPacks[curExpansion], expansionDiceCards[nextDiceCardIndex])
-      nextDiceCardIndex = nextDiceCardIndex + 1
-    end
-  end
-end
-
-function allCardsDeckPulled(deck)
-  allCardsPulledDeck = deck
-  startLuaCoroutine(self, 'allCardsDeckPulledCoroutine')
-end
-
-function allCardsDeckPulledCoroutine()
-  local deck = allCardsPulledDeck
-  local rivalsMode = Global.getVar("rivalsMode")
-
-  local expansionPacksNeeded     = {}
-  local sortedPullCards          = {}
-  local numCardsPulled           = 0
-
-  for i,curExpansion in pairs(expansions) do
-    expansionPacksNeeded[curExpansion]    = 0
-    allExpansionLegendaries[curExpansion] = {}
-    allExpansionRares[curExpansion]       = {}
-    allExpansionUncommons[curExpansion]   = {}
-    allExpansionCommons[curExpansion]     = {}
-    sortedPullCards[curExpansion]         = {}
-  end
-
-  -- Set up local cube variables as well.
-  expansionPacksNeeded['Cube']          = 0
-  sortedPullCards['Cube']               = {}
-
-  if (rivalsExpansion != 'Mixed') then
-    -- Set all pack selections to the same expansion.
-    for i=1,numPacksPerPlayer do
-      packSelections[i] = rivalsExpansion
-    end
-  end
-
-  -- Determine how many cards from each expansion are needed.
-  for i=1,numPacksPerPlayer do
-    expansionPacksNeeded[packSelections[i]] = expansionPacksNeeded[packSelections[i]]+1
-  end
-
-  -- Generate tables for cards in each expansion.
-  local databank = Global.getTable("cardstable")
-  for index,curCard in ipairs(databank) do
-    local cardSet = curCard["set"]
-    local rarity = curCard["rarity"]
-
-    if "Legendary" == rarity then
-      table.insert(allExpansionLegendaries[cardSet], curCard["set"] .. ' ' .. curCard["number"])
-    elseif "Rare" == rarity then
-      table.insert(allExpansionRares[cardSet], curCard["set"] .. ' ' .. curCard["number"])
-    elseif "Uncommon" == rarity then
-      table.insert(allExpansionUncommons[cardSet], curCard["set"] .. ' ' .. curCard["number"])
-    elseif "Common" == rarity then
-      table.insert(allExpansionCommons[cardSet], curCard["set"] .. ' ' .. curCard["number"])
-    else
-      -- Nothing needs done.
-    end
-  end
-
-  local seatedPlayers = getSeatedPlayers()
-  local numSeatedPlayers = 0
-  for playerIndex,somePlayer in pairs(seatedPlayers) do
-    numSeatedPlayers = numSeatedPlayers + 1
-  end
-
-  -- Generate 2 boxes for each expansion.
-  generateBoxes()
-
-  printToAll("Preparing to pull cards...", {1,1,1})
-
-  coroutine.yield(0)
-
-  for expansionIndex,curExpansion in pairs(expansions) do
-    local numPacksToPull = (numSeatedPlayers*expansionPacksNeeded[curExpansion])
-
-    local cardIndex = 1
-    for packIndex=1,numPacksToPull do
-      -- Insert a pack at a time.
-      for i=1,5 do
-        table.insert(sortedPullCards[curExpansion], rivalsExpansionPacks[curExpansion][cardIndex])
-        cardIndex = cardIndex + 1
-      end
-    end
-
-    -- Sort the pull list.
-    table.sort(sortedPullCards[curExpansion])
-
-    -- Pull cards in the sorted pull list.
-    local numPullCards = #(sortedPullCards[curExpansion])
-    local cloneCard = nil
-    local lastNameOrDescription = nil
-    if numPullCards >= 1 then
-      for cardIndex=1,numPullCards do
-        if sortedPullCards[curExpansion][cardIndex] == lastNameOrDescription then
-          -- This is the same as the last card.  Clone it.
-          local cloneCardY = cloneCard.getPosition().y
-          local newCard = cloneCard.clone({position={6, (2 + (numCardsPulled * 0.05)) - cloneCardY, (-0.9)}})
-          newCard.locked = false
-          newCard.interactable = true
-          newCard.drag = 0.001
-          newCard.angular_drag = 0.001
-          newCard.dynamic_friction = 0.8
-          newCard.bounciness = 0
-
-          numCardsPulled = numCardsPulled + 1
-        else
-          -- This is a new card.  Delete the last card, pull the new one, and then clone it.
-          if cloneCard != nil then
-            cloneCard.destruct()
-          end
-
-          -- Find the GUID of the card.
-          local deckObjects = deck.getObjects()
-          local cardFound = false
-          for checkIndex,curCard in ipairs(deckObjects) do
-            if curCard.description == sortedPullCards[curExpansion][cardIndex] then
-              cardFound = true
-              local pullGuid = curCard.guid
-              if cubeCompatibilityMode == true then
-                lastNameOrDescription = curCard.nickname
-              else
-                lastNameOrDescription = curCard.description
-              end
-              cloneCard = deck.takeObject({position={200,1,200}, rotation={0,0,180}, guid=pullGuid, flip=false, smooth=false})
-              cloneCard.locked = true
-              cloneCard.interactable = false
-              cloneCard.drag = 0.001
-              cloneCard.angular_drag = 0.001
-              cloneCard.dynamic_friction = 0.8
-              cloneCard.bounciness = 0
-
-              local cloneCardY = cloneCard.getPosition().y
-              local newCard = cloneCard.clone({position={6, (2 + (numCardsPulled * 0.05)) - cloneCardY, (-0.9)}})
-              newCard.locked = false
-              newCard.interactable = true
-              newCard.drag = 0.001
-              newCard.angular_drag = 0.001
-              newCard.dynamic_friction = 0.8
-              newCard.bounciness = 0
-
-              numCardsPulled = numCardsPulled + 1
-              break
-            end
-          end
-
-          if cardFound == false then
-            -- This should never happen.
-            printToAll("Error, card \"" .. sortedPullCards[curExpansion][cardIndex] .. "\" not found.", {1,0,0})
-          end
-        end
-
-        -- Occasionally yield so the game does not freeze too much.
-        if ((numCardsPulled % 20) == 0) then
-          coroutine.yield(0)
-        end
-      end
-
-      if cloneCard != nil then
-        cloneCard.destruct()
-        cloneCard = nil
-      end
-    end
-  end
-
-  -- Add dummy cards so that once the deck is empty of useful cards, it will still be a "deck", and can be deleted.
-  -- Only do this for non-cube decks, since cube decks might not have enough spare cards.
-  if rivalsExpansion != 'Cube' then
-    deck.takeObject({position={6, 3 + (numCardsPulled * 0.1), (-0.9)}, rotation={0,0,180}, flip=false, smooth=false})
-    deck.takeObject({position={6, 3.1 + (numCardsPulled * 0.1), (-0.9)}, rotation={0,0,180}, flip=false, smooth=false})
-  end
-
-  -- Clone the Rivals deck for all players.
-  local scriptZoneObjects = getObjectFromGUID(rivalsDeckZoneGuid).getObjects()
-  local rivalsDeck = nil
-  for i,curDeck in ipairs(scriptZoneObjects) do
-    if curDeck.tag == "Deck" then
-      rivalsDeck = curDeck
-      break
-    end
-  end
-
-  if rivalsDeck != nil then
-    local seatData = Global.getTable("seatData")
-
-    for i,somePlayer in pairs(seatedPlayers) do
-      local clonePosition = nil
-
-      if ((rivalsMode == "Normal Draft") or (rivalsMode == "Cube Draft")) then
-        -- For normal draft or cube draft, clone on the Rivals deck holder.
-        clonePosition = getObjectFromGUID(seatData[somePlayer].rivalsDeckHolderGuid).getPosition()
-      else
-        -- For Winchester or sealed, clone on top of the deck area.
-        clonePosition = getObjectFromGUID(seatData[somePlayer].scriptZoneGuid).getPosition()
-      end
-      clonePosition.y = 1.5
-
-      local newRivalsDeck = rivalsDeck.clone({position=clonePosition})
-
-      -- Update the Rival deck rotation to be correct for each seat.
-      local rivalsDeckRotation = getObjectFromGUID(seatData[somePlayer].scriptZoneGuid).getRotation()
-
-      if ((rivalsMode == "Normal Draft") or (rivalsMode == "Cube Draft")) then
-        -- For normal draft or cube draft, rotate the Rivals deck to be face up.
-        rivalsDeckRotation.y = rivalsDeckRotation.y+180
-      else
-        -- For sealed and Winchester, flip the Rivals deck over.
-        rivalsDeckRotation.x = rivalsDeckRotation.x+180
-      end
-
-      newRivalsDeck.setRotation(rivalsDeckRotation)
-    end
-
-    -- After a delay, destruct the Rivals deck.
-    Wait.time(function() destructRivalsDeck(rivalsDeck) end, 1.5)
-  else
-    -- This should never happen.
-    printToAll("Error, Rivals deck not found.", {1,0,0})
-  end
-
-  -- Wait before dealing.  Note that this is a long time because cards for 8 players take a while.
-  Wait.time(function() draftReadyForDeal(deck) end, 3.5)
-
-  return 1
-end
-
-function destructRivalsDeck(rivalsDeck)
-  rivalsDeck.destruct()
-end
-
-function updatePackChoices(clickedPackIndex, clickedExpansionOffset)
-  packSelections[clickedPackIndex] = expansions[clickedExpansionOffset+1]
-
-  local clickedPackOffset = (clickedPackIndex-1)
-
-  for expansionOffset=0,(numExpansions-1) do
-    local editButtonParameters = {}
-
-    -- Change button colors to reflect the new selection.  Unlike Lua arrays, button indices start at 0.
-
-    editButtonParameters.index = ((clickedPackOffset * numExpansions) + expansionOffset)
-    if clickedExpansionOffset == expansionOffset then
-      editButtonParameters.color = {1,1,1}
-      editButtonParameters.font_color = {0,0,0}
-    else
-      editButtonParameters.color = {0,0,0}
-      editButtonParameters.font_color = {1,1,1}
-    end
-    self.editButton(editButtonParameters)
-  end
-end
+--function generatePacks(playerColor, expansion)
+--  -- Zoom camera back out to the normal perspective for that player.
+--  zoomCameraBackOut(playerColor)
+--
+--  -- Move player mats up before things start dropping on them.
+--  Global.call("moveAllMatsUp")
+--
+--  local rivalsMode = Global.getVar("rivalsMode")
+--
+--  -- Lock and make the decks uninteractable so players cannot cheat.  Also move them into the sky so no one can see them.
+--  -- Move them to the side so they do not cause a reflection on the table.
+--  -- It is important to keep them loaded, because otherwise when cards start getting pulled for dealing, huge loading
+--  -- delays can result that may break draft timing.
+--  local deckToLock = nil
+--  local oldPosition = nil
+--
+--  deckToLock = getObjectFromGUID(awakeningsCycleDeckGuid)
+--  if deckToLock != nil then
+--    deckToLock.locked = true
+--    deckToLock.interactable = false
+--    oldPosition = deckToLock.getPosition()
+--    deckToLock.setPosition({(oldPosition.x - 10), (oldPosition.y + 160), oldPosition.z})
+--  end
+--
+--  deckToLock = getObjectFromGUID(legaciesCycleDeckGuid)
+--  if deckToLock != nil then
+--    deckToLock.locked = true
+--    deckToLock.interactable = false
+--    oldPosition = deckToLock.getPosition()
+--    deckToLock.setPosition({(oldPosition.x - 10), (oldPosition.y + 160), oldPosition.z})
+--  end
+--
+--  -- Sanity check player count before starting Winchester mode.
+--  if rivalsMode == "Winchester Draft" then
+--    local seatedPlayers = getSeatedPlayers()
+--    local numSeatedPlayers = 0
+--    for i,somePlayer in pairs(seatedPlayers) do
+--      numSeatedPlayers = numSeatedPlayers + 1
+--    end
+--
+--    if ((numSeatedPlayers == 1) or (numSeatedPlayers == 2)) then
+--      local firstPlayerToAssign = nil
+--      local secondPlayerToAssign = nil
+--      local blueUsed = false
+--      local greenUsed = false
+--      local colorChangeNeeded = false
+--      for i,somePlayer in pairs(seatedPlayers) do
+--        if somePlayer == "Blue" then
+--          blueUsed = true
+--        elseif somePlayer == "Green" then
+--          greenUsed = true
+--        else
+--          if firstPlayerToAssign == nil then
+--            firstPlayerToAssign = somePlayer
+--            colorChangeNeeded = true
+--          else
+--            secondPlayerToAssign = somePlayer
+--            colorChangeNeeded = true
+--          end
+--        end
+--      end
+--
+--      -- If either or both players are not blue/green, change their color(s).
+--
+--      if firstPlayerToAssign != nil then
+--        if blueUsed == false then
+--          Player[firstPlayerToAssign].changeColor("Blue")
+--          blueUsed = true
+--        else
+--          -- If blue is used, then green must not be used, otherwise firstPlayerToAssign would be nil.
+--          Player[firstPlayerToAssign].changeColor("Green")
+--          greenUsed = true
+--        end
+--      end
+--
+--      if secondPlayerToAssign != nil then
+--        -- If neither player was blue or green, the first player got assigned to blue, so this one should be green.
+--        Player[secondPlayerToAssign].changeColor("Green")
+--        greenUsed = true
+--      end
+--
+--      if colorChangeNeeded == true then
+--        printToAll("Winchester draft only uses the Blue and Green seats.", {1,1,1})
+--      end
+--    else
+--      printToAll("Error, Winchester draft only supports 2 seated players.", {1,0,0})
+--
+--      return
+--    end
+--  end
+--
+--  self.setPosition({0, -4, 0})
+--  clearSpawnedItems()
+--  rivalsExpansion = expansion
+--
+--  -- Spawn the "please wait" message board.
+--  Global.call("showPleaseWait")
+--
+--  -- Report progress.
+--  printToAll("Preparing to generate expansion cards...", {1,1,1})
+--
+--  -- Spawn boards and get ready to continue setup.
+--  Global.call("initBoards")
+--  Wait.time(readyForRivals, 1.0)
+--end
+
+--function generateBoxes()
+--  printToAll("Generating boxes...", {1,1,1})
+--
+--  -- Generate 6 legendaries and 30 rares for each box.
+--  for i,curExpansion in pairs(expansions) do
+--    local expansionDiceCards  = {}
+--    local expansionUncommons  = {}
+--    local expansionCommons    = {}
+--
+--    for boxIndex=1,2 do
+--      local boxDiceCards = {}
+--      local randomIndex = 1
+--      local numBoxLegendaries = 0
+--
+--      -- Prevent duplicate legendaries inside a box.
+--      for legendaryIndex=1,6 do
+--        local isDuplicate = true
+--        while isDuplicate == true do
+--          randomIndex = math.random(1, #(allExpansionLegendaries[curExpansion]))
+--          isDuplicate = false
+--          for previousLegendaryIndex=1,numBoxLegendaries do
+--            if allExpansionLegendaries[curExpansion][randomIndex] == boxDiceCards[previousLegendaryIndex] then
+--              isDuplicate = true
+--            end
+--          end
+--        end
+--        table.insert(boxDiceCards, allExpansionLegendaries[curExpansion][randomIndex])
+--        numBoxLegendaries = numBoxLegendaries + 1
+--      end
+--
+--      -- Rares can have duplicates inside a box.
+--      for rareIndex=1,30 do
+--        randomIndex = math.random(1, #(allExpansionRares[curExpansion]))
+--        table.insert(boxDiceCards, allExpansionRares[curExpansion][randomIndex])
+--      end
+--
+--      -- At this point, there are 36 dice cards that need randomized.
+--      local diceCardsLeftToRandomize = 36
+--      for i=1,36 do
+--        randomIndex = math.random(1,diceCardsLeftToRandomize)
+--        table.insert(expansionDiceCards, table.remove(boxDiceCards, randomIndex))
+--        diceCardsLeftToRandomize = diceCardsLeftToRandomize - 1
+--      end
+--
+--      -- Uncommons can have duplicates inside a box.
+--      for uncommonIndex=1,36 do
+--        randomIndex = math.random(1, #(allExpansionUncommons[curExpansion]))
+--        table.insert(expansionUncommons, allExpansionUncommons[curExpansion][randomIndex])
+--      end
+--
+--      -- Commons can have duplicates inside a box.
+--      for commonIndex=1,108 do
+--        randomIndex = math.random(1, #(allExpansionCommons[curExpansion]))
+--        table.insert(expansionCommons, allExpansionCommons[curExpansion][randomIndex])
+--      end
+--    end
+--
+--    -- At this point, 2 boxes have been generated for the current expansion.  All 72 packs can now be saved.
+--    local nextDiceCardIndex = 1
+--    local nextUncommonIndex = 1
+--    local nextCommonIndex = 1
+--    nextExpansionIndex[curExpansion] = 1
+--    rivalsExpansionPacks[curExpansion] = {}
+--    for packIndex = 1,72 do
+--      -- The packs are created in reverse order so that dice cards end up on top of decks.
+--      table.insert(rivalsExpansionPacks[curExpansion], expansionCommons[nextCommonIndex])
+--      nextCommonIndex = nextCommonIndex + 1
+--      table.insert(rivalsExpansionPacks[curExpansion], expansionCommons[nextCommonIndex])
+--      nextCommonIndex = nextCommonIndex + 1
+--      table.insert(rivalsExpansionPacks[curExpansion], expansionCommons[nextCommonIndex])
+--      nextCommonIndex = nextCommonIndex + 1
+--
+--      table.insert(rivalsExpansionPacks[curExpansion], expansionUncommons[nextUncommonIndex])
+--      nextUncommonIndex = nextUncommonIndex + 1
+--
+--      table.insert(rivalsExpansionPacks[curExpansion], expansionDiceCards[nextDiceCardIndex])
+--      nextDiceCardIndex = nextDiceCardIndex + 1
+--    end
+--  end
+--end
+
+--function allCardsDeckPulled(deck)
+--  allCardsPulledDeck = deck
+--  startLuaCoroutine(self, 'allCardsDeckPulledCoroutine')
+--end
+
+--function allCardsDeckPulledCoroutine()
+--  local deck = allCardsPulledDeck
+--  local rivalsMode = Global.getVar("rivalsMode")
+--
+--  local expansionPacksNeeded     = {}
+--  local sortedPullCards          = {}
+--  local numCardsPulled           = 0
+--
+--  for i,curExpansion in pairs(expansions) do
+--    expansionPacksNeeded[curExpansion]    = 0
+--    allExpansionLegendaries[curExpansion] = {}
+--    allExpansionRares[curExpansion]       = {}
+--    allExpansionUncommons[curExpansion]   = {}
+--    allExpansionCommons[curExpansion]     = {}
+--    sortedPullCards[curExpansion]         = {}
+--  end
+--
+--  -- Set up local cube variables as well.
+--  expansionPacksNeeded['Cube']          = 0
+--  sortedPullCards['Cube']               = {}
+--
+--  if (rivalsExpansion != 'Mixed') then
+--    -- Set all pack selections to the same expansion.
+--    for i=1,numPacksPerPlayer do
+--      packSelections[i] = rivalsExpansion
+--    end
+--  end
+--
+--  -- Determine how many cards from each expansion are needed.
+--  for i=1,numPacksPerPlayer do
+--    expansionPacksNeeded[packSelections[i]] = expansionPacksNeeded[packSelections[i]]+1
+--  end
+--
+--  -- Generate tables for cards in each expansion.
+--  local databank = Global.getTable("cardstable")
+--  for index,curCard in ipairs(databank) do
+--    local cardSet = curCard["set"]
+--    local rarity = curCard["rarity"]
+--
+--    if "Legendary" == rarity then
+--      table.insert(allExpansionLegendaries[cardSet], curCard["set"] .. ' ' .. curCard["number"])
+--    elseif "Rare" == rarity then
+--      table.insert(allExpansionRares[cardSet], curCard["set"] .. ' ' .. curCard["number"])
+--    elseif "Uncommon" == rarity then
+--      table.insert(allExpansionUncommons[cardSet], curCard["set"] .. ' ' .. curCard["number"])
+--    elseif "Common" == rarity then
+--      table.insert(allExpansionCommons[cardSet], curCard["set"] .. ' ' .. curCard["number"])
+--    else
+--      -- Nothing needs done.
+--    end
+--  end
+--
+--  local seatedPlayers = getSeatedPlayers()
+--  local numSeatedPlayers = 0
+--  for playerIndex,somePlayer in pairs(seatedPlayers) do
+--    numSeatedPlayers = numSeatedPlayers + 1
+--  end
+--
+--  -- Generate 2 boxes for each expansion.
+--  generateBoxes()
+--
+--  printToAll("Preparing to pull cards...", {1,1,1})
+--
+--  coroutine.yield(0)
+--
+--  for expansionIndex,curExpansion in pairs(expansions) do
+--    local numPacksToPull = (numSeatedPlayers*expansionPacksNeeded[curExpansion])
+--
+--    local cardIndex = 1
+--    for packIndex=1,numPacksToPull do
+--      -- Insert a pack at a time.
+--      for i=1,5 do
+--        table.insert(sortedPullCards[curExpansion], rivalsExpansionPacks[curExpansion][cardIndex])
+--        cardIndex = cardIndex + 1
+--      end
+--    end
+--
+--    -- Sort the pull list.
+--    table.sort(sortedPullCards[curExpansion])
+--
+--    -- Pull cards in the sorted pull list.
+--    local numPullCards = #(sortedPullCards[curExpansion])
+--    local cloneCard = nil
+--    local lastNameOrDescription = nil
+--    if numPullCards >= 1 then
+--      for cardIndex=1,numPullCards do
+--        if sortedPullCards[curExpansion][cardIndex] == lastNameOrDescription then
+--          -- This is the same as the last card.  Clone it.
+--          local cloneCardY = cloneCard.getPosition().y
+--          local newCard = cloneCard.clone({position={6, (2 + (numCardsPulled * 0.05)) - cloneCardY, (-0.9)}})
+--          newCard.locked = false
+--          newCard.interactable = true
+--          newCard.drag = 0.001
+--          newCard.angular_drag = 0.001
+--          newCard.dynamic_friction = 0.8
+--          newCard.bounciness = 0
+--
+--          numCardsPulled = numCardsPulled + 1
+--        else
+--          -- This is a new card.  Delete the last card, pull the new one, and then clone it.
+--          if cloneCard != nil then
+--            cloneCard.destruct()
+--          end
+--
+--          -- Find the GUID of the card.
+--          local deckObjects = deck.getObjects()
+--          local cardFound = false
+--          for checkIndex,curCard in ipairs(deckObjects) do
+--            if curCard.description == sortedPullCards[curExpansion][cardIndex] then
+--              cardFound = true
+--              local pullGuid = curCard.guid
+--              if cubeCompatibilityMode == true then
+--                lastNameOrDescription = curCard.nickname
+--              else
+--                lastNameOrDescription = curCard.description
+--              end
+--              cloneCard = deck.takeObject({position={200,1,200}, rotation={0,0,180}, guid=pullGuid, flip=false, smooth=false})
+--              cloneCard.locked = true
+--              cloneCard.interactable = false
+--              cloneCard.drag = 0.001
+--              cloneCard.angular_drag = 0.001
+--              cloneCard.dynamic_friction = 0.8
+--              cloneCard.bounciness = 0
+--
+--              local cloneCardY = cloneCard.getPosition().y
+--              local newCard = cloneCard.clone({position={6, (2 + (numCardsPulled * 0.05)) - cloneCardY, (-0.9)}})
+--              newCard.locked = false
+--              newCard.interactable = true
+--              newCard.drag = 0.001
+--              newCard.angular_drag = 0.001
+--              newCard.dynamic_friction = 0.8
+--              newCard.bounciness = 0
+--
+--              numCardsPulled = numCardsPulled + 1
+--              break
+--            end
+--          end
+--
+--          if cardFound == false then
+--            -- This should never happen.
+--            printToAll("Error, card \"" .. sortedPullCards[curExpansion][cardIndex] .. "\" not found.", {1,0,0})
+--          end
+--        end
+--
+--        -- Occasionally yield so the game does not freeze too much.
+--        if ((numCardsPulled % 20) == 0) then
+--          coroutine.yield(0)
+--        end
+--      end
+--
+--      if cloneCard != nil then
+--        cloneCard.destruct()
+--        cloneCard = nil
+--      end
+--    end
+--  end
+--
+--  -- Add dummy cards so that once the deck is empty of useful cards, it will still be a "deck", and can be deleted.
+--  -- Only do this for non-cube decks, since cube decks might not have enough spare cards.
+--  if rivalsExpansion != 'Cube' then
+--    deck.takeObject({position={6, 3 + (numCardsPulled * 0.1), (-0.9)}, rotation={0,0,180}, flip=false, smooth=false})
+--    deck.takeObject({position={6, 3.1 + (numCardsPulled * 0.1), (-0.9)}, rotation={0,0,180}, flip=false, smooth=false})
+--  end
+--
+--  -- Clone the Rivals deck for all players.
+--  local scriptZoneObjects = getObjectFromGUID(rivalsDeckZoneGuid).getObjects()
+--  local rivalsDeck = nil
+--  for i,curDeck in ipairs(scriptZoneObjects) do
+--    if curDeck.tag == "Deck" then
+--      rivalsDeck = curDeck
+--      break
+--    end
+--  end
+--
+--  if rivalsDeck != nil then
+--    local seatData = Global.getTable("seatData")
+--
+--    for i,somePlayer in pairs(seatedPlayers) do
+--      local clonePosition = nil
+--
+--      if ((rivalsMode == "Normal Draft") or (rivalsMode == "Cube Draft")) then
+--        -- For normal draft or cube draft, clone on the Rivals deck holder.
+--        clonePosition = getObjectFromGUID(seatData[somePlayer].rivalsDeckHolderGuid).getPosition()
+--      else
+--        -- For Winchester or sealed, clone on top of the deck area.
+--        clonePosition = getObjectFromGUID(seatData[somePlayer].scriptZoneGuid).getPosition()
+--      end
+--      clonePosition.y = 1.5
+--
+--      local newRivalsDeck = rivalsDeck.clone({position=clonePosition})
+--
+--      -- Update the Rival deck rotation to be correct for each seat.
+--      local rivalsDeckRotation = getObjectFromGUID(seatData[somePlayer].scriptZoneGuid).getRotation()
+--
+--      if ((rivalsMode == "Normal Draft") or (rivalsMode == "Cube Draft")) then
+--        -- For normal draft or cube draft, rotate the Rivals deck to be face up.
+--        rivalsDeckRotation.y = rivalsDeckRotation.y+180
+--      else
+--        -- For sealed and Winchester, flip the Rivals deck over.
+--        rivalsDeckRotation.x = rivalsDeckRotation.x+180
+--      end
+--
+--      newRivalsDeck.setRotation(rivalsDeckRotation)
+--    end
+--
+--    -- After a delay, destruct the Rivals deck.
+--    Wait.time(function() destructRivalsDeck(rivalsDeck) end, 1.5)
+--  else
+--    -- This should never happen.
+--    printToAll("Error, Rivals deck not found.", {1,0,0})
+--  end
+--
+--  -- Wait before dealing.  Note that this is a long time because cards for 8 players take a while.
+--  Wait.time(function() draftReadyForDeal(deck) end, 3.5)
+--
+--  return 1
+--end
+
+--function destructRivalsDeck(rivalsDeck)
+--  rivalsDeck.destruct()
+--end
+
+--function updatePackChoices(clickedPackIndex, clickedExpansionOffset)
+--  packSelections[clickedPackIndex] = expansions[clickedExpansionOffset+1]
+--
+--  local clickedPackOffset = (clickedPackIndex-1)
+--
+--  for expansionOffset=0,(numExpansions-1) do
+--    local editButtonParameters = {}
+--
+--    -- Change button colors to reflect the new selection.  Unlike Lua arrays, button indices start at 0.
+--
+--    editButtonParameters.index = ((clickedPackOffset * numExpansions) + expansionOffset)
+--    if clickedExpansionOffset == expansionOffset then
+--      editButtonParameters.color = {1,1,1}
+--      editButtonParameters.font_color = {0,0,0}
+--    else
+--      editButtonParameters.color = {0,0,0}
+--      editButtonParameters.font_color = {1,1,1}
+--    end
+--    self.editButton(editButtonParameters)
+--  end
+--end
 
 -- Unfortunately, there seems to be no way to identify which button was clicked without using a million functions here or doing dynamic function generation.
 
-function packAW1()
-  updatePackChoices(1, 0)
-end
-
-function packAW2()
-  updatePackChoices(2, 0)
-end
-
-function packAW3()
-  updatePackChoices(3, 0)
-end
-
-function packAW4()
-  updatePackChoices(4, 0)
-end
-
-function packAW5()
-  updatePackChoices(5, 0)
-end
-
-function packAW6()
-  updatePackChoices(6, 0)
-end
-
-function packAW7()
-  updatePackChoices(7, 0)
-end
-
-function packAW8()
-  updatePackChoices(8, 0)
-end
-
-function packSoR1()
-  updatePackChoices(1, 1)
-end
-
-function packSoR2()
-  updatePackChoices(2, 1)
-end
-
-function packSoR3()
-  updatePackChoices(3, 1)
-end
-
-function packSoR4()
-  updatePackChoices(4, 1)
-end
-
-function packSoR5()
-  updatePackChoices(5, 1)
-end
-
-function packSoR6()
-  updatePackChoices(6, 1)
-end
-
-function packSoR7()
-  updatePackChoices(7, 1)
-end
-
-function packSoR8()
-  updatePackChoices(8, 1)
-end
-
-function packEaW1()
-  updatePackChoices(1, 2)
-end
-
-function packEaW2()
-  updatePackChoices(2, 2)
-end
-
-function packEaW3()
-  updatePackChoices(3, 2)
-end
-
-function packEaW4()
-  updatePackChoices(4, 2)
-end
-
-function packEaW5()
-  updatePackChoices(5, 2)
-end
-
-function packEaW6()
-  updatePackChoices(6, 2)
-end
-
-function packEaW7()
-  updatePackChoices(7, 2)
-end
-
-function packEaW8()
-  updatePackChoices(8, 2)
-end
-
-function packLEG1()
-  updatePackChoices(1, 3)
-end
-
-function packLEG2()
-  updatePackChoices(2, 3)
-end
-
-function packLEG3()
-  updatePackChoices(3, 3)
-end
-
-function packLEG4()
-  updatePackChoices(4, 3)
-end
-
-function packLEG5()
-  updatePackChoices(5, 3)
-end
-
-function packLEG6()
-  updatePackChoices(6, 3)
-end
-
-function packLEG7()
-  updatePackChoices(7, 3)
-end
-
-function packLEG8()
-  updatePackChoices(8, 3)
-end
-
-function packWotF1()
-  updatePackChoices(1, 4)
-end
-
-function packWotF2()
-  updatePackChoices(2, 4)
-end
-
-function packWotF3()
-  updatePackChoices(3, 4)
-end
-
-function packWotF4()
-  updatePackChoices(4, 4)
-end
-
-function packWotF5()
-  updatePackChoices(5, 4)
-end
-
-function packWotF6()
-  updatePackChoices(6, 4)
-end
-
-function packWotF7()
-  updatePackChoices(7, 4)
-end
-
-function packWotF8()
-  updatePackChoices(8, 4)
-end
-
-function heroButton()
-  if herobutton==true then
-    self.editButton({index=0,label='Hero'})
-    affiliationselect='nil'
-    if villainbutton!=true and neutralbutton != true then
-      affiliationselect='Hero'
-      affiliationselect2='Villain'
-      affiliationselect3='Neutral'
-    end
-    herobutton=false
-    return
-  end
-
-  if herobutton!=true then
-    self.editButton({index=0,label='!Hero!'})
-    herobutton=true
-    affiliationselect='Hero'
-    if villainbutton!=true and neutralbutton != true then
-      affiliationselect2='nil'
-      affiliationselect3='nil'
-    end
-    return
-  end
-end
-
-function villainButton()
-  if villainbutton==true then
-    self.editButton({index=1,label='villain'})
-    affiliationselect2='nil'
-    if herobutton!=true and neutralbutton != true then
-      affiliationselect='Hero'
-      affiliationselect2='Villain'
-      affiliationselect3='Neutral'
-    end
-    villainbutton=false
-    return
-  end
-
-  if villainbutton!=true then
-    self.editButton({index=1,label='!villain!'})
-    villainbutton=true
-    affiliationselect2='Villain'
-    if herobutton!=true and neutralbutton != true then
-      affiliationselect='nil'
-      affiliationselect3='nil'
-    end
-    return
-  end
-end
-
-function neutralButton()
-  if neutralbutton==true then
-    self.editButton({index=2,label='Neutral'})
-    affiliationselect3='nil'
-    if villainbutton!=true and herobutton != true then
-      affiliationselect='Hero'
-      affiliationselect2='villain'
-      affiliationselect3='Neutral'
-    end
-    neutralbutton=false
-    return
-  end
-
-  if neutralbutton!=true then
-    self.editButton({index=2,label='!Neutral!'})
-    neutralbutton=true
-    affiliationselect3='Neutral'
-    if villainbutton!=true and herobutton != true then
-      affiliationselect2='nil'
-      affiliationselect='nil'
-    end
-    return
-  end
-end
-
-function charactersButton()
-  if charactersbutton==true then
-    self.editButton({index=3,label='Characters'})
-    typeselect='nil'
-    if upgradesbutton!=true and supportsbutton != true and eventsbutton != true then
-      typeselect='Character'
-      typeselect2='Upgrade'
-      typeselect3='Support'
-      typeselect4='Event'
-    end
-    charactersbutton=false
-    return
-  end
-
-  if charactersbutton!=true then
-    self.editButton({index=3,label='!Character!'})
-    charactersbutton=true
-    typeselect='Character'
-    if upgradesbutton!=true and supportsbutton != true and eventsbutton != true then
-      typeselect2='nil'
-      typeselect3='nil'
-      typeselect4='nil'
-    end
-    return
-  end
-end
-
-function upgradesButton()
-  if upgradesbutton==true then
-    self.editButton({index=4,label='Upgrades'})
-    typeselect2='nil'
-    if charactersbutton!=true and supportsbutton != true and eventsbutton != true then
-      typeselect='Character'
-      typeselect2='Upgrade'
-      typeselect3='Support'
-      typeselect4='Event'
-    end
-    upgradesbutton=false
-    return
-  end
-
-  if upgradesbutton!=true then
-    self.editButton({index=4,label='!Upgrades!'})
-    upgradesbutton=true
-    typeselect2='Upgrade'
-    if charactersbutton!=true and supportsbutton != true and eventsbutton != true then
-      typeselect='nil'
-      typeselect3='nil'
-      typeselect4='nil'
-    end
-    return
-  end
-end
-
-function supportsButton()
-  if supportsbutton==true then
-    self.editButton({index=5,label='Supports'})
-    typeselect3='nil'
-    if charactersbutton!=true and upgradesbutton != true and eventsbutton != true then
-      typeselect='Character'
-      typeselect2='Upgrade'
-      typeselect3='Support'
-      typeselect4='Event'
-    end
-    supportsbutton=false
-    return
-  end
-
-  if supportsbutton!=true then
-    self.editButton({index=5,label='!Supports!'})
-    supportsbutton=true
-    typeselect3='Support'
-    if charactersbutton!=true and upgradesbutton != true and eventsbutton != true then
-      typeselect='nil'
-      typeselect2='nil'
-      typeselect4='nil'
-    end
-    return
-  end
-end
-
-function eventsButton()
-  if eventsbutton==true then
-    self.editButton({index=6,label='Events'})
-    typeselect4='nil'
-    if charactersbutton!=true and upgradesbutton != true and supportsbutton != true then
-      typeselect='Character'
-      typeselect2='Upgrade'
-      typeselect3='Support'
-      typeselect4='Event'
-    end
-    eventsbutton=false
-    return
-  end
-
-  if eventsbutton!=true then
-    self.editButton({index=6,label='!Events!'})
-    eventsbutton=true
-    typeselect4='Event'
-    if charactersbutton!=true and upgradesbutton != true and supportsbutton != true then
-      typeselect='nil'
-      typeselect2='nil'
-      typeselect3='nil'
-    end
-    return
-  end
-end
-
-function redButton()
-  if redbutton==true then
-    self.editButton({index=7,label='Red'})
-    colorselect='nil'
-    if bluebutton!=true and yellowbutton != true and greybutton != true then
-      colorselect='Red'
-      colorselect2='Blue'
-      colorselect3='Yellow'
-      colorselect4='Gray'
-    end
-    redbutton=false
-    return
-  end
-
-  if redbutton!=true then
-    self.editButton({index=7,label='!Red!'})
-    redbutton=true
-    colorselect='Red'
-    if bluebutton!=true and yellowbutton != true and greybutton != true then
-      colorselect2='nil'
-      colorselect3='nil'
-      colorselect4='nil'
-    end
-    return
-  end
-end
-
-function blueButton()
-  if bluebutton==true then
-    self.editButton({index=8,label='Blue'})
-    colorselect2='nil'
-    if redbutton!=true and yellowbutton != true and greybutton != true then
-      colorselect='Red'
-      colorselect2='Blue'
-      colorselect3='Yellow'
-      colorselect4='Gray'
-    end
-    bluebutton=false
-    return
-  end
-
-  if bluebutton!=true then
-    self.editButton({index=8,label='!Blue!'})
-    bluebutton=true
-    colorselect2='Blue'
-    if redbutton!=true and yellowbutton != true and greybutton != true then
-      colorselect='nil'
-      colorselect3='nil'
-      colorselect4='nil'
-    end
-    return
-  end
-end
-
-function yellowButton()
-  if yellowbutton==true then
-    self.editButton({index=9,label='Yellow'})
-    colorselect3='nil'
-    if redbutton!=true and bluebutton != true and greybutton != true then
-      colorselect='Red'
-      colorselect2='Blue'
-      colorselect3='Yellow'
-      colorselect4='Gray'
-    end
-    yellowbutton=false
-    return
-  end
-
-  if yellowbutton!=true then
-    self.editButton({index=9,label='!Yellow!'})
-    yellowbutton=true
-    colorselect3='Yellow'
-    if redbutton!=true and bluebutton != true and greybutton != true then
-      colorselect='nil'
-      colorselect2='nil'
-      colorselect4='nil'
-    end
-    return
-  end
-end
-
-function greyButton()
-  if greybutton==true then
-    self.editButton({index=10,label='Gray'})
-    colorselect4='nil'
-    if redbutton!=true and bluebutton != true and yellowbutton != true then
-      colorselect='Red'
-      colorselect2='Blue'
-      colorselect3='Yellow'
-      colorselect4='Gray'
-    end
-    greybutton=false
-    return
-  end
-
-  if greybutton!=true then
-    self.editButton({index=10,label='!Grey!'})
-    greybutton=true
-    colorselect4='Gray'
-    if redbutton!=true and bluebutton != true and yellowbutton != true then
-      colorselect='nil'
-      colorselect2='nil'
-      colorselect3='nil'
-    end
-    return
-  end
-end
-
-function battlefieldsButton()
-  if battlefieldbutton !=true then
-    self.editButton({index=11,label='!Battlefields!'})
-    battlefieldbutton=true
-    return
-  end
-
-  if battlefieldbutton ==true then
-    self.editButton({index=11,label='Battlefields'})
-    battlefieldbutton=false
-    return
-  end
-
-end
-
-function setupDeckbuilding()
-  --broadcastToAll('Check Steam workshop page for instructions!', {255,255,255})
-  local object = setupObject.takeObject({position={28,1,6.5},guid='1cc719'})
-  object.interactable = false
-  object = setupObject.takeObject({position={28,1,12},guid='cf8e15'})
-  object.interactable = false
-
-  self.clearButtons()
-  self.createButton({
-    label='Hero', click_function="heroButton", function_owner=self,
-      position={-1,0.1,-1}, width=500, height=150,font_size=90
-  })
-
-  self.createButton({
-    label='villain', click_function="villainButton", function_owner=self,
-      position={-0,0.1,-1}, width=500, height=150,font_size=90
-  })
-
-  self.createButton({
-    label='Neutral', click_function="neutralButton", function_owner=self,
-      position={1,0.1,-1}, width=500, height=150,font_size=90
-  })
-
-  self.createButton({
-    label='Characters', click_function="charactersButton", function_owner=self,
-      position={-0.6,0.1,-0.4}, width=600, height=150,font_size=90
-  })
-
-  self.createButton({
-    label='Upgrades', click_function="upgradesButton", function_owner=self,
-      position={0.6,0.1,-0.4}, width=600, height=150,font_size=90
-  })
-
-  self.createButton({
-    label='Supports', click_function="supportsButton", function_owner=self,
-      position={-0.6,0.1,-0.1}, width=600, height=150,font_size=90
-  })
-
-  self.createButton({
-    label='Events', click_function="eventsButton", function_owner=self,
-      position={0.6,0.1,-0.1}, width=600, height=150,font_size=90
-  })
-
-  self.createButton({
-    label='Red',click_function="redButton",function_owner=self,
-    position={-1.2,0.1,0.5},width = 400, height = 150, font_size = 90
-  })
-
-  self.createButton({
-    label='Blue',click_function="blueButton",function_owner=self,
-    position={-0.4,0.1,0.5},width = 400, height = 150, font_size = 90
-  })
-
-  self.createButton({
-    label='Yellow',click_function="yellowButton",function_owner=self,
-    position={0.4,0.1,0.5},width = 400, height = 150, font_size = 90
-  })
-
-  self.createButton({
-    label='Gray',click_function="greyButton",function_owner=self,
-    position={1.2,0.1,0.5},width = 400, height = 150, font_size = 90
-  })
-
-  self.createButton({
-    label='Battlefields', click_function="battlefieldsButton", function_owner=self,
-    position={0,0.1,1.1}, width=800, height=150,font_size=90
-  })
-
-  self.createButton({
-    label='Spawn',click_function="spawndb",function_owner=self,
-    position={-1.3,0.1,1.7},width = 400, height = 150, font_size = 100
-  })
-
-  self.createButton({
-    label='Back',click_function="dbBack",function_owner=self,
-    position={1.3,0.1,1.7},width = 400, height = 150, font_size = 100
-  })
-end
+--function packAW1()
+--  updatePackChoices(1, 0)
+--end
+--
+--function packAW2()
+--  updatePackChoices(2, 0)
+--end
+--
+--function packAW3()
+--  updatePackChoices(3, 0)
+--end
+--
+--function packAW4()
+--  updatePackChoices(4, 0)
+--end
+--
+--function packAW5()
+--  updatePackChoices(5, 0)
+--end
+--
+--function packAW6()
+--  updatePackChoices(6, 0)
+--end
+--
+--function packAW7()
+--  updatePackChoices(7, 0)
+--end
+--
+--function packAW8()
+--  updatePackChoices(8, 0)
+--end
+--
+--function packSoR1()
+--  updatePackChoices(1, 1)
+--end
+--
+--function packSoR2()
+--  updatePackChoices(2, 1)
+--end
+--
+--function packSoR3()
+--  updatePackChoices(3, 1)
+--end
+--
+--function packSoR4()
+--  updatePackChoices(4, 1)
+--end
+--
+--function packSoR5()
+--  updatePackChoices(5, 1)
+--end
+--
+--function packSoR6()
+--  updatePackChoices(6, 1)
+--end
+--
+--function packSoR7()
+--  updatePackChoices(7, 1)
+--end
+--
+--function packSoR8()
+--  updatePackChoices(8, 1)
+--end
+--
+--function packEaW1()
+--  updatePackChoices(1, 2)
+--end
+--
+--function packEaW2()
+--  updatePackChoices(2, 2)
+--end
+--
+--function packEaW3()
+--  updatePackChoices(3, 2)
+--end
+--
+--function packEaW4()
+--  updatePackChoices(4, 2)
+--end
+--
+--function packEaW5()
+--  updatePackChoices(5, 2)
+--end
+--
+--function packEaW6()
+--  updatePackChoices(6, 2)
+--end
+--
+--function packEaW7()
+--  updatePackChoices(7, 2)
+--end
+--
+--function packEaW8()
+--  updatePackChoices(8, 2)
+--end
+--
+--function packLEG1()
+--  updatePackChoices(1, 3)
+--end
+--
+--function packLEG2()
+--  updatePackChoices(2, 3)
+--end
+--
+--function packLEG3()
+--  updatePackChoices(3, 3)
+--end
+--
+--function packLEG4()
+--  updatePackChoices(4, 3)
+--end
+--
+--function packLEG5()
+--  updatePackChoices(5, 3)
+--end
+--
+--function packLEG6()
+--  updatePackChoices(6, 3)
+--end
+--
+--function packLEG7()
+--  updatePackChoices(7, 3)
+--end
+--
+--function packLEG8()
+--  updatePackChoices(8, 3)
+--end
+--
+--function packWotF1()
+--  updatePackChoices(1, 4)
+--end
+--
+--function packWotF2()
+--  updatePackChoices(2, 4)
+--end
+--
+--function packWotF3()
+--  updatePackChoices(3, 4)
+--end
+--
+--function packWotF4()
+--  updatePackChoices(4, 4)
+--end
+--
+--function packWotF5()
+--  updatePackChoices(5, 4)
+--end
+--
+--function packWotF6()
+--  updatePackChoices(6, 4)
+--end
+--
+--function packWotF7()
+--  updatePackChoices(7, 4)
+--end
+--
+--function packWotF8()
+--  updatePackChoices(8, 4)
+--end
+
+--function heroButton()
+--  if herobutton==true then
+--    self.editButton({index=0,label='Hero'})
+--    affiliationselect='nil'
+--    if villainbutton!=true and neutralbutton != true then
+--      affiliationselect='Hero'
+--      affiliationselect2='Villain'
+--      affiliationselect3='Neutral'
+--    end
+--    herobutton=false
+--    return
+--  end
+--
+--  if herobutton!=true then
+--    self.editButton({index=0,label='!Hero!'})
+--    herobutton=true
+--    affiliationselect='Hero'
+--    if villainbutton!=true and neutralbutton != true then
+--      affiliationselect2='nil'
+--      affiliationselect3='nil'
+--    end
+--    return
+--  end
+--end
+
+--function villainButton()
+--  if villainbutton==true then
+--    self.editButton({index=1,label='villain'})
+--    affiliationselect2='nil'
+--    if herobutton!=true and neutralbutton != true then
+--      affiliationselect='Hero'
+--      affiliationselect2='Villain'
+--      affiliationselect3='Neutral'
+--    end
+--    villainbutton=false
+--    return
+--  end
+--
+--  if villainbutton!=true then
+--    self.editButton({index=1,label='!villain!'})
+--    villainbutton=true
+--    affiliationselect2='Villain'
+--    if herobutton!=true and neutralbutton != true then
+--      affiliationselect='nil'
+--      affiliationselect3='nil'
+--    end
+--    return
+--  end
+--end
+
+--function neutralButton()
+--  if neutralbutton==true then
+--    self.editButton({index=2,label='Neutral'})
+--    affiliationselect3='nil'
+--    if villainbutton!=true and herobutton != true then
+--      affiliationselect='Hero'
+--      affiliationselect2='villain'
+--      affiliationselect3='Neutral'
+--    end
+--    neutralbutton=false
+--    return
+--  end
+--
+--  if neutralbutton!=true then
+--    self.editButton({index=2,label='!Neutral!'})
+--    neutralbutton=true
+--    affiliationselect3='Neutral'
+--    if villainbutton!=true and herobutton != true then
+--      affiliationselect2='nil'
+--      affiliationselect='nil'
+--    end
+--    return
+--  end
+--end
+
+--function charactersButton()
+--  if charactersbutton==true then
+--    self.editButton({index=3,label='Characters'})
+--    typeselect='nil'
+--    if upgradesbutton!=true and supportsbutton != true and eventsbutton != true then
+--      typeselect='Character'
+--      typeselect2='Upgrade'
+--      typeselect3='Support'
+--      typeselect4='Event'
+--    end
+--    charactersbutton=false
+--    return
+--  end
+--
+--  if charactersbutton!=true then
+--    self.editButton({index=3,label='!Character!'})
+--    charactersbutton=true
+--    typeselect='Character'
+--    if upgradesbutton!=true and supportsbutton != true and eventsbutton != true then
+--      typeselect2='nil'
+--      typeselect3='nil'
+--      typeselect4='nil'
+--    end
+--    return
+--  end
+--end
+
+--function upgradesButton()
+--  if upgradesbutton==true then
+--    self.editButton({index=4,label='Upgrades'})
+--    typeselect2='nil'
+--    if charactersbutton!=true and supportsbutton != true and eventsbutton != true then
+--      typeselect='Character'
+--      typeselect2='Upgrade'
+--      typeselect3='Support'
+--      typeselect4='Event'
+--    end
+--    upgradesbutton=false
+--    return
+--  end
+--
+--  if upgradesbutton!=true then
+--    self.editButton({index=4,label='!Upgrades!'})
+--    upgradesbutton=true
+--    typeselect2='Upgrade'
+--    if charactersbutton!=true and supportsbutton != true and eventsbutton != true then
+--      typeselect='nil'
+--      typeselect3='nil'
+--      typeselect4='nil'
+--    end
+--    return
+--  end
+--end
+
+--function supportsButton()
+--  if supportsbutton==true then
+--    self.editButton({index=5,label='Supports'})
+--    typeselect3='nil'
+--    if charactersbutton!=true and upgradesbutton != true and eventsbutton != true then
+--      typeselect='Character'
+--      typeselect2='Upgrade'
+--      typeselect3='Support'
+--      typeselect4='Event'
+--    end
+--    supportsbutton=false
+--    return
+--  end
+--
+--  if supportsbutton!=true then
+--    self.editButton({index=5,label='!Supports!'})
+--    supportsbutton=true
+--    typeselect3='Support'
+--    if charactersbutton!=true and upgradesbutton != true and eventsbutton != true then
+--      typeselect='nil'
+--      typeselect2='nil'
+--      typeselect4='nil'
+--    end
+--    return
+--  end
+--end
+
+--function eventsButton()
+--  if eventsbutton==true then
+--    self.editButton({index=6,label='Events'})
+--    typeselect4='nil'
+--    if charactersbutton!=true and upgradesbutton != true and supportsbutton != true then
+--      typeselect='Character'
+--      typeselect2='Upgrade'
+--      typeselect3='Support'
+--      typeselect4='Event'
+--    end
+--    eventsbutton=false
+--    return
+--  end
+--
+--  if eventsbutton!=true then
+--    self.editButton({index=6,label='!Events!'})
+--    eventsbutton=true
+--    typeselect4='Event'
+--    if charactersbutton!=true and upgradesbutton != true and supportsbutton != true then
+--      typeselect='nil'
+--      typeselect2='nil'
+--      typeselect3='nil'
+--    end
+--    return
+--  end
+--end
+
+--function redButton()
+--  if redbutton==true then
+--    self.editButton({index=7,label='Red'})
+--    colorselect='nil'
+--    if bluebutton!=true and yellowbutton != true and greybutton != true then
+--      colorselect='Red'
+--      colorselect2='Blue'
+--      colorselect3='Yellow'
+--      colorselect4='Gray'
+--    end
+--    redbutton=false
+--    return
+--  end
+--
+--  if redbutton!=true then
+--    self.editButton({index=7,label='!Red!'})
+--    redbutton=true
+--    colorselect='Red'
+--    if bluebutton!=true and yellowbutton != true and greybutton != true then
+--      colorselect2='nil'
+--      colorselect3='nil'
+--      colorselect4='nil'
+--    end
+--    return
+--  end
+--end
+
+--function blueButton()
+--  if bluebutton==true then
+--    self.editButton({index=8,label='Blue'})
+--    colorselect2='nil'
+--    if redbutton!=true and yellowbutton != true and greybutton != true then
+--      colorselect='Red'
+--      colorselect2='Blue'
+--      colorselect3='Yellow'
+--      colorselect4='Gray'
+--    end
+--    bluebutton=false
+--    return
+--  end
+--
+--  if bluebutton!=true then
+--    self.editButton({index=8,label='!Blue!'})
+--    bluebutton=true
+--    colorselect2='Blue'
+--    if redbutton!=true and yellowbutton != true and greybutton != true then
+--      colorselect='nil'
+--      colorselect3='nil'
+--      colorselect4='nil'
+--    end
+--    return
+--  end
+--end
+
+--function yellowButton()
+--  if yellowbutton==true then
+--    self.editButton({index=9,label='Yellow'})
+--    colorselect3='nil'
+--    if redbutton!=true and bluebutton != true and greybutton != true then
+--      colorselect='Red'
+--      colorselect2='Blue'
+--      colorselect3='Yellow'
+--      colorselect4='Gray'
+--    end
+--    yellowbutton=false
+--    return
+--  end
+--
+--  if yellowbutton!=true then
+--    self.editButton({index=9,label='!Yellow!'})
+--    yellowbutton=true
+--    colorselect3='Yellow'
+--    if redbutton!=true and bluebutton != true and greybutton != true then
+--      colorselect='nil'
+--      colorselect2='nil'
+--      colorselect4='nil'
+--    end
+--    return
+--  end
+--end
+
+--function greyButton()
+--  if greybutton==true then
+--    self.editButton({index=10,label='Gray'})
+--    colorselect4='nil'
+--    if redbutton!=true and bluebutton != true and yellowbutton != true then
+--      colorselect='Red'
+--      colorselect2='Blue'
+--      colorselect3='Yellow'
+--      colorselect4='Gray'
+--    end
+--    greybutton=false
+--    return
+--  end
+--
+--  if greybutton!=true then
+--    self.editButton({index=10,label='!Grey!'})
+--    greybutton=true
+--    colorselect4='Gray'
+--    if redbutton!=true and bluebutton != true and yellowbutton != true then
+--      colorselect='nil'
+--      colorselect2='nil'
+--      colorselect3='nil'
+--    end
+--    return
+--  end
+--end
+
+--function battlefieldsButton()
+--  if battlefieldbutton !=true then
+--    self.editButton({index=11,label='!Battlefields!'})
+--    battlefieldbutton=true
+--    return
+--  end
+--
+--  if battlefieldbutton ==true then
+--    self.editButton({index=11,label='Battlefields'})
+--    battlefieldbutton=false
+--    return
+--  end
+--
+--end
+
+--function setupDeckbuilding()
+--  --broadcastToAll('Check Steam workshop page for instructions!', {255,255,255})
+--  local object = setupObject.takeObject({position={28,1,6.5},guid='1cc719'})
+--  object.interactable = false
+--  object = setupObject.takeObject({position={28,1,12},guid='cf8e15'})
+--  object.interactable = false
+--
+--  self.clearButtons()
+--  self.createButton({
+--    label='Hero', click_function="heroButton", function_owner=self,
+--      position={-1,0.1,-1}, width=500, height=150,font_size=90
+--  })
+--
+--  self.createButton({
+--    label='villain', click_function="villainButton", function_owner=self,
+--      position={-0,0.1,-1}, width=500, height=150,font_size=90
+--  })
+--
+--  self.createButton({
+--    label='Neutral', click_function="neutralButton", function_owner=self,
+--      position={1,0.1,-1}, width=500, height=150,font_size=90
+--  })
+--
+--  self.createButton({
+--    label='Characters', click_function="charactersButton", function_owner=self,
+--      position={-0.6,0.1,-0.4}, width=600, height=150,font_size=90
+--  })
+--
+--  self.createButton({
+--    label='Upgrades', click_function="upgradesButton", function_owner=self,
+--      position={0.6,0.1,-0.4}, width=600, height=150,font_size=90
+--  })
+--
+--  self.createButton({
+--    label='Supports', click_function="supportsButton", function_owner=self,
+--      position={-0.6,0.1,-0.1}, width=600, height=150,font_size=90
+--  })
+--
+--  self.createButton({
+--    label='Events', click_function="eventsButton", function_owner=self,
+--      position={0.6,0.1,-0.1}, width=600, height=150,font_size=90
+--  })
+--
+--  self.createButton({
+--    label='Red',click_function="redButton",function_owner=self,
+--    position={-1.2,0.1,0.5},width = 400, height = 150, font_size = 90
+--  })
+--
+--  self.createButton({
+--    label='Blue',click_function="blueButton",function_owner=self,
+--    position={-0.4,0.1,0.5},width = 400, height = 150, font_size = 90
+--  })
+--
+--  self.createButton({
+--    label='Yellow',click_function="yellowButton",function_owner=self,
+--    position={0.4,0.1,0.5},width = 400, height = 150, font_size = 90
+--  })
+--
+--  self.createButton({
+--    label='Gray',click_function="greyButton",function_owner=self,
+--    position={1.2,0.1,0.5},width = 400, height = 150, font_size = 90
+--  })
+--
+--  self.createButton({
+--    label='Battlefields', click_function="battlefieldsButton", function_owner=self,
+--    position={0,0.1,1.1}, width=800, height=150,font_size=90
+--  })
+--
+--  self.createButton({
+--    label='Spawn',click_function="spawndb",function_owner=self,
+--    position={-1.3,0.1,1.7},width = 400, height = 150, font_size = 100
+--  })
+--
+--  self.createButton({
+--    label='Back',click_function="dbBack",function_owner=self,
+--    position={1.3,0.1,1.7},width = 400, height = 150, font_size = 100
+--  })
+--end
 
 function spawnSetupButton(buttonObject, playerColor)
   local errorDetected = false
@@ -2785,124 +2669,124 @@ function spawnToken(position, number)
 end
 
 function onCollisionEnter(collision_info)
-  local position = self.getPosition()
-  local object = collision_info.collision_object
-  local obj_parameters = {}
-  local custom = {}
-  obj_parameters.type = 'Custom_Dice'
-  obj_parameters.scale = {1.7,1.7,1.7}
-  obj_parameters.position = {object.getPosition()[1],object.getPosition()[2]+1,object.getPosition()[3]}
-  obj_parameters.rotation = {0,object.getRotation()[2]+180,0}
-  local datatable = Global.getTable("cardstable")
-
-  if object.getVar("spawned") ~= true and object.tag == 'Card' then
-    local cardFound = false
-    local cardDescription = object.getDescription()
-    local cardDescriptionLength = 0
-    local dataTableIndex = 1
-    local fixedCardName = ''
-    local isElite = false
-
-    if cardDescription != nil then
-      cardDescriptionLength = string.len(cardDescription)
-      if string.sub(cardDescription, 1, 5) == 'elite' then
-        isElite = true
-      end
-    end
-
-    -- If there is text past "elite", or the card is not elite and there is text at all, the card uses the new format.
-    if (((isElite == true) and (cardDescriptionLength > 5)) or
-        ((isElite == false) and (cardDescriptionLength > 0))) then
-      -- This is a new card export.  Extract the set and number.
-      local cardSet = ''
-      local cardNumber = ''
-      local setCharIndex = 1
-      local numberCharIndex = 1
-      if (isElite == true) then
-        setCharIndex = 7
-      else
-        setCharIndex = 1
-      end
-
-      -- Do a plain search.
-      numberCharIndex = (string.find(cardDescription, ' ', setCharIndex, true) + 1)
-      cardSet = string.sub(cardDescription, setCharIndex, (numberCharIndex - 2))
-      -- Leaving out the third argument takes a substring to the end of the string.
-      cardNumber = string.sub(cardDescription, numberCharIndex)
-
-      -- Find the card by its set and number.
-      for i in ipairs(datatable) do
-        if ((datatable[i]["set"] == cardSet) and
-            (datatable[i]["number"] == cardNumber) and
-            (datatable[i]["diceimage"] != nil) and
-            ((datatable[i]["type"] == 'Upgrade') or (datatable[i]["type"] == 'Character') or (datatable[i]["type"] == 'Battlefield'))) then
-          cardFound = true
-          dataTableIndex = i
-          fixedCardName = datatable[dataTableIndex]["cardname"]
-          object.setName(fixedCardName)
-          break
-        end
-      end
-
-      local diceSpawnDebug = Global.getVar("diceSpawnDebug")
-
-      if (cardFound == false) then
-        if diceSpawnDebug == true then
-          printToAll("Error, card " .. cardSet .. " " .. cardNumber .. " not found (make sure it is not a support).", {1,0,0})
-        end
-      end
-    else
-      -- This is an old card export.  Use the old system.
-      fixedCardName = Global.call("fixCardName", { object.getName() })
-      object.setName(fixedCardName)
-      for i in ipairs(datatable) do
-        if ((datatable[i]["cardname"] == fixedCardName) and
-            (datatable[i]["diceimage"] != nil) and
-            ((datatable[i]["type"] == 'Upgrade') or (datatable[i]["type"] == 'Character') or (datatable[i]["type"] == 'Battlefield'))) then
-          cardFound = true
-          dataTableIndex = i
-          break
-        end
-      end
-
-      if (cardFound == false) then
-        if diceSpawnDebug == true then
-          printToAll("Error, card " .. fixedCardName .. " not found (make sure it is not a support).", {1,0,0})
-        end
-      end
-    end
-
-    if (cardFound == true) then
-      -- For character cards, spawn the dice on the table for ease of rollout.
-      zOffset = 0
-      if (datatable[dataTableIndex]["type"] == 'Character') then
-        if owner == 'Blue' then
-          zOffset = (-6)
-        else
-          zOffset = 5
-        end
-      end
-
-      collision_info.collision_object.setVar("spawned", true)
-      obj_parameters.position[3] = (obj_parameters.position[3] + zOffset)
-      local dice = spawnObject(obj_parameters)
-      custom.image = datatable[dataTableIndex]["diceimage"]
-      dice.setCustomObject(custom)
-      if (fixedCardName == 'Seventh Sister, Agile Inquisitor') then
-        obj_parameters.position = {object.getPosition()[1]+1, object.getPosition()[2]+1, (object.getPosition()[3] + zOffset)}
-        local extradice = spawnObject(obj_parameters)
-        custom.image = "http://cloud-3.steamusercontent.com/ugc/869614883116891249/E95F6BDCAD82D95AEEFF7798BA2EB89013F1C530/"
-        extradice.setCustomObject(custom)
-        custom.image = datatable[dataTableIndex]["diceimage"]
-      end
-
-      if (isElite == true) then
-        obj_parameters.position = {object.getPosition()[1], object.getPosition()[2]+1, (object.getPosition()[3] + 1 + zOffset)}
-        local dice = spawnObject(obj_parameters)
-        dice.setCustomObject(custom)
-      end
-    end
-  end
+--  local position = self.getPosition()
+--  local object = collision_info.collision_object
+--  local obj_parameters = {}
+--  local custom = {}
+--  obj_parameters.type = 'Custom_Dice'
+--  obj_parameters.scale = {1.7,1.7,1.7}
+--  obj_parameters.position = {object.getPosition()[1],object.getPosition()[2]+1,object.getPosition()[3]}
+--  obj_parameters.rotation = {0,object.getRotation()[2]+180,0}
+--  local datatable = Global.getTable("cardstable")
+--
+--  if object.getVar("spawned") ~= true and object.tag == 'Card' then
+--    local cardFound = false
+--    local cardDescription = object.getDescription()
+--    local cardDescriptionLength = 0
+--    local dataTableIndex = 1
+--    local fixedCardName = ''
+--    local isElite = false
+--
+--    if cardDescription != nil then
+--      cardDescriptionLength = string.len(cardDescription)
+--      if string.sub(cardDescription, 1, 5) == 'elite' then
+--        isElite = true
+--      end
+--    end
+--
+--    -- If there is text past "elite", or the card is not elite and there is text at all, the card uses the new format.
+--    if (((isElite == true) and (cardDescriptionLength > 5)) or
+--        ((isElite == false) and (cardDescriptionLength > 0))) then
+--      -- This is a new card export.  Extract the set and number.
+--      local cardSet = ''
+--      local cardNumber = ''
+--      local setCharIndex = 1
+--      local numberCharIndex = 1
+--      if (isElite == true) then
+--        setCharIndex = 7
+--      else
+--        setCharIndex = 1
+--      end
+--
+--      -- Do a plain search.
+--      numberCharIndex = (string.find(cardDescription, ' ', setCharIndex, true) + 1)
+--      cardSet = string.sub(cardDescription, setCharIndex, (numberCharIndex - 2))
+--      -- Leaving out the third argument takes a substring to the end of the string.
+--      cardNumber = string.sub(cardDescription, numberCharIndex)
+--
+--      -- Find the card by its set and number.
+--      for i in ipairs(datatable) do
+--        if ((datatable[i]["set"] == cardSet) and
+--            (datatable[i]["number"] == cardNumber) and
+--            (datatable[i]["diceimage"] != nil) and
+--            ((datatable[i]["type"] == 'Upgrade') or (datatable[i]["type"] == 'Character') or (datatable[i]["type"] == 'Battlefield'))) then
+--          cardFound = true
+--          dataTableIndex = i
+--          fixedCardName = datatable[dataTableIndex]["cardname"]
+--          object.setName(fixedCardName)
+--          break
+--        end
+--      end
+--
+--      local diceSpawnDebug = Global.getVar("diceSpawnDebug")
+--
+--      if (cardFound == false) then
+--        if diceSpawnDebug == true then
+--          printToAll("Error, card " .. cardSet .. " " .. cardNumber .. " not found (make sure it is not a support).", {1,0,0})
+--        end
+--      end
+--    else
+--      -- This is an old card export.  Use the old system.
+--      fixedCardName = Global.call("fixCardName", { object.getName() })
+--      object.setName(fixedCardName)
+--      for i in ipairs(datatable) do
+--        if ((datatable[i]["cardname"] == fixedCardName) and
+--            (datatable[i]["diceimage"] != nil) and
+--            ((datatable[i]["type"] == 'Upgrade') or (datatable[i]["type"] == 'Character') or (datatable[i]["type"] == 'Battlefield'))) then
+--          cardFound = true
+--          dataTableIndex = i
+--          break
+--        end
+--      end
+--
+--      if (cardFound == false) then
+--        if diceSpawnDebug == true then
+--          printToAll("Error, card " .. fixedCardName .. " not found (make sure it is not a support).", {1,0,0})
+--        end
+--      end
+--    end
+--
+--    if (cardFound == true) then
+--      -- For character cards, spawn the dice on the table for ease of rollout.
+--      zOffset = 0
+--      if (datatable[dataTableIndex]["type"] == 'Character') then
+--        if owner == 'Blue' then
+--          zOffset = (-6)
+--        else
+--          zOffset = 5
+--        end
+--      end
+--
+--      collision_info.collision_object.setVar("spawned", true)
+--      obj_parameters.position[3] = (obj_parameters.position[3] + zOffset)
+--      local dice = spawnObject(obj_parameters)
+--      custom.image = datatable[dataTableIndex]["diceimage"]
+--      dice.setCustomObject(custom)
+--      if (fixedCardName == 'Seventh Sister, Agile Inquisitor') then
+--        obj_parameters.position = {object.getPosition()[1]+1, object.getPosition()[2]+1, (object.getPosition()[3] + zOffset)}
+--        local extradice = spawnObject(obj_parameters)
+--        custom.image = "http://cloud-3.steamusercontent.com/ugc/869614883116891249/E95F6BDCAD82D95AEEFF7798BA2EB89013F1C530/"
+--        extradice.setCustomObject(custom)
+--        custom.image = datatable[dataTableIndex]["diceimage"]
+--      end
+--
+--      if (isElite == true) then
+--        obj_parameters.position = {object.getPosition()[1], object.getPosition()[2]+1, (object.getPosition()[3] + 1 + zOffset)}
+--        local dice = spawnObject(obj_parameters)
+--        dice.setCustomObject(custom)
+--      end
+--    end
+--  end
 end
 
 function setSpawnPositions(position)
@@ -2926,152 +2810,152 @@ function onLoad()
 end
 
 function onCollisionEnter(collision_info)
-  local position = self.getPosition()
-  local object = collision_info.collision_object
-  local obj_parameters = {}
-  local custom = {}
-  obj_parameters.type = 'Custom_Dice'
-  obj_parameters.scale = {1.7,1.7,1.7}
-  obj_parameters.position = {object.getPosition()[1],object.getPosition()[2]+1,object.getPosition()[3]}
-  obj_parameters.rotation = {0,object.getRotation()[2]+180,0}
-  local datatable = Global.getTable("cardstable")
-
-  if object.getVar("spawned") ~= true and object.tag == 'Card' then
-    local cardFound = false
-    local cardDescription = object.getDescription()
-    local cardDescriptionLength = 0
-    local dataTableIndex = 1
-    local fixedCardName = ''
-    local isElite = false
-
-    if cardDescription != nil then
-      cardDescriptionLength = string.len(cardDescription)
-      if string.sub(cardDescription, 1, 5) == 'elite' then
-        isElite = true
-      end
-    end
-
-    -- If there is text past "elite", or the card is not elite and there is text at all, the card uses the new format.
-    if (((isElite == true) and (cardDescriptionLength > 5)) or
-        ((isElite == false) and (cardDescriptionLength > 0))) then
-      -- This is a new card export.  Extract the set and number.
-      local cardSet = ''
-      local cardNumber = ''
-      local setCharIndex = 1
-      local numberCharIndex = 1
-      if (isElite == true) then
-        setCharIndex = 7
-      else
-        setCharIndex = 1
-      end
-
-      -- Do a plain search.
-      numberCharIndex = (string.find(cardDescription, ' ', setCharIndex, true) + 1)
-      cardSet = string.sub(cardDescription, setCharIndex, (numberCharIndex - 2))
-      -- Leaving out the third argument takes a substring to the end of the string.
-      cardNumber = string.sub(cardDescription, numberCharIndex)
-
-      -- Find the card by its set and number.
-      for i in ipairs(datatable) do
-        if ((datatable[i]["set"] == cardSet) and
-            (datatable[i]["number"] == cardNumber) and
-            ((datatable[i]["type"] == 'Support') or (datatable[i]["type"] == 'Battlefield'))) then
-          cardFound = true
-          dataTableIndex = i
-          fixedCardName = datatable[dataTableIndex]["cardname"]
-          object.setName(fixedCardName)
-          break
-        end
-      end
-
-      local diceSpawnDebug = Global.getVar("diceSpawnDebug")
-
-      if (cardFound == false) then
-        if diceSpawnDebug == true then
-          printToAll("Error, card " .. cardSet .. " " .. cardNumber .. " not found (make sure it is actually a support).", {1,0,0})
-        end
-      end
-    else
-      -- This is an old card export.  Use the old system.
-      fixedCardName = Global.call("fixCardName", { object.getName() })
-      object.setName(fixedCardName)
-      for i in ipairs(datatable) do
-        if ((datatable[i]["cardname"] == fixedCardName) and
-            ((datatable[i]["type"] == 'Support') or (datatable[i]["type"] == 'Battlefield'))) then
-          cardFound = true
-          dataTableIndex = i
-          break
-        end
-      end
-
-      if (cardFound == false) then
-        if diceSpawnDebug == true then
-          printToAll("Error, card " .. fixedCardName .. " not found (make sure it is actually a support).", {1,0,0})
-        end
-      end
-    end
-
-    if (cardFound == true) then
-      collision_info.collision_object.setVar("spawned", true)
-
-      if (datatable[dataTableIndex]["diceimage"] != nil) then
-        local dice = spawnObject(obj_parameters)
-        custom.image = datatable[dataTableIndex]["diceimage"]
-        dice.setCustomObject(custom)
-      end
-
-      if (fixedCardName == "Backup Muscle") then
-        collision_info.collision_object.setVar("spawned", true)
-        obj_parameters.type = 'Custom_Token'
-        obj_parameters.rotation = {3.87674022, 0, 0.239081308}
-        obj_parameters.scale = {0.227068469, 1, 0.227068469}
-        for i=1,3 do
-          obj_parameters.position = {collision_info.collision_object.getPosition()[1]-1.5+(i*0.7),collision_info.collision_object.getPosition()[2]+0.2,collision_info.collision_object.getPosition()[3]-1.5+(i*0.7)}
-          local token = spawnObject(obj_parameters)
-          local custom = {}
-          custom.image = tokenplayerone.damageone
-          custom.thickness = 0.1
-          custom.merge_distance = 5.0
-          custom.stackable = false
-          token.setCustomObject(custom)
-        end
-      elseif (fixedCardName == "Modified HWK-290") then
-        collision_info.collision_object.setVar("spawned", true)
-        obj_parameters.type = 'Custom_Token'
-        obj_parameters.rotation = {3.87674022, 0, 0.239081308}
-        obj_parameters.scale = {0.227068469, 1, 0.227068469}
-        for i=1,2 do
-          obj_parameters.position = {collision_info.collision_object.getPosition()[1]-1.5+(i*0.7),collision_info.collision_object.getPosition()[2]+0.2,collision_info.collision_object.getPosition()[3]-1.5+(i*0.7)}
-          local token = spawnObject(obj_parameters)
-          local custom = {}
-          custom.image = tokenplayerone.damageone
-          custom.thickness = 0.1
-          custom.merge_distance = 5.0
-          custom.stackable = false
-          token.setCustomObject(custom)
-        end
-      elseif (fixedCardName == "Air Superiority") then
-        collision_info.collision_object.setVar("spawned", true)
-        obj_parameters.type = 'Custom_Token'
-        obj_parameters.rotation = {3.87674022, 0, 0.239081308}
-        obj_parameters.scale = {0.227068469, 1, 0.227068469}
-        for i=1,3 do
-          obj_parameters.position = {collision_info.collision_object.getPosition()[1]-1.5+(i*0.7),collision_info.collision_object.getPosition()[2]+0.2,collision_info.collision_object.getPosition()[3]-1.5+(i*0.7)}
-          local token = spawnObject(obj_parameters)
-          local custom = {}
-          custom.image = tokenplayerone.shield
-          custom.thickness = 0.1
-          custom.merge_distance = 5.0
-          custom.stackable = false
-          token.setCustomObject(custom)
-        end
-      end
-
-      if (isElite == true) then
-        printToAll("Error, supports cannot be elite.  Ignoring tag.", {1,0,0})
-      end
-    end
-  end
+--  local position = self.getPosition()
+--  local object = collision_info.collision_object
+--  local obj_parameters = {}
+--  local custom = {}
+--  obj_parameters.type = 'Custom_Dice'
+--  obj_parameters.scale = {1.7,1.7,1.7}
+--  obj_parameters.position = {object.getPosition()[1],object.getPosition()[2]+1,object.getPosition()[3]}
+--  obj_parameters.rotation = {0,object.getRotation()[2]+180,0}
+--  local datatable = Global.getTable("cardstable")
+--
+--  if object.getVar("spawned") ~= true and object.tag == 'Card' then
+--    local cardFound = false
+--    local cardDescription = object.getDescription()
+--    local cardDescriptionLength = 0
+--    local dataTableIndex = 1
+--    local fixedCardName = ''
+--    local isElite = false
+--
+--    if cardDescription != nil then
+--      cardDescriptionLength = string.len(cardDescription)
+--      if string.sub(cardDescription, 1, 5) == 'elite' then
+--        isElite = true
+--      end
+--    end
+--
+--    -- If there is text past "elite", or the card is not elite and there is text at all, the card uses the new format.
+--    if (((isElite == true) and (cardDescriptionLength > 5)) or
+--        ((isElite == false) and (cardDescriptionLength > 0))) then
+--      -- This is a new card export.  Extract the set and number.
+--      local cardSet = ''
+--      local cardNumber = ''
+--      local setCharIndex = 1
+--      local numberCharIndex = 1
+--      if (isElite == true) then
+--        setCharIndex = 7
+--      else
+--        setCharIndex = 1
+--      end
+--
+--      -- Do a plain search.
+--      numberCharIndex = (string.find(cardDescription, ' ', setCharIndex, true) + 1)
+--      cardSet = string.sub(cardDescription, setCharIndex, (numberCharIndex - 2))
+--      -- Leaving out the third argument takes a substring to the end of the string.
+--      cardNumber = string.sub(cardDescription, numberCharIndex)
+--
+--      -- Find the card by its set and number.
+--      for i in ipairs(datatable) do
+--        if ((datatable[i]["set"] == cardSet) and
+--            (datatable[i]["number"] == cardNumber) and
+--            ((datatable[i]["type"] == 'Support') or (datatable[i]["type"] == 'Battlefield'))) then
+--          cardFound = true
+--          dataTableIndex = i
+--          fixedCardName = datatable[dataTableIndex]["cardname"]
+--          object.setName(fixedCardName)
+--          break
+--        end
+--      end
+--
+--      local diceSpawnDebug = Global.getVar("diceSpawnDebug")
+--
+--      if (cardFound == false) then
+--        if diceSpawnDebug == true then
+--          printToAll("Error, card " .. cardSet .. " " .. cardNumber .. " not found (make sure it is actually a support).", {1,0,0})
+--        end
+--      end
+--    else
+--      -- This is an old card export.  Use the old system.
+--      fixedCardName = Global.call("fixCardName", { object.getName() })
+--      object.setName(fixedCardName)
+--      for i in ipairs(datatable) do
+--        if ((datatable[i]["cardname"] == fixedCardName) and
+--            ((datatable[i]["type"] == 'Support') or (datatable[i]["type"] == 'Battlefield'))) then
+--          cardFound = true
+--          dataTableIndex = i
+--          break
+--        end
+--      end
+--
+--      if (cardFound == false) then
+--        if diceSpawnDebug == true then
+--          printToAll("Error, card " .. fixedCardName .. " not found (make sure it is actually a support).", {1,0,0})
+--        end
+--      end
+--    end
+--
+--    if (cardFound == true) then
+--      collision_info.collision_object.setVar("spawned", true)
+--
+--      if (datatable[dataTableIndex]["diceimage"] != nil) then
+--        local dice = spawnObject(obj_parameters)
+--        custom.image = datatable[dataTableIndex]["diceimage"]
+--        dice.setCustomObject(custom)
+--      end
+--
+--      if (fixedCardName == "Backup Muscle") then
+--        collision_info.collision_object.setVar("spawned", true)
+--        obj_parameters.type = 'Custom_Token'
+--        obj_parameters.rotation = {3.87674022, 0, 0.239081308}
+--        obj_parameters.scale = {0.227068469, 1, 0.227068469}
+--        for i=1,3 do
+--          obj_parameters.position = {collision_info.collision_object.getPosition()[1]-1.5+(i*0.7),collision_info.collision_object.getPosition()[2]+0.2,collision_info.collision_object.getPosition()[3]-1.5+(i*0.7)}
+--          local token = spawnObject(obj_parameters)
+--          local custom = {}
+--          custom.image = tokenplayerone.damageone
+--          custom.thickness = 0.1
+--          custom.merge_distance = 5.0
+--          custom.stackable = false
+--          token.setCustomObject(custom)
+--        end
+--      elseif (fixedCardName == "Modified HWK-290") then
+--        collision_info.collision_object.setVar("spawned", true)
+--        obj_parameters.type = 'Custom_Token'
+--        obj_parameters.rotation = {3.87674022, 0, 0.239081308}
+--        obj_parameters.scale = {0.227068469, 1, 0.227068469}
+--        for i=1,2 do
+--          obj_parameters.position = {collision_info.collision_object.getPosition()[1]-1.5+(i*0.7),collision_info.collision_object.getPosition()[2]+0.2,collision_info.collision_object.getPosition()[3]-1.5+(i*0.7)}
+--          local token = spawnObject(obj_parameters)
+--          local custom = {}
+--          custom.image = tokenplayerone.damageone
+--          custom.thickness = 0.1
+--          custom.merge_distance = 5.0
+--          custom.stackable = false
+--          token.setCustomObject(custom)
+--        end
+--      elseif (fixedCardName == "Air Superiority") then
+--        collision_info.collision_object.setVar("spawned", true)
+--        obj_parameters.type = 'Custom_Token'
+--        obj_parameters.rotation = {3.87674022, 0, 0.239081308}
+--        obj_parameters.scale = {0.227068469, 1, 0.227068469}
+--        for i=1,3 do
+--          obj_parameters.position = {collision_info.collision_object.getPosition()[1]-1.5+(i*0.7),collision_info.collision_object.getPosition()[2]+0.2,collision_info.collision_object.getPosition()[3]-1.5+(i*0.7)}
+--          local token = spawnObject(obj_parameters)
+--          local custom = {}
+--          custom.image = tokenplayerone.shield
+--          custom.thickness = 0.1
+--          custom.merge_distance = 5.0
+--          custom.stackable = false
+--          token.setCustomObject(custom)
+--        end
+--      end
+--
+--      if (isElite == true) then
+--        printToAll("Error, supports cannot be elite.  Ignoring tag.", {1,0,0})
+--      end
+--    end
+--  end
 end
 
 function setSpawnPositions(position)
@@ -3093,15 +2977,15 @@ function onLoad()
   tokenplayerone = Global.getTable('tokenplayerone')
   tokenplayertwo = Global.getTable('tokenplayertwo')
 
-  self.createButton({
-    label=" ", click_function="spawnResource", function_owner=self, tooltip="Get a resource",
-    position={-0.1,-0.2,0.26}, width=1200, height=150, font_size=200, color={1,1,1,0.6}
-  })
+  --self.createButton({
+  --  label=" ", click_function="spawnResource", function_owner=self, tooltip="Get a resource",
+  --  position={-0.1,-0.2,0.26}, width=1200, height=150, font_size=200, color={1,1,1,0.6}
+  --})
 
-  self.createButton({
-    label=" ", click_function="randomDiscard", function_owner=self, tooltip="Discard a random card",
-    position={-0.1,-0.2,0.56}, width=1200, height=150, font_size=200, color={1,1,1,0.6}
-  })
+  --self.createButton({
+  --  label=" ", click_function="randomDiscard", function_owner=self, tooltip="Discard a random card",
+  --  position={-0.1,-0.2,0.56}, width=1200, height=150, font_size=200, color={1,1,1,0.6}
+  --})
 
   self.createButton({
     label=" ", click_function="shuffleHand", function_owner=self, tooltip="Shuffle your hand",
@@ -3122,44 +3006,44 @@ function onLoad()
   end
 end
 
-function passButton()
-  if owner == 'Blue' then
-    broadcastToAll('Pass', {0.1,0.5,1.0})
-  else
-    broadcastToAll('Pass', {0.8,0.1,0.1})
-  end
-end
+--function passButton()
+--  if owner == 'Blue' then
+--    broadcastToAll('Pass', {0.1,0.5,1.0})
+--  else
+--    broadcastToAll('Pass', {0.8,0.1,0.1})
+--  end
+--end
 
-function resourceSpawned(newResource)
-  newResource.setName("1 resource")
-  newResource.tooltip = false
-end
+--function resourceSpawned(newResource)
+--  newResource.setName("1 resource")
+--  newResource.tooltip = false
+--end
 
-function spawnResource()
-  local position = self.getPosition()
-  local obj_parameters = {}
-  obj_parameters.type = 'Custom_Token'
-  if owner == 'Blue' then
-    obj_parameters.position = {(position[1]+2.60-spawnd),(position[2]+0.2),(position[3]-6.55)}
-    obj_parameters.rotation = {3.87674022, 0, 0.239081308}
-  else
-    obj_parameters.position = {(position[1]-2.60+spawnd),(position[2]+0.2),(position[3]+6.55)}
-    obj_parameters.rotation = {3.87674022, 180, 0.239081308}
-  end
-  obj_parameters.callback_function = resourceSpawned
-  local token = spawnObject(obj_parameters)
-  local custom = {}
-  custom.image = tokenplayerone.resource
-  custom.thickness = 0.1
-  custom.merge_distance = 5.0
-  custom.stackable = false
-  token.setCustomObject(custom)
-  token.scale {0.227068469, 1, 0.227068469}
-  spawnd = spawnd + 0.8
-  if spawnd > 4.8 then
-    spawnd = 0
-  end
-end
+--function spawnResource()
+--  local position = self.getPosition()
+--  local obj_parameters = {}
+--  obj_parameters.type = 'Custom_Token'
+--  if owner == 'Blue' then
+--    obj_parameters.position = {(position[1]+2.60-spawnd),(position[2]+0.2),(position[3]-6.55)}
+--    obj_parameters.rotation = {3.87674022, 0, 0.239081308}
+--  else
+--    obj_parameters.position = {(position[1]-2.60+spawnd),(position[2]+0.2),(position[3]+6.55)}
+--    obj_parameters.rotation = {3.87674022, 180, 0.239081308}
+--  end
+--  obj_parameters.callback_function = resourceSpawned
+--  local token = spawnObject(obj_parameters)
+--  local custom = {}
+--  custom.image = tokenplayerone.resource
+--  custom.thickness = 0.1
+--  custom.merge_distance = 5.0
+--  custom.stackable = false
+--  token.setCustomObject(custom)
+--  token.scale {0.227068469, 1, 0.227068469}
+--  spawnd = spawnd + 0.8
+--  if spawnd > 4.8 then
+--    spawnd = 0
+--  end
+--end
 
 function randomDiscard()
   local handObjects = Player[owner].getHandObjects()

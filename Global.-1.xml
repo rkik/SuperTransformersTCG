@@ -11,7 +11,7 @@
 >
 
 <Button
-   offsetXY="-130 0"
+   offsetXY="0 0"
    width="226"
    height="226"
    onClick="2a325b/twoPlayerModernFromGUI"
@@ -21,16 +21,6 @@
 >2-Player
 Modern
 (beta)</Button>
-<!--<Button                        -->
-<!--   offsetXY="130 0"            -->
-<!--   width="226"                 -->
-<!--   height="226"                -->
-<!--   onClick="2a325b/classicMenu"-->
-<!--   image="main_menu_button"    -->
-<!--   fontSize="32"               -->
-<!--   textColor="#FFFFFF"         -->
-<!-->Classic                       -->
-<!--Menu</Button>                  -->
 <Button
    id="change_table_color_button"
    active="true"
@@ -271,20 +261,6 @@ Modern
    fontSize="36"
    color="#FFFFFF"
 >0</Text>
-<!--<Text                           -->
-<!--   id="blue_panel_red_resources"-->
-<!--   offsetXY="80 133"            -->
-<!--   fontStyle="Bold"             -->
-<!--   fontSize="36"                -->
-<!--   color="#FFFFFF"              -->
-<!-->0</Text>                       -->
-<!--<Text                            -->
-<!--   id="blue_panel_blue_resources"-->
-<!--   offsetXY="80 98"              -->
-<!--   fontStyle="Bold"              -->
-<!--   fontSize="36"                 -->
-<!--   color="#FFFFFF"               -->
-<!-->0</Text>                        -->
 <Button
    offsetXY="100 180"
    width="30"
@@ -292,26 +268,6 @@ Modern
    onClick="guiToggle"
    image="ingame_gui_minimize"
 ></Button>
-<!--<Button                                  -->
-<!--   offsetXY="-60 23"                     -->
-<!--   width="92"                            -->
-<!--   height="92"                           -->
-<!--   toolTip="Get a resource"              -->
-<!--   onClick="guiResource"                 -->
-<!--   image="ingame_gui_resource"           -->
-<!--   tooltipPosition="Above"               -->
-<!--   tooltipBackgroundColor="rgba(0,0,0,1)"-->
-<!--></Button>                               -->
-<!--<Button                                  -->
-<!--   offsetXY="60 23"                      -->
-<!--   width="92"                            -->
-<!--   height="92"                           -->
-<!--   toolTip="Pass"                        -->
-<!--   onClick="guiPass"                     -->
-<!--   image="ingame_gui_pass"               -->
-<!--   tooltipPosition="Above"               -->
-<!--   tooltipBackgroundColor="rgba(0,0,0,1)"-->
-<!--></Button>                               -->
 <Button
    offsetXY="-60 -92"
    width="92"
@@ -370,20 +326,6 @@ Modern
    fontSize="36"
    color="#FFFFFF"
 >0</Text>
-<!--<Text                           -->
-<!--   id="red_panel_blue_resources"-->
-<!--   offsetXY="80 133"            -->
-<!--   fontStyle="Bold"             -->
-<!--   fontSize="36"                -->
-<!--   color="#FFFFFF"              -->
-<!-->0</Text>                       -->
-<!--<Text                           -->
-<!--   id="red_panel_red_resources" -->
-<!--   offsetXY="80 98"             -->
-<!--   fontStyle="Bold"             -->
-<!--   fontSize="36"                -->
-<!--   color="#FFFFFF"              -->
-<!-->0</Text>                       -->
 <Button
    offsetXY="100 180"
    width="30"
@@ -391,26 +333,6 @@ Modern
    onClick="guiToggle"
    image="ingame_gui_minimize"
 ></Button>
-<!--<Button                                  -->
-<!--   offsetXY="-60 23"                     -->
-<!--   width="92"                            -->
-<!--   height="92"                           -->
-<!--   toolTip="Get a resource"              -->
-<!--   onClick="guiResource"                 -->
-<!--   image="ingame_gui_resource"           -->
-<!--   tooltipPosition="Above"               -->
-<!--   tooltipBackgroundColor="rgba(0,0,0,1)"-->
-<!--></Button>                               -->
-<!--<Button                                  -->
-<!--   offsetXY="60 23"                      -->
-<!--   width="92"                            -->
-<!--   height="92"                           -->
-<!--   toolTip="Pass"                        -->
-<!--   onClick="guiPass"                     -->
-<!--   image="ingame_gui_pass"               -->
-<!--   tooltipPosition="Above"               -->
-<!--   tooltipBackgroundColor="rgba(0,0,0,1)"-->
-<!--></Button>                               -->
 <Button
    offsetXY="-60 -92"
    width="92"
