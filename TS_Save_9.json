@@ -2,14 +2,14 @@
   "SaveName": "Transformers",
   "GameMode": "Custom",
   "Gravity": 0.5,
-  "Date": "10/13/2018 3:04:00 PM",
+  "Date": "10/13/2018 3:07:08 PM",
   "Table": "Table_Custom_Square",
   "TableURL": "http://cloud-3.steamusercontent.com/ugc/956344776544647214/5BAF51C16974164CC188E6437420A3168EEF1489/",
   "Sky": "Sky_Tunnel",
   "Note": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n[u]TFTCG[/u]\n\nThere are bags in each corner of the table just in case you delete something, and the health counters for playing the game.\n\nThe [current] rules for the game are also in the white bag.",
   "Rules": "",
   "XmlUI": "<!-- Xml UI. See documentation: https://api.tabletopsimulator.com/ui/introUI/ -->",
-  "LuaScript": "--[[ Lua code. See documentation: https://api.tabletopsimulator.com/ --]]\n\n--[[ The onLoad event is called after the game save finishes loading. --]]\nfunction onLoad()\n  -- In case the mod was just loaded, start as Blue so the menu is right side up.\n  Player.White.changeColor('Blue')\n\n  TRANSFORMERS_TCG_VERSION = \"0.0.1\"\n\n  blueMatZone = nil\n  blueMatZoneguid = 'c57486'\n  redMatZone = nil\n  redMatZoneguid = '349950'\n  startLuaCoroutine(self, 'modernSetupCoroutine')\n\n\n  printToAll(\"===========================================\", {1,1,1})\n  printToAll(\"Super Transformers TCG version \" .. TRANSFORMERS_TCG_VERSION, {1,1,1})\n  printToAll(\"\", {1,1,1})\n  printToAll(\"Type \\\"!help\\\" in chat for a command list.\", {1,1,1})\n  printToAll(\"===========================================\", {1,1,1})\nend\n\n--[[ The onUpdate event is called once per frame. --]]\nfunction onUpdate()\n    --[[ print('onUpdate loop!') --]]\nend\n\nfunction onObjectDrop(playerColor, dropObject)\n  print(dropObject.tag)\nend\n\nfunction onObjectPickUp(playerColor, pickUpObject)\n  if (pickUpObject.tag == \"Card\") then\n    print(playerColor)\n    pickUpObject.setVar(\"curLiftingPlayer\", playerColor)\n  end\nend\n\nfunction onObjectEnterScriptingZone(zone, enter_object)\n  print(enter_object.getName() .. ' has entered zone ' .. zone.getGUID())\n\n  if (enter_object.tag == \"Card\") then\n    if (zone.getGUID() == blueMatZoneguid) then\n      enter_object.setVar('curMatZone', 'Blue')\n      print('entered ' .. enter_object.getVar('curMatZone') .. 'zone')\n    elseif (zone.getGUID() == redMatZoneguid) then\n      enter_object.setVar('curMatZone', 'Red')\n      print('entered ' .. enter_object.getVar('curMatZone') .. 'zone')\n    end\n  end\nend\n\nfunction onObjectLeaveScriptingZone(zone, exit_object)\n  print(exit_object.getName() .. ' has left zone ')\n\n  if (exit_object.tag == \"Card\") then\n      exit_object.setVar('curMatZone', nil)\n      print(exit_object.getVar('curMatZone'))\n  end\nend\n\nfunction modernSetupCoroutine()\n  local obj_parameters = {}\n\n  HandSetup()\n\n  blueMatZone = getObjectFromGUID('blueMatZoneguid')\n  print(\"blue zone created\")\n\n  redMatZone = getObjectFromGUID('redMatZoneguid')\n  print(\"red zone created\")\n\n  coroutine.yield(0)\n  coroutine.yield(0)\n  return 1\nend\n\nfunction HandSetup()\n  -- Adjust the red and blue hand zones to be usable.\n  local handTransform = Player[\"Red\"].getHandTransform()\n  handTransform.position.x = -1.70\n  handTransform.position.y = 4.60\n  handTransform.position.z = (-20.00)\n  handTransform.rotation.x = 0.00\n  handTransform.rotation.y = 0.00\n  handTransform.rotation.z = 0.00\n  handTransform.scale.x = 20.00\n  handTransform.scale.y = 5.65\n  handTransform.scale.z = 3.00\n  Player[\"Red\"].setHandTransform(handTransform)\n  handTransform = Player[\"Blue\"].getHandTransform()\n  handTransform.position.x = 1.70\n  handTransform.position.y = 4.60\n  handTransform.position.z = 20.00\n  handTransform.rotation.x = 0.00\n  handTransform.rotation.y = 180.00\n  handTransform.rotation.z = 0.00\n  handTransform.scale.x = 20.00\n  handTransform.scale.y = 5.65\n  handTransform.scale.z = 3.00\n  Player[\"Blue\"].setHandTransform(handTransform)\nend\n",
+  "LuaScript": "--[[ Lua code. See documentation: https://api.tabletopsimulator.com/ --]]\n\n--[[ The onLoad event is called after the game save finishes loading. --]]\nfunction onLoad()\n  -- In case the mod was just loaded, start as Blue so the menu is right side up.\n  Player.White.changeColor('Blue')\n\n  TRANSFORMERS_TCG_VERSION = \"0.0.1\"\n\n  blueMatZone = nil\n  blueMatZoneguid = 'c57486'\n  redMatZone = nil\n  redMatZoneguid = '349950'\n  startLuaCoroutine(self, 'modernSetupCoroutine')\n\n\n  printToAll(\"===========================================\", {1,1,1})\n  printToAll(\"Super Transformers TCG version \" .. TRANSFORMERS_TCG_VERSION, {1,1,1})\n  printToAll(\"\", {1,1,1})\n  printToAll(\"Type \\\"!help\\\" in chat for a command list.\", {1,1,1})\n  printToAll(\"===========================================\", {1,1,1})\nend\n\n--[[ The onUpdate event is called once per frame. --]]\nfunction onUpdate()\n    --[[ print('onUpdate loop!') --]]\nend\n\nfunction onObjectDrop(playerColor, dropObject)\n  print(dropObject.tag)\nend\n\nfunction onObjectPickUp(playerColor, pickUpObject)\n  if (pickUpObject.tag == \"Card\") then\n    print(playerColor)\n    pickUpObject.setVar(\"curLiftingPlayer\", playerColor)\n  end\nend\n\nfunction onObjectEnterScriptingZone(zone, enter_object)\n  print(enter_object.getName() .. ' has entered zone ' .. zone.getGUID())\n\n  if (enter_object.tag == \"Card\") then\n    if (zone.getGUID() == blueMatZoneguid) then\n      enter_object.setVar('curMatZone', 'Blue')\n      print('entered ' .. enter_object.getVar('curMatZone') .. 'zone')\n    elseif (zone.getGUID() == redMatZoneguid) then\n      enter_object.setVar('curMatZone', 'Red')\n      print('entered ' .. enter_object.getVar('curMatZone') .. 'zone')\n    end\n  end\nend\n\nfunction onObjectLeaveScriptingZone(zone, exit_object)\n  print(exit_object.getName() .. ' has left zone ')\n\n  if (exit_object.tag == \"Card\") then\n      exit_object.setVar('curMatZone', nil)\n      print(exit_object.getVar('curMatZone'))\n  end\nend\n\nfunction modernSetupCoroutine()\n  local obj_parameters = {}\n\n  HandSetup()\n\n  blueMatZone = getObjectFromGUID('blueMatZoneguid')\n  print(\"blue zone created\")\n\n  redMatZone = getObjectFromGUID('redMatZoneguid')\n  print(\"red zone created\")\n\n  coroutine.yield(0)\n  coroutine.yield(0)\n  return 1\nend\n\nfunction HandSetup()\n  -- Adjust the red and blue hand zones to be usable.\n  local handTransform = Player[\"Red\"].getHandTransform()\n  handTransform.position.x = -1.70\n  handTransform.position.y = 4.60\n  handTransform.position.z = (-20.00)\n  handTransform.rotation.x = 0.00\n  handTransform.rotation.y = 0.00\n  handTransform.rotation.z = 0.00\n  handTransform.scale.x = 20.00\n  handTransform.scale.y = 5.65\n  handTransform.scale.z = 3.00\n  Player[\"Red\"].setHandTransform(handTransform)\n  handTransform = Player[\"Blue\"].getHandTransform()\n  handTransform.position.x = 1.70\n  handTransform.position.y = 4.60\n  handTransform.position.z = 20.00\n  handTransform.rotation.x = 0.00\n  handTransform.rotation.y = 180.00\n  handTransform.rotation.z = 0.00\n  handTransform.scale.x = 20.00\n  handTransform.scale.y = 5.65\n  handTransform.scale.z = 3.00\n  Player[\"Blue\"].setHandTransform(handTransform)\nend",
   "LuaScriptState": "",
   "Grid": {
     "Type": 0,
@@ -108,12 +108,12 @@
     {
       "Name": "Deck",
       "Transform": {
-        "posX": -28.0461,
+        "posX": -28.0470581,
         "posY": 1.25879323,
-        "posZ": 11.467782,
-        "rotX": -1.50090887E-06,
-        "rotY": 359.991669,
-        "rotZ": 7.20956848E-07,
+        "posZ": 11.4675369,
+        "rotX": -4.77826774E-08,
+        "rotY": 359.9634,
+        "rotZ": 8.50949462E-08,
         "scaleX": 1.58668,
         "scaleY": 1.0,
         "scaleZ": 1.58668
@@ -563,7 +563,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Insecticon Skrapnel - Insecticon Leader",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -609,7 +609,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Decepticon Shockwave - Cybertron Commander",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -655,7 +655,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Dinobot Snarl - Desert Warrior",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -701,7 +701,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Wheeljack - Weapons Inventor",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -747,7 +747,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Thundercracker - Mach Warrior",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -793,7 +793,7 @@
             "scaleZ": 1.58859241
           },
           "Nickname": "Inferno - Fearless Firefighter",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -839,7 +839,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Bombshell - Insecticon Mind-controller",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -885,7 +885,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Sergeant Kup - Veteran Sergeant",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -931,7 +931,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Starscream - Scheming Second-in-command",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -977,7 +977,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Autobot Jazz - Special Ops",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1023,7 +1023,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Flamewar - Veteran Decepticon",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1069,7 +1069,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Darkmount - Cruel Overlord",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1115,7 +1115,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Bumblebee - Courageous Scout",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1161,7 +1161,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Bumblebee - Legendary Warrior",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1207,7 +1207,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Ironhide - Veteran Autobot",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1253,7 +1253,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Skywarp - Sneaky Prankster",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1299,7 +1299,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Autobot Cosmos - Recon & Communication",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1345,7 +1345,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Red Alert - Security Chief",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1391,7 +1391,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Nemesis Prime - Dark Clone",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1437,7 +1437,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Dinobot Sludge - Mighty Stomper",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1483,7 +1483,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Megatron - Living Weapon",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1529,7 +1529,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Dinobot Swoop - Fearsome Flyer",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1575,7 +1575,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Megatron - Decepticon Leader",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1621,7 +1621,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Ransack - Insecticon Commando",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1667,7 +1667,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Dinobot Slug - Hot-headed Warrior",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1713,7 +1713,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Autobot Mirage - Lone Wolf",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1759,7 +1759,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Chop Shop - Sneaky Insecticon",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1805,7 +1805,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Barrage - Merciless Insecticon",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1851,7 +1851,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Jetfire - Air Guardian",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1897,7 +1897,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Prowl - Military Strategist",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1943,7 +1943,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Kickback - Cunning Insecticon",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -1989,7 +1989,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Chromia - Special Ops",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2035,7 +2035,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Optimus Prime - Freedom Fighter",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2081,7 +2081,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Deadlock - Bounty Hunter",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2127,7 +2127,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Slipstream - Strategic Seeker",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2173,7 +2173,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Demolisher - Devoted Decepticon",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2219,7 +2219,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Arcee - Skilled Fighter",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2265,7 +2265,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Optimus Prime - Autobot Leader",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2311,7 +2311,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Ramjet - Sky Smasher",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2357,7 +2357,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Grimlock - Dinobot Leader",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2403,7 +2403,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Autobot Hound - Long-range Scout",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2449,7 +2449,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Optimus Prime - Battlefield Legend",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2495,7 +2495,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Cliffjumper - Renegade Warrior",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2541,7 +2541,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Starscream - Air Commander",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2587,7 +2587,7 @@
             "scaleZ": 1.58668
           },
           "Nickname": "Bumblebee - Brave Warrior",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2622,18 +2622,18 @@
         {
           "Name": "Card",
           "Transform": {
-            "posX": -27.76849,
-            "posY": 1.58789766,
-            "posZ": 11.9152985,
-            "rotX": 0.0130945053,
-            "rotY": 0.0521356538,
-            "rotZ": 359.971039,
+            "posX": -28.1743488,
+            "posY": 1.58808017,
+            "posZ": 11.27461,
+            "rotX": 359.9882,
+            "rotY": 0.00668618362,
+            "rotZ": 0.00513580674,
             "scaleX": 1.58668,
             "scaleY": 1.0,
             "scaleZ": 1.58668
           },
           "Nickname": "Sunstorm - Furious Flyer",
-          "Description": "",
+          "Description": "Bot",
           "ColorDiffuse": {
             "r": 0.713235259,
             "g": 0.713235259,
@@ -2671,11 +2671,11 @@
     {
       "Name": "Deck",
       "Transform": {
-        "posX": -27.8962116,
+        "posX": -27.896162,
         "posY": 1.506275,
-        "posZ": 6.37591362,
-        "rotX": 3.59364122E-07,
-        "rotY": 180.000916,
+        "posZ": 6.3760047,
+        "rotX": -4.897348E-07,
+        "rotY": 180.0012,
         "rotZ": 180.0,
         "scaleX": 1.01823974,
         "scaleY": 1.0,
@@ -2960,12 +2960,12 @@
         {
           "Name": "Card",
           "Transform": {
-            "posX": -27.5741768,
-            "posY": 1.9483459,
-            "posZ": 6.36281,
-            "rotX": -0.000140110045,
-            "rotY": 180.000656,
-            "rotZ": 179.999969,
+            "posX": -28.6218472,
+            "posY": 1.94830763,
+            "posZ": 6.774971,
+            "rotX": -0.0005026394,
+            "rotY": 180.001,
+            "rotZ": 179.9965,
             "scaleX": 1.01823974,
             "scaleY": 1.0,
             "scaleZ": 1.01823974
