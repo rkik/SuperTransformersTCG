@@ -2,14 +2,14 @@
   "SaveName": "Transformers",
   "GameMode": "Custom",
   "Gravity": 0.5,
-  "Date": "10/13/2018 2:23:16 PM",
+  "Date": "10/13/2018 2:55:56 PM",
   "Table": "Table_Custom_Square",
   "TableURL": "http://cloud-3.steamusercontent.com/ugc/956344776544647214/5BAF51C16974164CC188E6437420A3168EEF1489/",
   "Sky": "Sky_Tunnel",
   "Note": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n[u]TFTCG[/u]\n\nThere are bags in each corner of the table just in case you delete something, and the health counters for playing the game.\n\nThe [current] rules for the game are also in the white bag.",
   "Rules": "",
   "XmlUI": "<!-- Xml UI. See documentation: https://api.tabletopsimulator.com/ui/introUI/ -->",
-  "LuaScript": "--[[ Lua code. See documentation: https://api.tabletopsimulator.com/ --]]\n\n--[[ The onLoad event is called after the game save finishes loading. --]]\nfunction onLoad()\n  -- In case the mod was just loaded, start as Blue so the menu is right side up.\n  Player.White.changeColor('Blue')\n\n  TRANSFORMERS_TCG_VERSION = \"0.0.1\"\n\n  blueMatZone = nil\n  redMatZone = nil\n  startLuaCoroutine(self, 'modernSetupCoroutine')\n\n\n  printToAll(\"===========================================\", {1,1,1})\n  printToAll(\"Super Transformers TCG version \" .. TRANSFORMERS_TCG_VERSION, {1,1,1})\n  printToAll(\"\", {1,1,1})\n  printToAll(\"Type \\\"!help\\\" in chat for a command list.\", {1,1,1})\n  printToAll(\"===========================================\", {1,1,1})\nend\n\n--[[ The onUpdate event is called once per frame. --]]\nfunction onUpdate()\n    --[[ print('onUpdate loop!') --]]\nend\n\nfunction onObjectDrop(playerColor, dropObject)\n  print(dropObject.tag)\n  print(owner)\n  print(dropObject.name)\nend\n\nfunction onObjectPickUp(playerColor, pickUpObject)\n  if (pickUpObject.tag == \"Card\") then\n    print(playerColor)\n    pickUpObject.setVar(\"curLiftingPlayer\", playerColor)\n  end\nend\n\nfunction onObjectEnterScriptingZone(zone, enter_object)\n  print(enter_object.getName() .. ' has entered zone ' .. zone.getGUID())\nend\n\nfunction onObjectLeaveScriptingZone(zone, exit_object)\n  print(leave_object.getName() .. ' has left zone ' .. zone.getGUID())\nend\n\nfunction modernSetupCoroutine()\n  local obj_parameters = {}\n\n  HandSetup()\n\n  obj_parameters.type = 'ScriptingTrigger'\n  obj_parameters.position = {4.82, 1.00, 10.20}\n  obj_parameters.rotation = {0.00, 0.00, 0.00}\n  obj_parameters.scale = {41.22, 1.00, 12.46}\n  blueMatZone = spawnObject(obj_parameters)\n  print(\"blue zone created\")\n\n  obj_parameters.type = 'ScriptingTrigger'\n  obj_parameters.position = {-4.82, 1.00, -10.20}\n  obj_parameters.rotation = {0.00, 0.00, 0.00}\n  obj_parameters.scale = {41.22, 1.00, 12.46}\n  redMatZone = spawnObject(obj_parameters)\n  print(\"red zone created\")\n\n  coroutine.yield(0)\n  coroutine.yield(0)\n  return 1\nend\n\nfunction HandSetup()\n  -- Adjust the red and blue hand zones to be usable.\n  local handTransform = Player[\"Red\"].getHandTransform()\n  handTransform.position.x = -1.70\n  handTransform.position.y = 4.60\n  handTransform.position.z = (-20.00)\n  handTransform.rotation.x = 0.00\n  handTransform.rotation.y = 0.00\n  handTransform.rotation.z = 0.00\n  handTransform.scale.x = 20.00\n  handTransform.scale.y = 5.65\n  handTransform.scale.z = 3.00\n  Player[\"Red\"].setHandTransform(handTransform)\n  handTransform = Player[\"Blue\"].getHandTransform()\n  handTransform.position.x = 1.70\n  handTransform.position.y = 4.60\n  handTransform.position.z = 20.00\n  handTransform.rotation.x = 0.00\n  handTransform.rotation.y = 180.00\n  handTransform.rotation.z = 0.00\n  handTransform.scale.x = 20.00\n  handTransform.scale.y = 5.65\n  handTransform.scale.z = 3.00\n  Player[\"Blue\"].setHandTransform(handTransform)\nend\n",
+  "LuaScript": "--[[ Lua code. See documentation: https://api.tabletopsimulator.com/ --]]\n\n--[[ The onLoad event is called after the game save finishes loading. --]]\nfunction onLoad()\n  -- In case the mod was just loaded, start as Blue so the menu is right side up.\n  Player.White.changeColor('Blue')\n\n  TRANSFORMERS_TCG_VERSION = \"0.0.1\"\n\n  blueMatZone = nil\n  blueMatZoneguid = 'c57486'\n  redMatZone = nil\n  redMatZoneguid = '349950'\n  startLuaCoroutine(self, 'modernSetupCoroutine')\n\n\n  printToAll(\"===========================================\", {1,1,1})\n  printToAll(\"Super Transformers TCG version \" .. TRANSFORMERS_TCG_VERSION, {1,1,1})\n  printToAll(\"\", {1,1,1})\n  printToAll(\"Type \\\"!help\\\" in chat for a command list.\", {1,1,1})\n  printToAll(\"===========================================\", {1,1,1})\nend\n\n--[[ The onUpdate event is called once per frame. --]]\nfunction onUpdate()\n    --[[ print('onUpdate loop!') --]]\nend\n\nfunction onObjectDrop(playerColor, dropObject)\n  print(dropObject.tag)\n  print(owner)\n  print(dropObject.name)\nend\n\nfunction onObjectPickUp(playerColor, pickUpObject)\n  if (pickUpObject.tag == \"Card\") then\n    print(playerColor)\n    pickUpObject.setVar(\"curLiftingPlayer\", playerColor)\n  end\nend\n\nfunction onObjectEnterScriptingZone(zone, enter_object)\n  print(enter_object.getName() .. ' has entered zone ' .. zone.getGUID())\nend\n\nfunction onObjectLeaveScriptingZone(zone, exit_object)\n  print(leave_object.getName() .. ' has left zone ' .. zone.getGUID())\nend\n\nfunction modernSetupCoroutine()\n  local obj_parameters = {}\n\n  HandSetup()\n\n  blueMatZone = getObjectFromGUID('blueMatZoneguid')\n  print(\"blue zone created\")\n\n  redMatZone = getObjectFromGUID('redMatZoneguid')\n  print(\"red zone created\")\n\n  coroutine.yield(0)\n  coroutine.yield(0)\n  return 1\nend\n\nfunction HandSetup()\n  -- Adjust the red and blue hand zones to be usable.\n  local handTransform = Player[\"Red\"].getHandTransform()\n  handTransform.position.x = -1.70\n  handTransform.position.y = 4.60\n  handTransform.position.z = (-20.00)\n  handTransform.rotation.x = 0.00\n  handTransform.rotation.y = 0.00\n  handTransform.rotation.z = 0.00\n  handTransform.scale.x = 20.00\n  handTransform.scale.y = 5.65\n  handTransform.scale.z = 3.00\n  Player[\"Red\"].setHandTransform(handTransform)\n  handTransform = Player[\"Blue\"].getHandTransform()\n  handTransform.position.x = 1.70\n  handTransform.position.y = 4.60\n  handTransform.position.z = 20.00\n  handTransform.rotation.x = 0.00\n  handTransform.rotation.y = 180.00\n  handTransform.rotation.z = 0.00\n  handTransform.scale.x = 20.00\n  handTransform.scale.y = 5.65\n  handTransform.scale.z = 3.00\n  Player[\"Blue\"].setHandTransform(handTransform)\nend",
   "LuaScriptState": "",
   "Grid": {
     "Type": 0,
@@ -108,12 +108,12 @@
     {
       "Name": "Deck",
       "Transform": {
-        "posX": -28.0479679,
-        "posY": 1.25879323,
-        "posZ": 11.4690676,
-        "rotX": 1.05558172E-06,
-        "rotY": 359.9669,
-        "rotZ": 9.636686E-07,
+        "posX": -28.047184,
+        "posY": 1.25879312,
+        "posZ": 11.4680119,
+        "rotX": -6.615937E-07,
+        "rotY": 359.9776,
+        "rotZ": 4.25922337E-07,
         "scaleX": 1.58668,
         "scaleY": 1.0,
         "scaleZ": 1.58668
@@ -2622,12 +2622,12 @@
         {
           "Name": "Card",
           "Transform": {
-            "posX": -27.5006256,
-            "posY": 1.58808553,
-            "posZ": 11.5166607,
-            "rotX": -0.000322914915,
-            "rotY": 0.000332446,
-            "rotZ": -0.00176702568,
+            "posX": -27.3968334,
+            "posY": 1.58774185,
+            "posZ": 11.1222763,
+            "rotX": -0.00317540532,
+            "rotY": 359.971069,
+            "rotZ": 359.990662,
             "scaleX": 1.58668,
             "scaleY": 1.0,
             "scaleZ": 1.58668
@@ -2674,7 +2674,7 @@
         "posX": -27.8962631,
         "posY": 1.506275,
         "posZ": 6.375822,
-        "rotX": 4.20546314E-07,
+        "rotX": -3.28706449E-07,
         "rotY": 180.000656,
         "rotZ": 180.0,
         "scaleX": 1.01823974,
@@ -6779,210 +6779,6 @@
       "GUID": "77e36a"
     },
     {
-      "Name": "ScriptingTrigger",
-      "Transform": {
-        "posX": -4.82,
-        "posY": -4.0,
-        "posZ": -10.2,
-        "rotX": 0.0,
-        "rotY": 0.0,
-        "rotZ": 0.0,
-        "scaleX": 41.22,
-        "scaleY": 1.0,
-        "scaleZ": 12.46
-      },
-      "Nickname": "",
-      "Description": "",
-      "ColorDiffuse": {
-        "r": 1.0,
-        "g": 1.0,
-        "b": 1.0
-      },
-      "Locked": true,
-      "Grid": true,
-      "Snap": true,
-      "Autoraise": true,
-      "Sticky": true,
-      "Tooltip": true,
-      "GridProjection": false,
-      "HideWhenFaceDown": false,
-      "Hands": false,
-      "XmlUI": "",
-      "LuaScript": "",
-      "LuaScriptState": "",
-      "GUID": "989fc9"
-    },
-    {
-      "Name": "ScriptingTrigger",
-      "Transform": {
-        "posX": -4.82,
-        "posY": -4.0,
-        "posZ": -10.2,
-        "rotX": 0.0,
-        "rotY": 0.0,
-        "rotZ": 0.0,
-        "scaleX": 41.22,
-        "scaleY": 1.0,
-        "scaleZ": 12.46
-      },
-      "Nickname": "",
-      "Description": "",
-      "ColorDiffuse": {
-        "r": 1.0,
-        "g": 1.0,
-        "b": 1.0
-      },
-      "Locked": true,
-      "Grid": true,
-      "Snap": true,
-      "Autoraise": true,
-      "Sticky": true,
-      "Tooltip": true,
-      "GridProjection": false,
-      "HideWhenFaceDown": false,
-      "Hands": false,
-      "XmlUI": "",
-      "LuaScript": "",
-      "LuaScriptState": "",
-      "GUID": "02739e"
-    },
-    {
-      "Name": "ScriptingTrigger",
-      "Transform": {
-        "posX": 4.82,
-        "posY": 1.0,
-        "posZ": 10.2,
-        "rotX": 0.0,
-        "rotY": 0.0,
-        "rotZ": 0.0,
-        "scaleX": 41.22,
-        "scaleY": 1.0,
-        "scaleZ": 12.46
-      },
-      "Nickname": "",
-      "Description": "",
-      "ColorDiffuse": {
-        "r": 1.0,
-        "g": 1.0,
-        "b": 1.0
-      },
-      "Locked": true,
-      "Grid": true,
-      "Snap": true,
-      "Autoraise": true,
-      "Sticky": true,
-      "Tooltip": true,
-      "GridProjection": false,
-      "HideWhenFaceDown": false,
-      "Hands": false,
-      "XmlUI": "",
-      "LuaScript": "",
-      "LuaScriptState": "",
-      "GUID": "2e7793"
-    },
-    {
-      "Name": "ScriptingTrigger",
-      "Transform": {
-        "posX": -4.82,
-        "posY": 1.0,
-        "posZ": -10.2,
-        "rotX": 0.0,
-        "rotY": 0.0,
-        "rotZ": 0.0,
-        "scaleX": 41.22,
-        "scaleY": 1.0,
-        "scaleZ": 12.46
-      },
-      "Nickname": "",
-      "Description": "",
-      "ColorDiffuse": {
-        "r": 1.0,
-        "g": 1.0,
-        "b": 1.0
-      },
-      "Locked": true,
-      "Grid": true,
-      "Snap": true,
-      "Autoraise": true,
-      "Sticky": true,
-      "Tooltip": true,
-      "GridProjection": false,
-      "HideWhenFaceDown": false,
-      "Hands": false,
-      "XmlUI": "",
-      "LuaScript": "",
-      "LuaScriptState": "",
-      "GUID": "26c4fc"
-    },
-    {
-      "Name": "ScriptingTrigger",
-      "Transform": {
-        "posX": 4.82,
-        "posY": 1.0,
-        "posZ": 10.2,
-        "rotX": 0.0,
-        "rotY": 0.0,
-        "rotZ": 0.0,
-        "scaleX": 41.22,
-        "scaleY": 1.0,
-        "scaleZ": 12.46
-      },
-      "Nickname": "",
-      "Description": "",
-      "ColorDiffuse": {
-        "r": 1.0,
-        "g": 1.0,
-        "b": 1.0
-      },
-      "Locked": true,
-      "Grid": true,
-      "Snap": true,
-      "Autoraise": true,
-      "Sticky": true,
-      "Tooltip": true,
-      "GridProjection": false,
-      "HideWhenFaceDown": false,
-      "Hands": false,
-      "XmlUI": "",
-      "LuaScript": "",
-      "LuaScriptState": "",
-      "GUID": "18aa03"
-    },
-    {
-      "Name": "ScriptingTrigger",
-      "Transform": {
-        "posX": -4.82,
-        "posY": 1.0,
-        "posZ": -10.2,
-        "rotX": 0.0,
-        "rotY": 0.0,
-        "rotZ": 0.0,
-        "scaleX": 41.22,
-        "scaleY": 1.0,
-        "scaleZ": 12.46
-      },
-      "Nickname": "",
-      "Description": "",
-      "ColorDiffuse": {
-        "r": 1.0,
-        "g": 1.0,
-        "b": 1.0
-      },
-      "Locked": true,
-      "Grid": true,
-      "Snap": true,
-      "Autoraise": true,
-      "Sticky": true,
-      "Tooltip": true,
-      "GridProjection": false,
-      "HideWhenFaceDown": false,
-      "Hands": false,
-      "XmlUI": "",
-      "LuaScript": "",
-      "LuaScriptState": "",
-      "GUID": "bf11fd"
-    },
-    {
       "Name": "Custom_Tile",
       "Transform": {
         "posX": 4.91568358E-07,
@@ -7075,15 +6871,15 @@
     {
       "Name": "ScriptingTrigger",
       "Transform": {
-        "posX": 4.82,
+        "posX": -4.0,
         "posY": 1.0,
-        "posZ": 10.2,
+        "posZ": -9.0,
         "rotX": 0.0,
-        "rotY": 0.0,
+        "rotY": 180.000092,
         "rotZ": 0.0,
-        "scaleX": 41.22,
+        "scaleX": 43.0,
         "scaleY": 1.0,
-        "scaleZ": 12.46
+        "scaleZ": 15.0
       },
       "Nickname": "",
       "Description": "",
@@ -7104,20 +6900,20 @@
       "XmlUI": "",
       "LuaScript": "",
       "LuaScriptState": "",
-      "GUID": "64d01a"
+      "GUID": "349950"
     },
     {
       "Name": "ScriptingTrigger",
       "Transform": {
-        "posX": -4.82,
+        "posX": 4.0,
         "posY": 1.0,
-        "posZ": -10.2,
+        "posZ": 9.0,
         "rotX": 0.0,
-        "rotY": 0.0,
+        "rotY": 180.0,
         "rotZ": 0.0,
-        "scaleX": 41.22,
+        "scaleX": 43.0,
         "scaleY": 1.0,
-        "scaleZ": 12.46
+        "scaleZ": 15.0
       },
       "Nickname": "",
       "Description": "",
@@ -7138,7 +6934,7 @@
       "XmlUI": "",
       "LuaScript": "",
       "LuaScriptState": "",
-      "GUID": "e79269"
+      "GUID": "c57486"
     }
   ],
   "DecalPallet": [],
