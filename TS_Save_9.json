@@ -2,7 +2,7 @@
   "SaveName": "Transformers",
   "GameMode": "Custom",
   "Gravity": 0.5,
-  "Date": "10/13/2018 3:46:58 PM",
+  "Date": "10/13/2018 4:00:26 PM",
   "Table": "Table_Custom_Square",
   "TableURL": "http://cloud-3.steamusercontent.com/ugc/956344776544647214/5BAF51C16974164CC188E6437420A3168EEF1489/",
   "Sky": "Sky_Tunnel",
@@ -108,12 +108,12 @@
     {
       "Name": "Deck",
       "Transform": {
-        "posX": -28.0473919,
-        "posY": 1.25879323,
-        "posZ": 11.4676657,
-        "rotX": -8.061036E-07,
-        "rotY": 359.956573,
-        "rotZ": 9.810227E-07,
+        "posX": -28.04738,
+        "posY": 1.25879335,
+        "posZ": 11.4676609,
+        "rotX": -4.72553239E-07,
+        "rotY": 359.956726,
+        "rotZ": 8.519928E-07,
         "scaleX": 1.58668,
         "scaleY": 1.0,
         "scaleZ": 1.58668
@@ -2622,12 +2622,12 @@
         {
           "Name": "Card",
           "Transform": {
-            "posX": -27.2141933,
-            "posY": 1.58801484,
-            "posZ": 11.4606867,
-            "rotX": -0.00315508526,
-            "rotY": 359.974548,
-            "rotZ": 0.003957029,
+            "posX": -28.7526665,
+            "posY": 1.58805525,
+            "posZ": 11.5983973,
+            "rotX": -0.00100656645,
+            "rotY": 0.0005136723,
+            "rotZ": 0.00238320674,
             "scaleX": 1.58668,
             "scaleY": 1.0,
             "scaleZ": 1.58668
@@ -6878,7 +6878,7 @@
         "rotY": 180.000092,
         "rotZ": 0.0,
         "scaleX": 43.0,
-        "scaleY": 1.0,
+        "scaleY": 6.0,
         "scaleZ": 15.0
       },
       "Nickname": "",
@@ -6912,7 +6912,7 @@
         "rotY": 180.0,
         "rotZ": 0.0,
         "scaleX": 43.0,
-        "scaleY": 1.0,
+        "scaleY": 6.0,
         "scaleZ": 15.0
       },
       "Nickname": "",
