@@ -1,0 +1,13 @@
+Add deck and scrap zone symbols to board.
+
+Add hand counts for each player
+
+Add flip zone that counts attack and defense
+
+Add full card list with details
+
+Use card list to determine Bot status - for portability
+
+Update bot images to hi-res versions
+
+Card list updater should add the attack/defense/grey/bot info to the card description so that the database doesn't need to be searched each time
