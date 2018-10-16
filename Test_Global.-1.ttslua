@@ -1,0 +1,545 @@
+-- Created by Rkik 13 Oct 2018 for Transformers TCG
+
+function onLoad()
+  -- In case the mod was just loaded, start as Blue so the menu is right side up.
+  Player.White.changeColor('Blue')
+
+  TRANSFORMERS_TCG_VERSION = "0.0.1"
+
+  blueMatZone = nil
+  blueMatZoneguid = 'c57486'
+  redMatZone = nil
+  redMatZoneguid = '349950'
+  areBoardsZonesEnabled = true
+
+  redBoardguid = '401f2a'
+  redBoard = nil
+
+  blueBoardguid = 'd67403'
+  blueBoard = nil
+
+  blueFlipZoneguid = '5caf00'
+  blueFlipZone = nil
+
+  startLuaCoroutine(self, 'modernSetupCoroutine')
+
+  -- Use a small startup delay that blocks things from spawning.
+  loadDelayFinished        = false
+  Wait.time(function() loadDelayFinished = true end, 1.0)
+  setBoardZoneEnabled(areBoardsZonesEnabled)
+
+  printToAll("===========================================", {1,1,1})
+  printToAll("Transformers TCG version " .. TRANSFORMERS_TCG_VERSION, {1,1,1})
+  printToAll("", {1,1,1})
+  printToAll("Type \"!help\" in chat for a command list.", {1,1,1})
+  printToAll("===========================================", {1,1,1})
+end
+
+function onUpdate()
+  --[[ The onUpdate event is called once per frame. --]]
+end
+
+function onObjectDrop(playerColor, dropObject)
+  if (dropObject.tag == "Card") then
+    dropObject.setVar("curLiftingPlayer", nil)
+
+    -- If the card was already in a spawning zone, handle spawning the GUI.  This also handles updating the GUI position.
+    if (dropObject.getVar("curMatZone") == "Blue") then
+      blueBoard.call('handleBotSpawn', {cardObject=dropObject})
+    elseif (dropObject.getVar("curMatZone") == "Red") then
+      redBoard.call('handleBotSpawn', {cardObject=dropObject})
+    elseif (dropObject.getVar("curMatZone") == "BlueFlip") then
+      blueBoard.call('handleCardFlipEnter', {cardObject=dropObject})
+      print("flip on drop")
+    else
+      -- Nothing needs done.
+    end
+  end
+end
+
+function onObjectPickUp(playerColor, pickUpObject)
+  if (pickUpObject.tag == "Card") then
+    pickUpObject.setVar("curLiftingPlayer", playerColor)
+  end
+end
+
+function onObjectEnterScriptingZone(zone, enterObject)
+  local zoneObjects = nil
+  local spawnBluePerspective = false
+  local spawnRedPerspective = false
+  local objectY = enterObject.getPosition().y
+  local rotationZ = enterObject.getRotation().z
+
+  -- Only check cards.
+  if (enterObject.tag == "Card") then
+    -- Check if the zone should spawn dice.
+    if (zone == blueMatZone) then
+      enterObject.setVar("curMatZone", "Blue")
+      spawnBluePerspective = true
+    elseif (zone == redMatZone) then
+      enterObject.setVar("curMatZone", "Red")
+      spawnRedPerspective = true
+    elseif (zone == blueFlipZone) then
+      enterObject.setVar("curMatZone", "BlueFlip")
+      if (enterObject.getVar("curLiftingPlayer") == nil) then
+        blueBoard.call('handleCardFlipEnter', {cardObject=enterObject})
+        print("flip on")
+      end
+    end
+
+    -- Only check for spawning here if no one is currently lifting the card.
+    if (spawnBluePerspective == true) then
+      if (enterObject.getVar("curLiftingPlayer") == nil) then
+        blueBoard.call('handleBotSpawn', {cardObject=enterObject})
+      end
+    elseif (spawnRedPerspective == true) then
+      if (enterObject.getVar("curLiftingPlayer") == nil) then
+        redBoard.call('handleBotSpawn', {cardObject=enterObject})
+      end
+    else
+      -- Nothing needs done.
+    end
+  end
+end
+
+function onObjectLeaveScriptingZone(zone, leaveObject)
+  -- Only check cards.
+  if (leaveObject.tag == "Card") then
+    -- Check if the card is leaving a mat zone.
+    if ((zone == blueMatZone) or (zone == redMatZone)) then
+      leaveObject.setVar("curMatZone", nil)
+
+      -- Hide the GUI when the card leaves a mat zone.
+      local linkedGUIHolder = leaveObject.getVar("linkedGUIHolder")
+      if (linkedGUIHolder != nil) then
+        linkedGUIHolder.UI.setAttribute("card_gui", "active", false)
+        linkedGUIHolder.UI.setAttribute("opponent_card_gui", "active", false)
+      end
+
+    elseif ((zone == blueFlipZone)) then
+      leaveObject.setVar("curMatZone", nil)
+      blueBoard.call('handleCardFlipExit', {cardObject=leaveObject})
+      print("flip off")
+    end
+  end
+end
+
+function onObjectDestroy(destroyObject)
+  -- Only check cards.
+  if (destroyObject.tag == "Card") then
+    local linkedGUIHolder = destroyObject.getVar("linkedGUIHolder")
+
+    -- Destruct the GUI holder.
+    if (linkedGUIHolder != nil) then
+      linkedGUIHolder.destruct()
+    end
+  end
+end
+
+function modernSetupCoroutine()
+  local obj_parameters = {}
+
+  HandSetup()
+
+  blueFlipZone = getObjectFromGUID(blueFlipZoneguid)
+  blueMatZone = getObjectFromGUID(blueMatZoneguid)
+  blueBoard = getObjectFromGUID(blueBoardguid)
+  blueBoard.setName('Blue')
+  blueBoard.setLuaScript(playerPlaymatScript)
+  blueBoard.interactable = false
+
+  redMatZone = getObjectFromGUID(redMatZoneguid)
+  redBoard = getObjectFromGUID(redBoardguid)
+  redBoard.setName('Red')
+  redBoard.setLuaScript(playerPlaymatScript)
+  redBoard.interactable = false
+
+  coroutine.yield(0)
+  coroutine.yield(0)
+  return 1
+end
+
+function HandSetup()
+  -- Adjust the red and blue hand zones to be usable.
+  local handTransform = Player["Red"].getHandTransform()
+  handTransform.position.x = -1.70
+  handTransform.position.y = 4.60
+  handTransform.position.z = (-20.00)
+  handTransform.rotation.x = 0.00
+  handTransform.rotation.y = 0.00
+  handTransform.rotation.z = 0.00
+  handTransform.scale.x = 20.00
+  handTransform.scale.y = 5.65
+  handTransform.scale.z = 3.00
+  Player["Red"].setHandTransform(handTransform)
+  handTransform = Player["Blue"].getHandTransform()
+  handTransform.position.x = 1.70
+  handTransform.position.y = 4.60
+  handTransform.position.z = 20.00
+  handTransform.rotation.x = 0.00
+  handTransform.rotation.y = 180.00
+  handTransform.rotation.z = 0.00
+  handTransform.scale.x = 20.00
+  handTransform.scale.y = 5.65
+  handTransform.scale.z = 3.00
+  Player["Blue"].setHandTransform(handTransform)
+end
+
+function setBoardZoneEnabled(boardZoneEnabled)
+  if boardZoneEnabled == true then
+    -- Move zone above table to enable
+    redMatZone.setPosition({-4.00, 1.00, -9.00})
+    blueMatZone.setPosition({4.00, 1.00, 9.00})
+  else
+    -- Move zone below table to disable
+    redMatZone.setPosition({-4.00, -2.00, -9.00})
+    blueMatZone.setPosition({4.00, -2.00, 9.00})
+  end
+end
+
+
+--------------------------------------------------------------------------------
+-- Chat Options
+--------------------------------------------------------------------------------
+function onChat(message, chatPlayer)
+  if string.sub(message, 1, 5) == "!help" then
+    -- Note that the chat font is not necessarily fixed-width, so alignment is done manually.
+    printToColor("", chatPlayer.color, {1,1,1})
+    printToColor("Chat commands:", chatPlayer.color, {1,1,1})
+    printToColor("==================", chatPlayer.color, {1,1,1})
+    printToColor("!help                      Print this message", chatPlayer.color, {1,1,1})
+    printToColor("", chatPlayer.color, {1,1,1})
+    printToColor("!disableBotGUI   Disables spawning of bot GUI", chatPlayer.color, {1,1,1})
+    printToColor("!enableBotGUI    Enables spawning of bot GUI", chatPlayer.color, {1,1,1})
+    printToColor("", chatPlayer.color, {1,1,1})
+  elseif message == "!disableBotGUI" then
+    areBoardsZonesEnabled = false
+    setBoardZoneEnabled(areBoardsZonesEnabled)
+    printToAll("Bot GUI disabled.", {0,0.8,0})
+  elseif message == "!enableBotGUI" then
+    areBoardsZonesEnabled = true
+    setBoardZoneEnabled(areBoardsZonesEnabled)
+    printToAll("Bot GUI enabled.", {0,0.8,0})
+  else
+    -- Nothing needs done.
+  end
+end
+
+
+--------------------------------------------------------------------------------
+-- Player Board functions
+--------------------------------------------------------------------------------
+playerPlaymatScript = [[
+function onload()
+
+  tokenplayerone = Global.getTable('tokenplayerone')
+  tokenplayertwo = Global.getTable('tokenplayertwo')
+
+  cardCount = 0
+  cardFlipTable = {}
+
+  if self.getName() == 'Blue' then
+    owner = 'Blue'
+  else
+    owner = 'Red'
+  end
+end
+
+function onCollisionEnter(collision_info)
+end
+
+function onCollisionExit(collision_info)
+end
+
+--------------------------------------------------------------------------------
+-- Bot GUI functions
+--------------------------------------------------------------------------------
+function handleBotSpawn(params)
+  local position = self.getPosition()
+  local object = params.cardObject
+  local obj_parameters = {}
+  local custom = {}
+  obj_parameters.scale = {1.7,1.7,1.7}
+  obj_parameters.position = {object.getPosition()[1],object.getPosition()[2]+1,object.getPosition()[3]}
+  obj_parameters.rotation = {0,object.getRotation()[2]+180,0}
+
+  if ((object.getVar("spawned") ~= true) and
+      (object.tag == 'Card') and
+      (Global.getVar("loadDelayFinished") == true)) then
+    local isBotCard = false
+    local cardDescription = object.getDescription()
+    local cardDescriptionLength = 0
+    local testCardType = nil
+
+    if cardDescription == 'Bot' then
+      isBotCard = true
+      object.setVar("spawned", true)
+    end
+
+    -- For bot cards, create XML GUI
+    if (isBotCard == true) then
+      -- Since attaching the GUI directly to the card would cause the GUI to rotate when the card rotates, use a GUI holder object.
+      obj_parameters.type = 'BlockSquare'
+      obj_parameters.position = {object.getPosition()[1], 0.02, object.getPosition()[3]}
+      if (owner == 'Blue') then
+        obj_parameters.rotation = {0, 0, 0}
+      else
+        obj_parameters.rotation = {0, 180, 0}
+      end
+      obj_parameters.scale = {1, 1, 1}
+      obj_parameters.sound = false
+      -- Note that both the bot card and the GUI holder objects have scripts.
+      obj_parameters.callback_function = function(newObject) initGUIHolder(object, newObject) end
+
+      local cardGUIObject = spawnObject(obj_parameters)
+    end
+  else
+    local linkedGUIHolder = object.getVar("linkedGUIHolder")
+
+    -- If a GUI holder was linked and hidden, show it.
+    if (linkedGUIHolder != nil) then
+      -- Update the position.
+      local cardPosition = object.getPosition()
+      linkedGUIHolder.setPosition({x = cardPosition.x, y = 0.02, z = cardPosition.z})
+
+      if (linkedGUIHolder.UI.getAttribute("card_gui", "active") == "False") then
+        linkedGUIHolder.UI.setAttribute("card_gui", "active", true)
+        linkedGUIHolder.UI.setAttribute("opponent_card_gui", "active", true)
+
+        -- Update the visibility to match the prefab owner.
+        if (owner == 'Blue') then
+          linkedGUIHolder.setRotation({0, 0, 0})
+        else
+          linkedGUIHolder.setRotation({0, 180, 0})
+        end
+        linkedGUIHolder.UI.setAttribute("card_gui", "visibility", owner)
+        if (owner == 'Blue') then
+          linkedGUIHolder.UI.setAttribute("opponent_card_gui", "visibility", 'Red|Grey|Black')
+        else
+          linkedGUIHolder.UI.setAttribute("opponent_card_gui", "visibility", 'Blue|Grey|Black')
+        end
+      end
+    end
+  end
+end
+
+function initGUIHolder(cardObject, holderObject)
+  -- Set damage and damage values.
+  -- TODO is there a way to save/load variables on objects like this?
+  holderObject.setVar("damage", 0)
+  holderObject.setVar("damage", 0)
+  holderObject.setVar("owner", owner)
+
+  holderObject.setLuaScript(Global.getVar("characterGUILuaScript"))
+  Wait.time(function() finishInitGUIHolder(cardObject, holderObject) end, 0.2)
+
+  cardObject.setVar("linkedGUIHolder", holderObject)
+end
+
+function finishInitGUIHolder(cardObject, holderObject)
+  holderObject.UI.setAttribute("card_gui", "visibility", owner)
+  holderObject.UI.setAttribute("card_gui", "active", true)
+  if (owner == 'Blue') then
+    holderObject.UI.setAttribute("opponent_card_gui", "visibility", 'Red|Grey|Black')
+  else
+    holderObject.UI.setAttribute("opponent_card_gui", "visibility", 'Blue|Grey|Black')
+  end
+  holderObject.UI.setAttribute("opponent_card_gui", "active", true)
+end
+
+function handleCardFlipEnter(params)
+  local position = self.getPosition()
+  local object = params.cardObject
+
+  --Build a list of guids that have entered so we don't double count
+  print(cardCount)
+  local foundi = 0
+  for i,o in ipairs(cardFlipTable) do
+    if o == object then
+      foundi = i
+    end
+    print(o.guid)
+  end
+
+  print(foundi)
+  if foundi == 0 then
+    table.insert(cardFlipTable, object)
+    cardCount = (cardCount +1)
+  end
+
+end
+
+function handleCardFlipExit(params)
+  local position = self.getPosition()
+  local object = params.cardObject
+
+  table.remove(cardFlipTable)
+  if cardCount > 0 then
+    cardCount = (cardCount - 1)
+  end
+  print(cardCount)
+  for i,v in ipairs(cardFlipTable) do print(v.guid) end
+end
+]]
+-- END playerPlaymatScript
+
+characterGUILuaScript = [[
+function onload()
+  -- Load inside the script since global images do not work for players who join late.
+  local resourceAssets = {
+    {
+      name = "card_minus_button",
+      url = "http://cloud-3.steamusercontent.com/ugc/932693183049785038/A3CE1312007B6D4BCDEB2D84F9EB5B498D122C4B/"
+    },
+    {
+      name = "card_plus_button",
+      url = "http://cloud-3.steamusercontent.com/ugc/932693183049785426/CD098AC296A5D9124CB9A7F7526BEF7D91881249/"
+    },
+    {
+      name = "card_damage",
+      url = "http://cloud-3.steamusercontent.com/ugc/956344776549757288/5C67E20F331474C1BE71333F15C28C6A67B5D821/"
+    }
+  }
+  self.UI.setCustomAssets(resourceAssets)
+
+  self.UI.setXml(Global.getVar("characterGUIXMLScript"))
+
+  -- The XML buttons do nothing and are implemented by hidden classic buttons, since GUI XML buttons can be triggered by middle/right click with no way to differentiate.
+  self.createButton({
+    click_function="damageMinus", function_owner=self,
+    position={-1.490, 1.060, -4.5}, width=430, height=430, font_size=72, color={0,0,0,0}
+  })
+  self.createButton({
+    click_function="damagePlus", function_owner=self,
+    position={ 0.855, 1.060, -4.5}, width=430, height=430, font_size=72, color={0,0,0,0}
+  })
+
+  self.locked = true
+  self.interactable = false
+end
+
+function damageMinus(buttonObject, playerColor, altClick)
+  if ((playerColor == owner) and (altClick == false)) then
+    if (damage > 0) then
+      damage = (damage - 1)
+      self.UI.setAttribute("damage", "text", damage)
+      self.UI.setAttribute("opponent_view_damage", "text", damage)
+
+      if ((damage == 6) or (damage == 9)) then
+        self.UI.setAttribute("damage_underline", "text", "_")
+        self.UI.setAttribute("opponent_view_damage_underline", "text", "_")
+      else
+        self.UI.setAttribute("damage_underline", "text", "")
+        self.UI.setAttribute("opponent_view_damage_underline", "text", "")
+      end
+    end
+  end
+end
+
+function damagePlus(buttonObject, playerColor, altClick)
+  if ((playerColor == owner) and (altClick == false)) then
+    damage = (damage + 1)
+    self.UI.setAttribute("damage", "text", damage)
+    self.UI.setAttribute("opponent_view_damage", "text", damage)
+
+    if ((damage == 6) or (damage == 9)) then
+      self.UI.setAttribute("damage_underline", "text", "_")
+      self.UI.setAttribute("opponent_view_damage_underline", "text", "_")
+    else
+      self.UI.setAttribute("damage_underline", "text", "")
+      self.UI.setAttribute("opponent_view_damage_underline", "text", "")
+    end
+  end
+end
+]]
+-- END characterGUILuaScript
+
+characterGUIXMLScript = [[
+<Panel
+   id="card_gui"
+   active="false"
+   position="0 200 -108"
+   rotation="0 0 180"
+   rectAlignment="MiddleCenter"
+   width="128"
+   height="128"
+   raycastTarget="false"
+>
+<Button
+   offsetXY="-150 650"
+   width="80"
+   height="80"
+   image="card_minus_button"
+   raycastTarget="false"
+></Button>
+<Text
+   id="damage_underline"
+   offsetXY="-30 650"
+   scale="1.5 1.5"
+   fontStyle="Bold"
+   fontSize="72"
+   color="#FFFFFF"
+></Text>
+<Text
+   id="damage"
+   offsetXY="-30 650"
+   scale="1.5 1.5"
+   fontStyle="Bold"
+   fontSize="72"
+   color="#FFFFFF"
+>0</Text>
+<Button
+   offsetXY="85 650"
+   width="80"
+   height="80"
+   image="card_plus_button"
+   raycastTarget="false"
+></Button>
+<Image
+   offsetXY="180 650"
+   width="100"
+   height="100"
+   image="card_damage"
+   raycastTarget="false"
+></Image>
+</Panel>
+
+<Panel
+   id="opponent_card_gui"
+   active="false"
+   position="0 200 -108"
+   rotation="0 0 180"
+   rectAlignment="MiddleCenter"
+   width="128"
+   height="128"
+   raycastTarget="false"
+>
+<Text
+   id="opponent_view_damage_underline"
+   offsetXY="-30 650"
+   rotation="0 0 180"
+   scale="1.5 1.5"
+   fontStyle="Bold"
+   fontSize="72"
+   color="#FFFFFF"
+></Text>
+<Text
+   id="opponent_view_damage"
+   offsetXY="-30 650"
+   rotation="0 0 180"
+   scale="1.5 1.5"
+   fontStyle="Bold"
+   fontSize="72"
+   color="#FFFFFF"
+>0</Text>
+<Image
+   offsetXY="75 650"
+   rotation="0 0 180"
+   width="100"
+   height="100"
+   image="card_damage"
+   raycastTarget="false"
+></Image>
+</Panel>
+]]
+--END characterGUIXMLScript
