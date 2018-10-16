@@ -197,6 +197,25 @@ function setBoardZoneEnabled(boardZoneEnabled)
   end
 end
 
+function searchCardInBotsList(cardname)
+  local databank = Global.getTable("botsTable")
+  for i in ipairs(databank) do
+    if databank[i]["name"] == cardname then
+      return i
+    end
+  end
+  return false
+end
+
+function searchCardInBattleCardsList(cardname)
+  local databank = Global.getTable("battleCardsTable")
+  for i in ipairs(databank) do
+    if databank[i]["name"] == cardname then
+      return i
+    end
+  end
+  return false
+end
 
 --------------------------------------------------------------------------------
 -- Chat Options
@@ -543,3 +562,139 @@ characterGUIXMLScript = [[
 </Panel>
 ]]
 --END characterGUIXMLScript
+
+botsTable = {
+  {  name = 'Arcee', cardsubname = 'Skilled Fighter', cost = '5', type = 'Character', rarity = 'RT', number = '01', set = 'T40'  },
+  {  name = 'Autobot Cosmos', cardsubname = 'Recon & Communication', cost = '11', type = 'Character', rarity = 'RT', number = '02', set = 'T40'  },
+  {  name = 'Autobot Hound', cardsubname = 'Long Range Scout', cost = '8', type = 'Character', rarity = 'CT', number = '03', set = 'T40'  },
+  {  name = 'Autobot Jazz', cardsubname = 'Special Ops', cost = '6', type = 'Character', rarity = 'UT', number = '04', set = 'T40'  },
+  {  name = 'Autobot Mirage', cardsubname = 'Lone Wolf', cost = '9', type = 'Character', rarity = 'UT', number = '05', set = 'T40'  },
+  {  name = 'Barrage', cardsubname = 'Merciless Insecticon', cost = '7', type = 'Character', rarity = 'CT', number = '06', set = 'T40'  },
+  {  name = 'Bombshell', cardsubname = 'Insecticon Mind-Controller', cost = '8', type = 'Character', rarity = 'CT', number = '07', set = 'T40'  },
+  {  name = 'Bumblebee', cardsubname = 'Courageous Scout', cost = '9', type = 'Character', rarity = 'CT', number = '08', set = 'T40'  },
+  {  name = 'Bumblebee', cardsubname = 'Legendary Warrior', cost = '10', type = 'Character', rarity = 'SRT', number = '09', set = 'T40'  },
+  {  name = 'Chop Shop', cardsubname = 'Sneaky Insecticon', cost = '6', type = 'Character', rarity = 'UT', number = '10', set = 'T40'  },
+  {  name = 'Chromia', cardsubname = 'Special Ops', cost = '8', type = 'Character', rarity = 'RT', number = '11', set = 'T40'  },
+  {  name = 'Darkmount', cardsubname = 'Cruel Overlord', cost = '9', type = 'Character', rarity = 'RT', number = '12', set = 'T40'  },
+  {  name = 'Deadlock', cardsubname = 'Bounty Hunter', cost = '8', type = 'Character', rarity = 'UT', number = '13', set = 'T40'  },
+  {  name = 'Decepticon Shockwave', cardsubname = 'Cybertron Commander', cost = '11', type = 'Character', rarity = 'RT', number = '14', set = 'T40'  },
+  {  name = 'Demolisher', cardsubname = 'Devoted Decepticon ', cost = '6', type = 'Character', rarity = 'UT', number = '15', set = 'T40'  },
+  {  name = 'Dinobot Sludge', cardsubname = 'Mighty Stomper', cost = '8', type = 'Character', rarity = 'UT', number = '16', set = 'T40'  },
+  {  name = 'Dinobot Slug', cardsubname = 'Hot-Header Warrior', cost = '9', type = 'Character', rarity = 'CT', number = '17', set = 'T40'  },
+  {  name = 'Dinobot Snarl', cardsubname = 'Desert Warrior', cost = '7', type = 'Character', rarity = 'UT', number = '18', set = 'T40'  },
+  {  name = 'Dinobot Swoop', cardsubname = 'Fearsome Flyer', cost = '6', type = 'Character', rarity = 'CT', number = '19', set = 'T40'  },
+  {  name = 'Flamewar', cardsubname = 'Veteran Decepticon', cost = '5', type = 'Character', rarity = 'CT', number = '20', set = 'T40'  },
+  {  name = 'Grimlock', cardsubname = 'Dinobot Leader', cost = '10', type = 'Character', rarity = 'RT', number = '21', set = 'T40'  },
+  {  name = 'Inferno', cardsubname = 'Fearless Firefighter', cost = '12', type = 'Character', rarity = 'UT', number = '22', set = 'T40'  },
+  {  name = 'Insecticon Skrapnet', cardsubname = 'Insecticon Leader', cost = '7', type = 'Character', rarity = 'RT', number = '23', set = 'T40'  },
+  {  name = 'Jetfire', cardsubname = 'Air Guardian', cost = '10', type = 'Character', rarity = 'UT', number = '24', set = 'T40'  },
+  {  name = 'Kickback', cardsubname = 'Cunning Insecticon', cost = '5', type = 'Character', rarity = 'UT', number = '25', set = 'T40'  },
+  {  name = 'Megatron', cardsubname = 'Decepticon Leader', cost = '10', type = 'Character', rarity = 'CT', number = '26', set = 'T40'  },
+  {  name = 'Megatron', cardsubname = 'Living Weapon', cost = '13', type = 'Character', rarity = 'RT', number = '27', set = 'T40'  },
+  {  name = 'Nemesis Prime', cardsubname = 'Dark Clone', cost = '12', type = 'Character', rarity = 'SRT', number = '28', set = 'T40'  },
+  {  name = 'Optimus Prime', cardsubname = 'Battlefield Legend', cost = '13', type = 'Character', rarity = 'RT', number = '29', set = 'T40'  },
+  {  name = 'Optimus Prime', cardsubname = 'Freedom Fighter', cost = '12', type = 'Character', rarity = 'CT', number = '30', set = 'T40'  },
+  {  name = 'Prowl', cardsubname = 'Military Strategist', cost = '6', type = 'Character', rarity = 'UT', number = '31', set = 'T40'  },
+  {  name = 'Ramjet', cardsubname = 'Sky Smasher', cost = '10', type = 'Character', rarity = 'CT', number = '32', set = 'T40'  },
+  {  name = 'Ransack', cardsubname = ' Insecticon Commando', cost = '6', type = 'Character', rarity = 'UT', number = '33', set = 'T40'  },
+  {  name = 'Sergeant Kup', cardsubname = 'Veteran Sergeant', cost = '7', type = 'Character', rarity = 'CT', number = '34', set = 'T40'  },
+  {  name = 'Skywarp', cardsubname = 'Sneaky Prankster', cost = '6', type = 'Character', rarity = 'UT', number = '35', set = 'T40'  },
+  {  name = 'Starscream', cardsubname = 'Air Commander', cost = '11', type = 'Character', rarity = 'UT', number = '36', set = 'T40'  },
+  {  name = 'Starscream', cardsubname = 'Scheming Second-In-Command', cost = '10', type = 'Character', rarity = 'CT', number = '37', set = 'T40'  },
+  {  name = 'Sunstorm', cardsubname = 'Fusion Flyer', cost = '11', type = 'Character', rarity = 'RT', number = '38', set = 'T40'  },
+  {  name = 'Thundercracker', cardsubname = 'Mach Warrior', cost = '8', type = 'Character', rarity = 'UT', number = '39', set = 'T40'  },
+  {  name = 'Wheeljack', cardsubname = 'Weapons Inventor', cost = '9', type = 'Character', rarity = 'UT', number = '40', set = 'T40'  },
+  {  name = 'Bumblebee', cardsubname = 'Brave Warrior', cost = '6', type = 'Character', rarity = 'RT', number = 'T01', set = 'T04'  },
+  {  name = 'Ironhide', cardsubname = 'Veteran Autobot', cost = '6', type = 'Character', rarity = 'RT', number = 'T02', set = 'T04'  },
+  {  name = 'Optimus Prime', cardsubname = 'Autobot Leader', cost = '7', type = 'Character', rarity = 'RT', number = 'T03', set = 'T04'  },
+  {  name = 'Red Alert', cardsubname = 'Security Chief', cost = '6', type = 'Character', rarity = 'RT', number = 'T04', set = 'T04'  },
+  {  name = 'CliffJumper', cardsubname = 'Renegade Warrior', cost = '8', type = 'Character', rarity = 'SRT', number = 'T01', set = 'T02'  },
+  {  name = 'Slipstream', cardsubname = 'Strategic Seeker', cost = '8', type = 'Character', rarity = 'SRT', number = 'T02', set = 'T02'  }
+}
+
+battleCardsTable = {
+  { number = "U001", set = "081", name = "Aerial Recon", attack = "1", defense = "0", special = "0" },
+  { number = "R002", set = "081", name = "Agility of Bumblebee", attack = "1", defense = "0", special = "0" },
+  { number = "U003", set = "081", name = "Armed Hovercraft", attack = "0", defense = "1", special = "0" },
+  { number = "C004", set = "081", name = "Armored Plating", attack = "0", defense = "1", special = "0" },
+  { number = "U005", set = "081", name = "Backup Plan", attack = "0", defense = "0", special = "1" },
+  { number = "C006", set = "081", name = "Battle Ready", attack = "1", defense = "0", special = "0" },
+  { number = "U007", set = "081", name = "Blast Shield", attack = "0", defense = "1", special = "0" },
+  { number = "U008", set = "081", name = "Body Armor", attack = "1", defense = "0", special = "0" },
+  { number = "R009", set = "081", name = "Bombing Run", attack = "0", defense = "1", special = "0" },
+  { number = "C010", set = "081", name = "Brainstorm", attack = "0", defense = "1", special = "0" },
+  { number = "U011", set = "081", name = "Bug Bomb", attack = "0", defense = "1", special = "0" },
+  { number = "R012", set = "081", name = "Cargo Trailer", attack = "0", defense = "1", special = "0" },
+  { number = "U013", set = "081", name = "Collateral Damage", attack = "0", defense = "1", special = "0" },
+  { number = "R014", set = "081", name = "Combat Training", attack = "0", defense = "0", special = "1" },
+  { number = "U015", set = "081", name = "Computer Sabotage", attack = "1", defense = "0", special = "0" },
+  { number = "C016", set = "081", name = "Crushing Size", attack = "0", defense = "0", special = "1" },
+  { number = "U017", set = "081", name = "Crushing Treads", attack = "1", defense = "0", special = "0" },
+  { number = "R018", set = "081", name = "Cybertonium Bow", attack = "0", defense = "1", special = "0" },
+  { number = "R019", set = "081", name = "Data Bank", attack = "0", defense = "0", special = "1" },
+  { number = "C020", set = "081", name = "Data Pad", attack = "0", defense = "0", special = "1" },
+  { number = "U021", set = "081", name = "Debilitating Crystal", attack = "0", defense = "0", special = "1" },
+  { number = "R022", set = "081", name = "Dino-Chomp!", attack = "0", defense = "1", special = "0" },
+  { number = "U023", set = "081", name = "Disarm", attack = "0", defense = "1", special = "0" },
+  { number = "U024", set = "081", name = "Disruption", attack = "1", defense = "0", special = "0" },
+  { number = "R025", set = "081", name = "Disruptive Entrance", attack = "0", defense = "1", special = "0" },
+  { number = "C026", set = "081", name = "Drill Arms", attack = "0", defense = "1", special = "0" },
+  { number = "U027", set = "081", name = "Emergency Maintenance", attack = "1", defense = "0", special = "0" },
+  { number = "R028", set = "081", name = "Energon Axe", attack = "0", defense = "1", special = "0" },
+  { number = "U029", set = "081", name = "Equipment Enthusiast", attack = "0", defense = "0", special = "1" },
+  { number = "C030", set = "081", name = "Flamethrower", attack = "1", defense = "0", special = "0" },
+  { number = "C031", set = "081", name = "Force Field", attack = "0", defense = "0", special = "1" },
+  { number = "R032", set = "081", name = "Fusion Cannon of Megatron", attack = "0", defense = "1", special = "0" },
+  { number = "U033", set = "081", name = "Grenade Launcher", attack = "1", defense = "0", special = "0" },
+  { number = "C034", set = "081", name = "Handheld Blaster", attack = "0", defense = "2", special = "0" },
+  { number = "R035", set = "081", name = "Heroism", attack = "0", defense = "1", special = "0" },
+  { number = "R036", set = "081", name = "Hunker Down", attack = "0", defense = "1", special = "0" },
+  { number = "R037", set = "081", name = "I Still Function! ", attack = "0", defense = "0", special = "0" },
+  { number = "C038", set = "081", name = "Improvised Shield", attack = "2", defense = "0", special = "0" },
+  { number = "C039", set = "081", name = "Incoming Transmission", attack = "1", defense = "0", special = "0" },
+  { number = "C040", set = "081", name = "Inspiring Leadership", attack = "0", defense = "1", special = "0" },
+  { number = "R041", set = "081", name = "Ion Blaster of Optimus Prime ", attack = "0", defense = "1", special = "0" },
+  { number = "R042", set = "081", name = "Jaws of Steel", attack = "1", defense = "0", special = "0" },
+  { number = "U043", set = "081", name = "Leap Into Battle", attack = "0", defense = "1", special = "0" },
+  { number = "R044", set = "081", name = "Matrix of Leadership", attack = "1", defense = "1", special = "0" },
+  { number = "C045", set = "081", name = "Medic!", attack = "0", defense = "0", special = "0" },
+  { number = "C046", set = "081", name = "Multi-Mission Gear", attack = "1", defense = "0", special = "0" },
+  { number = "U047", set = "081", name = "Multi-Tool", attack = "0", defense = "1", special = "0" },
+  { number = "U048", set = "081", name = "New Designs", attack = "1", defense = "0", special = "0" },
+  { number = "C049", set = "081", name = "Null-Ray of Starscream", attack = "1", defense = "0", special = "0" },
+  { number = "R050", set = "081", name = "One Shall Stand, One Shall Fall", attack = "0", defense = "0", special = "0" },
+  { number = "R051", set = "081", name = "Peace through Tyranny  ", attack = "2", defense = "0", special = "0" },
+  { number = "R052", set = "081", name = "Photon Bomb ", attack = "0", defense = "0", special = "0" },
+  { number = "R053", set = "081", name = "Piercing Blaster ", attack = "0", defense = "0", special = "1" },
+  { number = "C054", set = "081", name = "Plasma Burst", attack = "0", defense = "0", special = "0" },
+  { number = "U055", set = "081", name = "Power Sword", attack = "0", defense = "1", special = "0" },
+  { number = "C056", set = "081", name = "Primary Laser", attack = "0", defense = "1", special = "0" },
+  { number = "C057", set = "081", name = "Ramming Speed", attack = "1", defense = "0", special = "0" },
+  { number = "U058", set = "081", name = "Rapid Ascent", attack = "1", defense = "0", special = "0" },
+  { number = "C059", set = "081", name = "Rapid Conversion", attack = "0", defense = "0", special = "1" },
+  { number = "C060", set = "081", name = "Ready For Action", attack = "0", defense = "0", special = "0" },
+  { number = "C061", set = "081", name = "Reinforced Plating", attack = "0", defense = "1", special = "0" },
+  { number = "C062", set = "081", name = "Repair Bay", attack = "1", defense = "0", special = "0" },
+  { number = "R063", set = "081", name = "Roll Out!", attack = "1", defense = "1", special = "0" },
+  { number = "R064", set = "081", name = "Salvage for Parts", attack = "0", defense = "0", special = "0" },
+  { number = "C065", set = "081", name = "Scrapper Gauntlets", attack = "1", defense = "0", special = "0" },
+  { number = "R066", set = "081", name = "Security Checkpoint", attack = "0", defense = "2", special = "0" },
+  { number = "R067", set = "081", name = "Shock Absorbers", attack = "1", defense = "0", special = "0" },
+  { number = "R068", set = "081", name = "Start Your Engines", attack = "0", defense = "1", special = "0" },
+  { number = "R069", set = "081", name = "Static Laser of Ironhide", attack = "0", defense = "0", special = "0" },
+  { number = "U070", set = "081", name = "Strafing Run", attack = "1", defense = "0", special = "0" },
+  { number = "C071", set = "081", name = "Supercharge", attack = "1", defense = "0", special = "0" },
+  { number = "U072", set = "081", name = "Swap Missions", attack = "0", defense = "1", special = "0" },
+  { number = "C073", set = "081", name = "Swap Parts", attack = "0", defense = "0", special = "1" },
+  { number = "R074", set = "081", name = "Swarm!", attack = "1", defense = "0", special = "0" },
+  { number = "R075", set = "081", name = "System Reboot", attack = "0", defense = "0", special = "1" },
+  { number = "R076", set = "081", name = "Team-Up Tactics", attack = "0", defense = "1", special = "0" },
+  { number = "R077", set = "081", name = "The Bigger They Are", attack = "0", defense = "1", special = "0" },
+  { number = "R078", set = "081", name = "Thermal Weaponry", attack = "1", defense = "0", special = "0" },
+  { number = "U079", set = "081", name = "Treasure Hunt", attack = "1", defense = "0", special = "0" },
+  { number = "U080", set = "081", name = "Turbo Boosters", attack = "1", defense = "0", special = "0" },
+  { number = "C081", set = "081", name = "Zap", attack = "1", defense = "0", special = "0" },
+  { number = "R001", set = "002", name = "All Out Attack", attack = "1", defense = "0", special = "0" },
+  { number = "R002", set = "002", name = "Tandem Targeting System", attack = "1", defense = "0", special = "0" }
+}
+
