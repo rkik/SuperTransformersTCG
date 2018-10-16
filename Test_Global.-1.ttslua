@@ -49,7 +49,7 @@ function onObjectDrop(playerColor, dropObject)
     elseif (dropObject.getVar("curMatZone") == "Red") then
       redBoard.call('handleBotSpawn', {cardObject=dropObject})
     elseif (dropObject.getVar("curMatZone") == "BlueFlip") then
-      blueBoard.call('handleCardFlipEnter', {cardObject=dropObject})
+      blueBoard.call('handleCardFlipEnter', {cardObject=dropObject, zone=blueFlipZone})
       print("flip on drop")
     else
       -- Nothing needs done.
@@ -197,7 +197,8 @@ function setBoardZoneEnabled(boardZoneEnabled)
   end
 end
 
-function searchCardInBotsList(cardname)
+function searchCardInBotsList(params)
+  local cardname = params[1]
   local databank = Global.getTable("botsTable")
   for i in ipairs(databank) do
     if databank[i]["name"] == cardname then
@@ -207,7 +208,8 @@ function searchCardInBotsList(cardname)
   return false
 end
 
-function getStatsFromBattleCardsList(cardname)
+function getStatsFromBattleCardsList(params)
+  local cardname = params[1]
   local databank = Global.getTable("battleCardsTable")
   for i in ipairs(databank) do
     if databank[i]["name"] == cardname then
@@ -258,6 +260,9 @@ function onload()
 
   cardCount = 0
   cardFlipTable = {}
+  flipAttack = 0
+  flipDefense = 0
+  flipSpecial = 0
 
   if self.getName() == 'Blue' then
     owner = 'Blue'
@@ -373,54 +378,76 @@ end
 function handleCardFlipEnter(params)
   local position = self.getPosition()
   local object = params.cardObject
-
-  -- Get the rotation of the card.
-  cardRotation = object.getRotation()
-
-  -- Flip the card upside down if needed.
-  if ((cardRotation.z < 160) or (cardRotation.z > 200)) then
-    cardRotation.setRotation({0, 0, 180})
-  end
-
-  --Build a list of guids that have entered so we don't double count
-  print(cardCount)
-  local foundi = false
-  for i,o in ipairs(cardFlipTable) do
-    if o == object then
-      foundi = i
+  local zone = params.zone
+  
+  local zoneObjects = zone.getObjects()
+    
+  for k, obj in pairs(zoneObjects) do
+    -- only look at cards
+    if obj.tag == "Card" then
+      -- Get the rotation of the card.
+      cardRotation = obj.getRotation()
+      if ((cardRotation.z > 160) or (cardRotation.z < 200)) then
+        stats = Global.call("getStatsFromBattleCardsList", { obj.getName() })
+        if stats ~= false then
+          flipAttack = flipAttack + stats["attack"]
+          flipDefense = flipDefense + stats["defense"]
+          flipSpecial = flipSpecial + stats["special"]
+        end
+      end
     end
-    print(o.guid)
   end
+  print("Atk: " .. flipAttack)
+  print("Def: " .. flipDefense)
+  print("Spc: " .. flipSpecial)
 
-  print(foundi)
-  if foundi ~= false then
-    table.insert(cardFlipTable, object)
-    cardCount = (cardCount +1)
-  end
+ -- -- Get the rotation of the card.
+ -- cardRotation = object.getRotation()
+ --
+ -- -- Flip the card upside down if needed.
+ -- if ((cardRotation.z < 160) or (cardRotation.z > 200)) then
+ --   cardRotation.setRotation({0, 0, 180})
+ -- end
+ --
+ -- --Build a list of guids that have entered so we don't double count
+ -- print(cardCount)
+ -- local foundi = false
+ -- for i,o in ipairs(cardFlipTable) do
+ --   if o == object then
+ --     foundi = i
+ --   end
+ --   print(o.guid)
+ -- end
+ --
+ -- print(foundi)
+ -- if foundi ~= false then
+ --   table.insert(cardFlipTable, object)
+ --   cardCount = (cardCount +1)
+ -- end
 
 end
 
 function handleCardFlipExit(params)
-  local position = self.getPosition()
-  local object = params.cardObject
-
-  local foundi = false
-  for i,o in ipairs(cardFlipTable) do
-    if o == object then
-      foundi = i
-    end
-    print(o.guid)
-  end
-
-  print(foundi)
-  if foundi ~= false then
-    table.remove(cardFlipTable, foundi)
-    if cardCount > 0 then
-      cardCount = (cardCount - 1)
-    end
-  end
-
-  for i,v in ipairs(cardFlipTable) do print(v.guid) end
+--  local position = self.getPosition()
+--  local object = params.cardObject
+--
+--  local foundi = false
+--  for i,o in ipairs(cardFlipTable) do
+--    if o == object then
+--      foundi = i
+--    end
+--    print(o.guid)
+--  end
+--
+--  print(foundi)
+--  if foundi ~= false then
+--    table.remove(cardFlipTable, foundi)
+--    if cardCount > 0 then
+--      cardCount = (cardCount - 1)
+--    end
+--  end
+--
+--  for i,v in ipairs(cardFlipTable) do print(v.guid) end
 end
 ]]
 -- END playerPlaymatScript
