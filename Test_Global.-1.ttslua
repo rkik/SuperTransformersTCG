@@ -207,11 +207,13 @@ function searchCardInBotsList(cardname)
   return false
 end
 
-function searchCardInBattleCardsList(cardname)
+function getStatsFromBattleCardsList(cardname)
   local databank = Global.getTable("battleCardsTable")
   for i in ipairs(databank) do
     if databank[i]["name"] == cardname then
-      return i
+      return {attack = databank[i]["attack"],
+              defense = databank[i]["defense"],
+              special = databank[i]["special"]}
     end
   end
   return false
@@ -262,6 +264,8 @@ function onload()
   else
     owner = 'Red'
   end
+
+  self.UI.setXml(Global.getVar("playmatGUIXMLScript"))
 end
 
 function onCollisionEnter(collision_info)
@@ -370,9 +374,17 @@ function handleCardFlipEnter(params)
   local position = self.getPosition()
   local object = params.cardObject
 
+  -- Get the rotation of the card.
+  cardRotation = object.getRotation()
+
+  -- Flip the card upside down if needed.
+  if ((cardRotation.z < 160) or (cardRotation.z > 200)) then
+    cardRotation.setRotation({0, 0, 180})
+  end
+
   --Build a list of guids that have entered so we don't double count
   print(cardCount)
-  local foundi = 0
+  local foundi = false
   for i,o in ipairs(cardFlipTable) do
     if o == object then
       foundi = i
@@ -381,7 +393,7 @@ function handleCardFlipEnter(params)
   end
 
   print(foundi)
-  if foundi == 0 then
+  if foundi ~= false then
     table.insert(cardFlipTable, object)
     cardCount = (cardCount +1)
   end
@@ -392,16 +404,93 @@ function handleCardFlipExit(params)
   local position = self.getPosition()
   local object = params.cardObject
 
-  table.remove(cardFlipTable)
-  if cardCount > 0 then
-    cardCount = (cardCount - 1)
+  local foundi = false
+  for i,o in ipairs(cardFlipTable) do
+    if o == object then
+      foundi = i
+    end
+    print(o.guid)
   end
-  print(cardCount)
+
+  print(foundi)
+  if foundi ~= false then
+    table.remove(cardFlipTable, foundi)
+    if cardCount > 0 then
+      cardCount = (cardCount - 1)
+    end
+  end
+
   for i,v in ipairs(cardFlipTable) do print(v.guid) end
 end
 ]]
 -- END playerPlaymatScript
 
+playmatGUIXMLScript = [[
+<Panel
+   id="flip_gui"
+   active="false"
+   position="0 0 0"
+   rotation="0 0 180"
+   rectAlignment="MiddleCenter"
+   width="128"
+   height="128"
+   raycastTarget="false"
+>
+<Text
+   id="damage_underline"
+   offsetXY="0 0"
+   scale="1.5 1.5"
+   fontStyle="Bold"
+   fontSize="72"
+   color="#FFFFFF"
+></Text>
+<Text
+   id="damage"
+   offsetXY="0 0"
+   scale="1.5 1.5"
+   fontStyle="Bold"
+   fontSize="72"
+   color="#FFFFFF"
+>0</Text>
+</Panel>
+
+<Panel
+   id="opponent_card_gui"
+   active="false"
+   position="0 0 0"
+   rotation="0 0 180"
+   rectAlignment="MiddleCenter"
+   width="128"
+   height="128"
+   raycastTarget="false"
+>
+<Text
+   id="opponent_view_damage_underline"
+   offsetXY="0 0"
+   rotation="0 0 180"
+   scale="1.5 1.5"
+   fontStyle="Bold"
+   fontSize="72"
+   color="#FFFFFF"
+></Text>
+<Text
+   id="opponent_view_damage"
+   offsetXY="0 0"
+   rotation="0 0 180"
+   scale="1.5 1.5"
+   fontStyle="Bold"
+   fontSize="72"
+   color="#FFFFFF"
+>0</Text>
+</Panel>
+]]
+--END characterGUIXMLScript
+
+
+
+--------------------------------------------------------------------------------
+-- Bot GUI Local Script
+--------------------------------------------------------------------------------
 characterGUILuaScript = [[
 function onload()
   -- Load inside the script since global images do not work for players who join late.
