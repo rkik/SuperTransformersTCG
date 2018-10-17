@@ -4,7 +4,7 @@ function onLoad()
   -- In case the mod was just loaded, start as Blue so the menu is right side up.
   Player.White.changeColor('Blue')
 
-  TRANSFORMERS_TCG_VERSION = "0.0.1"
+  TRANSFORMERS_TCG_VERSION = "0.0.2"
 
   blueMatZone = nil
   blueMatZoneguid = 'c57486'
@@ -49,7 +49,7 @@ function onObjectDrop(playerColor, dropObject)
     elseif (dropObject.getVar("curMatZone") == "Red") then
       redBoard.call('handleBotSpawn', {cardObject=dropObject})
     elseif (dropObject.getVar("curMatZone") == "BlueFlip") then
-      blueBoard.call('handleCardFlipEnter', {cardObject=dropObject, zone=blueFlipZone})
+      blueBoard.call('handleCardFlip', {cardObject=dropObject, zone=blueFlipZone})
       print("flip on drop")
     else
       -- Nothing needs done.
@@ -82,7 +82,7 @@ function onObjectEnterScriptingZone(zone, enterObject)
     elseif (zone == blueFlipZone) then
       enterObject.setVar("curMatZone", "BlueFlip")
       if (enterObject.getVar("curLiftingPlayer") == nil) then
-        blueBoard.call('handleCardFlipEnter', {cardObject=enterObject})
+        blueBoard.call('handleCardFlip', {cardObject=enterObject, zone=blueFlipZone})
         print("flip on")
       end
     end
@@ -118,7 +118,7 @@ function onObjectLeaveScriptingZone(zone, leaveObject)
 
     elseif ((zone == blueFlipZone)) then
       leaveObject.setVar("curMatZone", nil)
-      blueBoard.call('handleCardFlipExit', {cardObject=leaveObject})
+      blueBoard.call('handleCardFlip', {cardObject=leaveObject, zone=blueFlipZone})
       print("flip off")
     end
   end
@@ -260,9 +260,6 @@ function onload()
 
   cardCount = 0
   cardFlipTable = {}
-  flipAttack = 0
-  flipDefense = 0
-  flipSpecial = 0
 
   if self.getName() == 'Blue' then
     owner = 'Blue'
@@ -271,6 +268,9 @@ function onload()
   end
 
   self.UI.setXml(Global.getVar("playmatGUIXMLScript"))
+  Wait.time(function() finishInitFlipGUI() end, 0.2)
+  --self.UI.setAttribute("flip_gui", "visibility", owner)
+  --self.UI.setAttribute("flip_gui", "active", true)
 end
 
 function onCollisionEnter(collision_info)
@@ -375,20 +375,30 @@ function finishInitGUIHolder(cardObject, holderObject)
   holderObject.UI.setAttribute("opponent_card_gui", "active", true)
 end
 
-function handleCardFlipEnter(params)
+function finishInitFlipGUI()
+  self.UI.setAttribute("flip_gui", "visibility", owner)
+  self.UI.setAttribute("flip_gui", "active", true)
+end
+
+function handleCardFlip(params)
   local position = self.getPosition()
   local object = params.cardObject
   local zone = params.zone
-  
+  local flipAttack = 0
+  local flipDefense = 0
+  local flipSpecial = 0
+
   local zoneObjects = zone.getObjects()
-    
+
   for k, obj in pairs(zoneObjects) do
     -- only look at cards
     if obj.tag == "Card" then
       -- Get the rotation of the card.
       cardRotation = obj.getRotation()
-      if ((cardRotation.z > 160) or (cardRotation.z < 200)) then
+      print("rot: " .. cardRotation.z)
+      if ((cardRotation.z > 340) or (cardRotation.z < 20)) then
         stats = Global.call("getStatsFromBattleCardsList", { obj.getName() })
+        print(obj.getName())
         if stats ~= false then
           flipAttack = flipAttack + stats["attack"]
           flipDefense = flipDefense + stats["defense"]
@@ -400,54 +410,6 @@ function handleCardFlipEnter(params)
   print("Atk: " .. flipAttack)
   print("Def: " .. flipDefense)
   print("Spc: " .. flipSpecial)
-
- -- -- Get the rotation of the card.
- -- cardRotation = object.getRotation()
- --
- -- -- Flip the card upside down if needed.
- -- if ((cardRotation.z < 160) or (cardRotation.z > 200)) then
- --   cardRotation.setRotation({0, 0, 180})
- -- end
- --
- -- --Build a list of guids that have entered so we don't double count
- -- print(cardCount)
- -- local foundi = false
- -- for i,o in ipairs(cardFlipTable) do
- --   if o == object then
- --     foundi = i
- --   end
- --   print(o.guid)
- -- end
- --
- -- print(foundi)
- -- if foundi ~= false then
- --   table.insert(cardFlipTable, object)
- --   cardCount = (cardCount +1)
- -- end
-
-end
-
-function handleCardFlipExit(params)
---  local position = self.getPosition()
---  local object = params.cardObject
---
---  local foundi = false
---  for i,o in ipairs(cardFlipTable) do
---    if o == object then
---      foundi = i
---    end
---    print(o.guid)
---  end
---
---  print(foundi)
---  if foundi ~= false then
---    table.remove(cardFlipTable, foundi)
---    if cardCount > 0 then
---      cardCount = (cardCount - 1)
---    end
---  end
---
---  for i,v in ipairs(cardFlipTable) do print(v.guid) end
 end
 ]]
 -- END playerPlaymatScript
@@ -464,7 +426,7 @@ playmatGUIXMLScript = [[
    raycastTarget="false"
 >
 <Text
-   id="damage_underline"
+   id="attack_underline"
    offsetXY="0 0"
    scale="1.5 1.5"
    fontStyle="Bold"
@@ -472,7 +434,7 @@ playmatGUIXMLScript = [[
    color="#FFFFFF"
 ></Text>
 <Text
-   id="damage"
+   id="attack"
    offsetXY="0 0"
    scale="1.5 1.5"
    fontStyle="Bold"
@@ -482,7 +444,7 @@ playmatGUIXMLScript = [[
 </Panel>
 
 <Panel
-   id="opponent_card_gui"
+   id="opponent_flip_gui"
    active="false"
    position="0 0 0"
    rotation="0 0 180"
@@ -492,7 +454,7 @@ playmatGUIXMLScript = [[
    raycastTarget="false"
 >
 <Text
-   id="opponent_view_damage_underline"
+   id="opponent_view_attack_underline"
    offsetXY="0 0"
    rotation="0 0 180"
    scale="1.5 1.5"
@@ -501,7 +463,7 @@ playmatGUIXMLScript = [[
    color="#FFFFFF"
 ></Text>
 <Text
-   id="opponent_view_damage"
+   id="opponent_view_attack"
    offsetXY="0 0"
    rotation="0 0 180"
    scale="1.5 1.5"
@@ -694,7 +656,7 @@ botsTable = {
   {  name = 'Darkmount', cardsubname = 'Cruel Overlord', cost = '9', type = 'Character', rarity = 'RT', number = '12', set = 'T40'  },
   {  name = 'Deadlock', cardsubname = 'Bounty Hunter', cost = '8', type = 'Character', rarity = 'UT', number = '13', set = 'T40'  },
   {  name = 'Decepticon Shockwave', cardsubname = 'Cybertron Commander', cost = '11', type = 'Character', rarity = 'RT', number = '14', set = 'T40'  },
-  {  name = 'Demolisher', cardsubname = 'Devoted Decepticon ', cost = '6', type = 'Character', rarity = 'UT', number = '15', set = 'T40'  },
+  {  name = 'Demolisher', cardsubname = 'Devoted Decepticon', cost = '6', type = 'Character', rarity = 'UT', number = '15', set = 'T40'  },
   {  name = 'Dinobot Sludge', cardsubname = 'Mighty Stomper', cost = '8', type = 'Character', rarity = 'UT', number = '16', set = 'T40'  },
   {  name = 'Dinobot Slug', cardsubname = 'Hot-Header Warrior', cost = '9', type = 'Character', rarity = 'CT', number = '17', set = 'T40'  },
   {  name = 'Dinobot Snarl', cardsubname = 'Desert Warrior', cost = '7', type = 'Character', rarity = 'UT', number = '18', set = 'T40'  },
@@ -712,7 +674,7 @@ botsTable = {
   {  name = 'Optimus Prime', cardsubname = 'Freedom Fighter', cost = '12', type = 'Character', rarity = 'CT', number = '30', set = 'T40'  },
   {  name = 'Prowl', cardsubname = 'Military Strategist', cost = '6', type = 'Character', rarity = 'UT', number = '31', set = 'T40'  },
   {  name = 'Ramjet', cardsubname = 'Sky Smasher', cost = '10', type = 'Character', rarity = 'CT', number = '32', set = 'T40'  },
-  {  name = 'Ransack', cardsubname = ' Insecticon Commando', cost = '6', type = 'Character', rarity = 'UT', number = '33', set = 'T40'  },
+  {  name = 'Ransack', cardsubname = 'Insecticon Commando', cost = '6', type = 'Character', rarity = 'UT', number = '33', set = 'T40'  },
   {  name = 'Sergeant Kup', cardsubname = 'Veteran Sergeant', cost = '7', type = 'Character', rarity = 'CT', number = '34', set = 'T40'  },
   {  name = 'Skywarp', cardsubname = 'Sneaky Prankster', cost = '6', type = 'Character', rarity = 'UT', number = '35', set = 'T40'  },
   {  name = 'Starscream', cardsubname = 'Air Commander', cost = '11', type = 'Character', rarity = 'UT', number = '36', set = 'T40'  },
@@ -765,11 +727,11 @@ battleCardsTable = {
   { number = "C034", set = "081", name = "Handheld Blaster", attack = "0", defense = "2", special = "0" },
   { number = "R035", set = "081", name = "Heroism", attack = "0", defense = "1", special = "0" },
   { number = "R036", set = "081", name = "Hunker Down", attack = "0", defense = "1", special = "0" },
-  { number = "R037", set = "081", name = "I Still Function! ", attack = "0", defense = "0", special = "0" },
+  { number = "R037", set = "081", name = "I Still Function!", attack = "0", defense = "0", special = "0" },
   { number = "C038", set = "081", name = "Improvised Shield", attack = "2", defense = "0", special = "0" },
   { number = "C039", set = "081", name = "Incoming Transmission", attack = "1", defense = "0", special = "0" },
   { number = "C040", set = "081", name = "Inspiring Leadership", attack = "0", defense = "1", special = "0" },
-  { number = "R041", set = "081", name = "Ion Blaster of Optimus Prime ", attack = "0", defense = "1", special = "0" },
+  { number = "R041", set = "081", name = "Ion Blaster of Optimus Prime", attack = "0", defense = "1", special = "0" },
   { number = "R042", set = "081", name = "Jaws of Steel", attack = "1", defense = "0", special = "0" },
   { number = "U043", set = "081", name = "Leap Into Battle", attack = "0", defense = "1", special = "0" },
   { number = "R044", set = "081", name = "Matrix of Leadership", attack = "1", defense = "1", special = "0" },
@@ -779,9 +741,9 @@ battleCardsTable = {
   { number = "U048", set = "081", name = "New Designs", attack = "1", defense = "0", special = "0" },
   { number = "C049", set = "081", name = "Null-Ray of Starscream", attack = "1", defense = "0", special = "0" },
   { number = "R050", set = "081", name = "One Shall Stand, One Shall Fall", attack = "0", defense = "0", special = "0" },
-  { number = "R051", set = "081", name = "Peace through Tyranny  ", attack = "2", defense = "0", special = "0" },
-  { number = "R052", set = "081", name = "Photon Bomb ", attack = "0", defense = "0", special = "0" },
-  { number = "R053", set = "081", name = "Piercing Blaster ", attack = "0", defense = "0", special = "1" },
+  { number = "R051", set = "081", name = "Peace through Tyranny", attack = "2", defense = "0", special = "0" },
+  { number = "R052", set = "081", name = "Photon Bomb", attack = "0", defense = "0", special = "0" },
+  { number = "R053", set = "081", name = "Piercing Blaster", attack = "0", defense = "0", special = "1" },
   { number = "C054", set = "081", name = "Plasma Burst", attack = "0", defense = "0", special = "0" },
   { number = "U055", set = "081", name = "Power Sword", attack = "0", defense = "1", special = "0" },
   { number = "C056", set = "081", name = "Primary Laser", attack = "0", defense = "1", special = "0" },
@@ -810,7 +772,6 @@ battleCardsTable = {
   { number = "U079", set = "081", name = "Treasure Hunt", attack = "1", defense = "0", special = "0" },
   { number = "U080", set = "081", name = "Turbo Boosters", attack = "1", defense = "0", special = "0" },
   { number = "C081", set = "081", name = "Zap", attack = "1", defense = "0", special = "0" },
-  { number = "R001", set = "002", name = "All Out Attack", attack = "1", defense = "0", special = "0" },
+  { number = "R001", set = "002", name = "All-Out Attack", attack = "1", defense = "0", special = "0" },
   { number = "R002", set = "002", name = "Tandem Targeting System", attack = "1", defense = "0", special = "0" }
 }
-
