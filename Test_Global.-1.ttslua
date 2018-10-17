@@ -96,9 +96,9 @@ function onObjectDrop(playerColor, dropObject)
       blueBoard.call('handleBotSpawn', {cardObject=dropObject})
     elseif (dropObject.getVar("curMatZone") == "Red") then
       redBoard.call('handleBotSpawn', {cardObject=dropObject})
-    elseif (dropObject.getVar("curMatZone") == "BlueFlip") then
-      blueBoard.call('handleCardFlip', {cardObject=dropObject, zone=blueFlipZone})
-      print("flip on drop")
+    --elseif (dropObject.getVar("curMatZone") == "BlueFlip") then
+    --  blueBoard.call('handleCardFlip', {cardObject=dropObject, zone=blueFlipZone})
+    --  print("flip on drop")
     else
       -- Nothing needs done.
     end
@@ -135,12 +135,12 @@ function onObjectEnterScriptingZone(zone, enterObject)
     elseif (zone == redMatZone) then
       enterObject.setVar("curMatZone", "Red")
       spawnRedPerspective = true
-    elseif (zone == blueFlipZone) then
-      enterObject.setVar("curMatZone", "BlueFlip")
-      if (enterObject.getVar("curLiftingPlayer") == nil) then
-        blueBoard.call('handleCardFlip', {cardObject=enterObject, zone=blueFlipZone})
-        print("flip on")
-      end
+    --elseif (zone == blueFlipZone) then
+    --  enterObject.setVar("curMatZone", "BlueFlip")
+    --  if (enterObject.getVar("curLiftingPlayer") == nil) then
+    --    blueBoard.call('handleCardFlip', {cardObject=enterObject, zone=blueFlipZone})
+    --    print("flip on")
+    --  end
     end
 
     -- Only check for spawning here if no one is currently lifting the card.
@@ -176,10 +176,10 @@ function onObjectLeaveScriptingZone(zone, leaveObject)
         linkedGUIHolder.UI.setAttribute("opponent_card_gui", "active", false)
       end
 
-    elseif ((zone == blueFlipZone)) then
-      leaveObject.setVar("curMatZone", nil)
-      blueBoard.call('handleCardFlip', {cardObject=leaveObject, zone=blueFlipZone})
-      print("flip off")
+    --elseif ((zone == blueFlipZone)) then
+    --  leaveObject.setVar("curMatZone", nil)
+    --  blueBoard.call('handleCardFlip', {cardObject=leaveObject, zone=blueFlipZone})
+    --  print("flip off")
     end
   end
 end
@@ -254,6 +254,9 @@ function periodicHandCheckCoroutine()
   if Player["red"] != nil then
     redHandCount = #(Player["red"].getHandObjects())
   end
+
+  blueBoard.call('handleCardFlip', {cardObject=dropObject, zone=blueFlipZone})
+  --redBoard.call('handleCardFlip', {cardObject=dropObject, zone=redFlipZone})
 
   -- Update UI elements.
   UI.setAttribute("blue_panel_blue_cards", "text", blueHandCount)
@@ -606,10 +609,11 @@ function handleCardFlip(params)
   for k, obj in pairs(zoneObjects) do
     -- only look at cards
     if obj.tag == "Card" then
-      -- Get the rotation of the card.
+      -- Make sure they are face up and not being held
       cardRotation = obj.getRotation()
       print("rot: " .. cardRotation.z)
-      if ((cardRotation.z > 340) or (cardRotation.z < 20)) then
+      if ((obj.getVar("curLiftingPlayer") == nil) and
+          ((cardRotation.z > 340) or (cardRotation.z < 20))) then
         stats = Global.call("getStatsFromBattleCardsList", { obj.getName() })
         print(obj.getName())
         if stats ~= false then
@@ -623,6 +627,28 @@ function handleCardFlip(params)
   print("Atk: " .. flipAttack)
   print("Def: " .. flipDefense)
   print("Spc: " .. flipSpecial)
+  updateFlipGuiNumberValue(flipAttack, "blue_attack")
+end
+
+
+--------------------------------------------------------------------------------
+-- Display GUI value
+--------------------------------------------------------------------------------
+function updateFlipGuiNumberValue(value, gui_element)
+  local gui_element_underline = gui_element .. "_underline"
+
+  if blueBoard ~= nil then
+    blueBoard.UI.setAttribute(gui_element, "text", damage)
+    --self.UI.setAttribute("opponent_view_damage", "text", damage)
+
+    if ((value == 6) or (value == 9)) then
+      blueBoard.UI.setAttribute("gui_element_underline", "text", "_")
+      --self.UI.setAttribute("opponent_view_damage_underline", "text", "_")
+    else
+      blueBoard.UI.setAttribute("gui_element_underline", "text", "")
+      --self.UI.setAttribute("opponent_view_damage_underline", "text", "")
+    end
+  end
 end
 ]=]
 -- END playerPlaymatScript
