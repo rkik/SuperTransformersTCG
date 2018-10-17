@@ -1,5 +1,10 @@
+--------------------------------------------------------------------------------
 -- Created by Rkik 13 Oct 2018 for Transformers TCG
+--------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- On Load
+--------------------------------------------------------------------------------
 function onLoad()
   -- In case the mod was just loaded, start as Blue so the menu is right side up.
   Player.White.changeColor('Blue')
@@ -21,7 +26,15 @@ function onLoad()
   blueFlipZoneguid = '5caf00'
   blueFlipZone = nil
 
+  bluePanelMaximized       = true
+  blueHandCount            = 0
+  redPanelMaximized        = true
+  redHandCount             = 0
+
   startLuaCoroutine(self, 'modernSetupCoroutine')
+
+  -- Start a repeating function to check hand counts.
+  Wait.time(periodicHandCheck, 0.5)
 
   -- Use a small startup delay that blocks things from spawning.
   loadDelayFinished        = false
@@ -35,10 +48,45 @@ function onLoad()
   printToAll("===========================================", {1,1,1})
 end
 
+
+--------------------------------------------------------------------------------
+-- Setup Co-routine
+--------------------------------------------------------------------------------
+function modernSetupCoroutine()
+  local obj_parameters = {}
+
+  HandSetup()
+
+  blueFlipZone = getObjectFromGUID(blueFlipZoneguid)
+  blueMatZone = getObjectFromGUID(blueMatZoneguid)
+  blueBoard = getObjectFromGUID(blueBoardguid)
+  blueBoard.setName('Blue')
+  blueBoard.setLuaScript(playerPlaymatScript)
+  blueBoard.interactable = false
+
+  redMatZone = getObjectFromGUID(redMatZoneguid)
+  redBoard = getObjectFromGUID(redBoardguid)
+  redBoard.setName('Red')
+  redBoard.setLuaScript(playerPlaymatScript)
+  redBoard.interactable = false
+
+  coroutine.yield(0)
+  coroutine.yield(0)
+  return 1
+end
+
+
+--------------------------------------------------------------------------------
+-- Periodic Update
+--------------------------------------------------------------------------------
 function onUpdate()
   --[[ The onUpdate event is called once per frame. --]]
 end
 
+
+--------------------------------------------------------------------------------
+-- Object Drop
+--------------------------------------------------------------------------------
 function onObjectDrop(playerColor, dropObject)
   if (dropObject.tag == "Card") then
     dropObject.setVar("curLiftingPlayer", nil)
@@ -57,12 +105,20 @@ function onObjectDrop(playerColor, dropObject)
   end
 end
 
+
+--------------------------------------------------------------------------------
+-- Object Pick Up
+--------------------------------------------------------------------------------
 function onObjectPickUp(playerColor, pickUpObject)
   if (pickUpObject.tag == "Card") then
     pickUpObject.setVar("curLiftingPlayer", playerColor)
   end
 end
 
+
+--------------------------------------------------------------------------------
+-- Object Enter Zone
+--------------------------------------------------------------------------------
 function onObjectEnterScriptingZone(zone, enterObject)
   local zoneObjects = nil
   local spawnBluePerspective = false
@@ -102,6 +158,10 @@ function onObjectEnterScriptingZone(zone, enterObject)
   end
 end
 
+
+--------------------------------------------------------------------------------
+-- Object Leave Zone
+--------------------------------------------------------------------------------
 function onObjectLeaveScriptingZone(zone, leaveObject)
   -- Only check cards.
   if (leaveObject.tag == "Card") then
@@ -124,6 +184,10 @@ function onObjectLeaveScriptingZone(zone, leaveObject)
   end
 end
 
+
+--------------------------------------------------------------------------------
+-- Object Destroy
+--------------------------------------------------------------------------------
 function onObjectDestroy(destroyObject)
   -- Only check cards.
   if (destroyObject.tag == "Card") then
@@ -136,29 +200,10 @@ function onObjectDestroy(destroyObject)
   end
 end
 
-function modernSetupCoroutine()
-  local obj_parameters = {}
 
-  HandSetup()
-
-  blueFlipZone = getObjectFromGUID(blueFlipZoneguid)
-  blueMatZone = getObjectFromGUID(blueMatZoneguid)
-  blueBoard = getObjectFromGUID(blueBoardguid)
-  blueBoard.setName('Blue')
-  blueBoard.setLuaScript(playerPlaymatScript)
-  blueBoard.interactable = false
-
-  redMatZone = getObjectFromGUID(redMatZoneguid)
-  redBoard = getObjectFromGUID(redBoardguid)
-  redBoard.setName('Red')
-  redBoard.setLuaScript(playerPlaymatScript)
-  redBoard.interactable = false
-
-  coroutine.yield(0)
-  coroutine.yield(0)
-  return 1
-end
-
+--------------------------------------------------------------------------------
+-- Hand Setup Options
+--------------------------------------------------------------------------------
 function HandSetup()
   -- Adjust the red and blue hand zones to be usable.
   local handTransform = Player["Red"].getHandTransform()
@@ -185,6 +230,55 @@ function HandSetup()
   Player["Blue"].setHandTransform(handTransform)
 end
 
+
+--------------------------------------------------------------------------------
+-- Hand Check
+--------------------------------------------------------------------------------
+function periodicHandCheck()
+  -- Use a coroutine to avoid synchronization problems.
+  startLuaCoroutine(self, "periodicHandCheckCoroutine")
+
+  Wait.time(periodicHandCheck, 0.5)
+end
+
+
+--------------------------------------------------------------------------------
+-- Hand Check Coroutine
+--------------------------------------------------------------------------------
+function periodicHandCheckCoroutine()
+  -- Scan for cards.
+  if Player["blue"] != nil then
+    blueHandCount = #(Player["blue"].getHandObjects())
+  end
+
+  if Player["red"] != nil then
+    redHandCount = #(Player["red"].getHandObjects())
+  end
+
+  -- Update UI elements.
+  UI.setAttribute("blue_panel_blue_cards", "text", blueHandCount)
+  UI.setAttribute("blue_panel_red_cards", "text", redHandCount)
+
+  UI.setAttribute("red_panel_blue_cards", "text", blueHandCount)
+  UI.setAttribute("red_panel_red_cards", "text", redHandCount)
+
+  if blueBoard != nil then
+    blueBoard.UI.setAttribute("blue_panel_blue_cards", "text", blueHandCount)
+    blueBoard.UI.setAttribute("blue_panel_red_cards", "text", redHandCount)
+  end
+
+  if redBoard != nil then
+    redBoard.UI.setAttribute("red_panel_blue_cards", "text", blueHandCount)
+    redBoard.UI.setAttribute("red_panel_red_cards", "text", redHandCount)
+  end
+
+  return 1
+end
+
+
+--------------------------------------------------------------------------------
+-- Board Zone Enable
+--------------------------------------------------------------------------------
 function setBoardZoneEnabled(boardZoneEnabled)
   if boardZoneEnabled == true then
     -- Move zone above table to enable
@@ -197,6 +291,10 @@ function setBoardZoneEnabled(boardZoneEnabled)
   end
 end
 
+
+--------------------------------------------------------------------------------
+-- Bot Search
+--------------------------------------------------------------------------------
 function searchCardInBotsList(params)
   local cardname = params[1]
   local databank = Global.getTable("botsTable")
@@ -208,6 +306,10 @@ function searchCardInBotsList(params)
   return false
 end
 
+
+--------------------------------------------------------------------------------
+-- Battlecard Search
+--------------------------------------------------------------------------------
 function getStatsFromBattleCardsList(params)
   local cardname = params[1]
   local databank = Global.getTable("battleCardsTable")
@@ -252,14 +354,26 @@ end
 --------------------------------------------------------------------------------
 -- Player Board functions
 --------------------------------------------------------------------------------
-playerPlaymatScript = [[
+playerPlaymatScript = [=[
 function onload()
+  local resourceAssets = {
+    {
+      name = "ingame_gui_background",
+      url = "http://cloud-3.steamusercontent.com/ugc/948454725666385380/A47369F346253BDE02F44153C4940D47AA0E6E67/"
+    },
+    {
+      name = "ingame_blue_panel_overlay",
+      url = "http://cloud-3.steamusercontent.com/ugc/948454725666384731/E921F14A80CFA7C3BC20C7D7C61D7319443D0169/"
+    },
+    {
+      name = "ingame_red_panel_overlay",
+      url = "http://cloud-3.steamusercontent.com/ugc/948454725666389779/69DCF9BD43E89F93351F7F2F8E87D5CFFD7E3EF7/"
+    }
+  }
+  self.UI.setCustomAssets(resourceAssets)
 
   tokenplayerone = Global.getTable('tokenplayerone')
   tokenplayertwo = Global.getTable('tokenplayertwo')
-
-  cardCount = 0
-  cardFlipTable = {}
 
   if self.getName() == 'Blue' then
     owner = 'Blue'
@@ -267,10 +381,103 @@ function onload()
     owner = 'Red'
   end
 
-  self.UI.setXml(Global.getVar("playmatGUIXMLScript"))
-  Wait.time(function() finishInitFlipGUI() end, 0.2)
-  --self.UI.setAttribute("flip_gui", "visibility", owner)
-  --self.UI.setAttribute("flip_gui", "active", true)
+  if owner == 'Blue' then
+    self.UI.setXml([[
+      <Panel
+         id="blue_panel"
+         visibility="Blue"
+         active="false"
+         position="0 -300 -5"
+         rotation="0 0 0"
+         scale="5.46 5.46"
+         rectAlignment="MiddleCenter"
+         width="80"
+         height="96"
+         image="ingame_gui_background"
+         raycastTarget="false"
+      >
+      <Image
+         offsetXY="0 34"
+         width="80"
+         height="24"
+         image="ingame_blue_panel_overlay"
+         raycastTarget="false"
+      ></Image>
+      <Text
+         id="blue_panel_red_cards"
+         scale="0.3 0.3"
+         offsetXY="-6 39"
+         fontStyle="Bold"
+         fontSize="36"
+         color="#FFFFFF"
+      >0</Text>
+      <Text
+         id="blue_panel_blue_cards"
+         scale="0.3 0.3"
+         offsetXY="-6 29"
+         fontStyle="Bold"
+         fontSize="36"
+         color="#FFFFFF"
+      >0</Text>
+      <Text
+         id="blue_attack_underline"
+         offsetXY="24 39"
+         scale="1.5 1.5"
+         fontStyle="Bold"
+         fontSize="72"
+         color="#FFFFFF"
+      ></Text>
+      <Text
+         id="blue_attack"
+         offsetXY="24 39"
+         scale="1.5 1.5"
+         fontStyle="Bold"
+         fontSize="72"
+         color="#FFFFFF"
+      >0</Text>
+      </Panel>
+      ]])
+  else
+    self.UI.setXml([[
+      <Panel
+         id="red_panel"
+         visibility="Red"
+         active="false"
+         position="0 -300 -5"
+         rotation="0 0 0"
+         scale="5.46 5.46"
+         rectAlignment="MiddleCenter"
+         width="80"
+         height="96"
+         image="ingame_gui_background"
+         raycastTarget="false"
+      >
+      <Image
+         offsetXY="0 34"
+         width="80"
+         height="24"
+         image="ingame_red_panel_overlay"
+         raycastTarget="false"
+      ></Image>
+      <Text
+         id="red_panel_blue_cards"
+         scale="0.3 0.3"
+         offsetXY="-6 39"
+         fontStyle="Bold"
+         fontSize="36"
+         color="#FFFFFF"
+      >0</Text>
+      <Text
+         id="red_panel_red_cards"
+         scale="0.3 0.3"
+         offsetXY="-6 29"
+         fontStyle="Bold"
+         fontSize="36"
+         color="#FFFFFF"
+      >0</Text>
+      </Panel>
+      ]])
+  end
 end
 
 function onCollisionEnter(collision_info)
@@ -351,6 +558,9 @@ function handleBotSpawn(params)
   end
 end
 
+--------------------------------------------------------------------------------
+-- Init Bot GUI
+--------------------------------------------------------------------------------
 function initGUIHolder(cardObject, holderObject)
   -- Set damage and damage values.
   -- TODO is there a way to save/load variables on objects like this?
@@ -364,6 +574,10 @@ function initGUIHolder(cardObject, holderObject)
   cardObject.setVar("linkedGUIHolder", holderObject)
 end
 
+
+--------------------------------------------------------------------------------
+-- Finish Bot GUI Init
+--------------------------------------------------------------------------------
 function finishInitGUIHolder(cardObject, holderObject)
   holderObject.UI.setAttribute("card_gui", "visibility", owner)
   holderObject.UI.setAttribute("card_gui", "active", true)
@@ -375,11 +589,10 @@ function finishInitGUIHolder(cardObject, holderObject)
   holderObject.UI.setAttribute("opponent_card_gui", "active", true)
 end
 
-function finishInitFlipGUI()
-  self.UI.setAttribute("flip_gui", "visibility", owner)
-  self.UI.setAttribute("flip_gui", "active", true)
-end
 
+--------------------------------------------------------------------------------
+-- Handle card flip
+--------------------------------------------------------------------------------
 function handleCardFlip(params)
   local position = self.getPosition()
   local object = params.cardObject
@@ -411,8 +624,9 @@ function handleCardFlip(params)
   print("Def: " .. flipDefense)
   print("Spc: " .. flipSpecial)
 end
-]]
+]=]
 -- END playerPlaymatScript
+
 
 playmatGUIXMLScript = [[
 <Panel
