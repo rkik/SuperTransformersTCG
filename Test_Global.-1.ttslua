@@ -62,7 +62,7 @@ function modernSetupCoroutine()
   blueBoard = getObjectFromGUID(blueBoardguid)
   blueBoard.setName('Blue')
   blueBoard.setLuaScript(playerPlaymatScript)
-  blueBoard.interactable = false
+  blueBoard.interactable = true
 
   redMatZone = getObjectFromGUID(redMatZoneguid)
   redBoard = getObjectFromGUID(redBoardguid)
@@ -384,19 +384,21 @@ function onload()
     owner = 'Red'
   end
 
+  --scale="5.46 5.46"
+  --image="ingame_gui_background"
   if owner == 'Blue' then
+
+    print("owner " .. owner)
     self.UI.setXml([[
       <Panel
          id="blue_panel"
-         visibility="Blue"
-         active="false"
-         position="0 -300 -5"
+         visibility="Host"
+         active="true"
+         position="0 0 -11"
          rotation="0 0 0"
-         scale="5.46 5.46"
          rectAlignment="MiddleCenter"
          width="80"
          height="96"
-         image="ingame_gui_background"
          raycastTarget="false"
       >
       <Image
@@ -611,11 +613,11 @@ function handleCardFlip(params)
     if obj.tag == "Card" then
       -- Make sure they are face up and not being held
       cardRotation = obj.getRotation()
-      print("rot: " .. cardRotation.z)
+      --print("rot: " .. cardRotation.z)
       if ((obj.getVar("curLiftingPlayer") == nil) and
           ((cardRotation.z > 340) or (cardRotation.z < 20))) then
         stats = Global.call("getStatsFromBattleCardsList", { obj.getName() })
-        print(obj.getName())
+        --print(obj.getName())
         if stats ~= false then
           flipAttack = flipAttack + stats["attack"]
           flipDefense = flipDefense + stats["defense"]
@@ -624,10 +626,10 @@ function handleCardFlip(params)
       end
     end
   end
-  print("Atk: " .. flipAttack)
-  print("Def: " .. flipDefense)
-  print("Spc: " .. flipSpecial)
-  updateFlipGuiNumberValue(flipAttack, "blue_attack")
+  --print("Atk: " .. flipAttack)
+  --print("Def: " .. flipDefense)
+  --print("Spc: " .. flipSpecial)
+  Global.getVar("blueBoard").UI.setAttribute("blue_attack", "text", flipAttack)
 end
 
 
@@ -638,8 +640,10 @@ function updateFlipGuiNumberValue(value, gui_element)
   local gui_element_underline = gui_element .. "_underline"
 
   if blueBoard ~= nil then
-    blueBoard.UI.setAttribute(gui_element, "text", damage)
-    --self.UI.setAttribute("opponent_view_damage", "text", damage)
+
+    print(gui_element .. value)
+    self.UI.setAttribute(gui_element, "text", value)
+    --self.UI.setAttribute("opponent_view_damage", "text", value)
 
     if ((value == 6) or (value == 9)) then
       blueBoard.UI.setAttribute("gui_element_underline", "text", "_")
