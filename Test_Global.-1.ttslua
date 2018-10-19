@@ -359,7 +359,7 @@ function onChat(message, chatPlayer)
   elseif message == "!showGUI" then
     showPlaymatGui(chatPlayer.color, true)
     printToAll("GUI visible", {0,0.8,0})
-    else
+  else
     -- Nothing needs done.
   end
 end
