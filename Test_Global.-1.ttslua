@@ -9,7 +9,7 @@ function onLoad()
   -- In case the mod was just loaded, start as Blue so the menu is right side up.
   Player.White.changeColor('Blue')
 
-  TRANSFORMERS_TCG_VERSION = "0.0.2"
+  TRANSFORMERS_TCG_VERSION = "0.0.3"
 
   blueMatZone = nil
   blueMatZoneguid = 'c57486'
@@ -19,12 +19,13 @@ function onLoad()
 
   redBoardguid = '401f2a'
   redBoard = nil
-
   blueBoardguid = 'd67403'
   blueBoard = nil
 
   blueFlipZoneguid = '5caf00'
   blueFlipZone = nil
+  redFlipZoneguid = '4eeb2d'
+  redFlipZone = nil
 
   bluePanelMaximized       = true
   blueHandCount            = 0
@@ -64,6 +65,7 @@ function modernSetupCoroutine()
   blueBoard.setLuaScript(playerPlaymatScript)
   blueBoard.interactable = true
 
+  redFlipZone = getObjectFromGUID(redFlipZoneguid)
   redMatZone = getObjectFromGUID(redMatZoneguid)
   redBoard = getObjectFromGUID(redBoardguid)
   redBoard.setName('Red')
@@ -256,23 +258,23 @@ function periodicHandCheckCoroutine()
   end
 
   blueBoard.call('handleCardFlip', {cardObject=dropObject, zone=blueFlipZone})
-  --redBoard.call('handleCardFlip', {cardObject=dropObject, zone=redFlipZone})
+  redBoard.call('handleCardFlip', {cardObject=dropObject, zone=redFlipZone})
 
   -- Update UI elements.
-  UI.setAttribute("blue_panel_blue_cards", "text", blueHandCount)
-  UI.setAttribute("blue_panel_red_cards", "text", redHandCount)
+  --UI.setAttribute("blue_panel_blue_cards", "text", blueHandCount)
+  --UI.setAttribute("blue_panel_red_cards", "text", redHandCount)
 
-  UI.setAttribute("red_panel_blue_cards", "text", blueHandCount)
-  UI.setAttribute("red_panel_red_cards", "text", redHandCount)
+  --UI.setAttribute("red_panel_blue_cards", "text", blueHandCount)
+  --UI.setAttribute("red_panel_red_cards", "text", redHandCount)
 
   if blueBoard != nil then
-    blueBoard.UI.setAttribute("blue_panel_blue_cards", "text", blueHandCount)
-    blueBoard.UI.setAttribute("blue_panel_red_cards", "text", redHandCount)
+    --blueBoard.UI.setAttribute("blue_panel_blue_cards", "text", blueHandCount)
+    --blueBoard.UI.setAttribute("blue_panel_red_cards", "text", redHandCount)
   end
 
   if redBoard != nil then
-    redBoard.UI.setAttribute("red_panel_blue_cards", "text", blueHandCount)
-    redBoard.UI.setAttribute("red_panel_red_cards", "text", redHandCount)
+    --redBoard.UI.setAttribute("red_panel_blue_cards", "text", blueHandCount)
+    --redBoard.UI.setAttribute("red_panel_red_cards", "text", redHandCount)
   end
 
   return 1
@@ -384,105 +386,7 @@ function onload()
     owner = 'Red'
   end
 
-  --scale="5.46 5.46"
-  --image="ingame_gui_background"
-  if owner == 'Blue' then
-
-    print("owner " .. owner)
-    self.UI.setXml([[
-      <Panel
-         id="blue_panel"
-         visibility="Host"
-         active="true"
-         position="0 0 -11"
-         rotation="0 0 0"
-         rectAlignment="MiddleCenter"
-         width="80"
-         height="96"
-         raycastTarget="false"
-      >
-      <Image
-         offsetXY="0 34"
-         width="80"
-         height="24"
-         image="ingame_blue_panel_overlay"
-         raycastTarget="false"
-      ></Image>
-      <Text
-         id="blue_panel_red_cards"
-         scale="0.3 0.3"
-         offsetXY="-6 39"
-         fontStyle="Bold"
-         fontSize="36"
-         color="#FFFFFF"
-      >0</Text>
-      <Text
-         id="blue_panel_blue_cards"
-         scale="0.3 0.3"
-         offsetXY="-6 29"
-         fontStyle="Bold"
-         fontSize="36"
-         color="#FFFFFF"
-      >0</Text>
-      <Text
-         id="blue_attack_underline"
-         offsetXY="24 39"
-         scale="1.5 1.5"
-         fontStyle="Bold"
-         fontSize="72"
-         color="#FFFFFF"
-      ></Text>
-      <Text
-         id="blue_attack"
-         offsetXY="24 39"
-         scale="1.5 1.5"
-         fontStyle="Bold"
-         fontSize="72"
-         color="#FFFFFF"
-      >0</Text>
-      </Panel>
-      ]])
-  else
-    self.UI.setXml([[
-      <Panel
-         id="red_panel"
-         visibility="Red"
-         active="false"
-         position="0 -300 -5"
-         rotation="0 0 0"
-         scale="5.46 5.46"
-         rectAlignment="MiddleCenter"
-         width="80"
-         height="96"
-         image="ingame_gui_background"
-         raycastTarget="false"
-      >
-      <Image
-         offsetXY="0 34"
-         width="80"
-         height="24"
-         image="ingame_red_panel_overlay"
-         raycastTarget="false"
-      ></Image>
-      <Text
-         id="red_panel_blue_cards"
-         scale="0.3 0.3"
-         offsetXY="-6 39"
-         fontStyle="Bold"
-         fontSize="36"
-         color="#FFFFFF"
-      >0</Text>
-      <Text
-         id="red_panel_red_cards"
-         scale="0.3 0.3"
-         offsetXY="-6 29"
-         fontStyle="Bold"
-         fontSize="36"
-         color="#FFFFFF"
-      >0</Text>
-      </Panel>
-      ]])
-  end
+  self.UI.setXml(Global.getVar("playmatGUIXMLScript"))
 end
 
 function onCollisionEnter(collision_info)
@@ -629,7 +533,9 @@ function handleCardFlip(params)
   --print("Atk: " .. flipAttack)
   --print("Def: " .. flipDefense)
   --print("Spc: " .. flipSpecial)
-  Global.getVar("blueBoard").UI.setAttribute("blue_attack", "text", flipAttack)
+
+  self.UI.setAttribute("attack", "text", flipAttack)
+  self.UI.setAttribute("defense", "text", flipDefense)
 end
 
 
@@ -661,8 +567,8 @@ end
 playmatGUIXMLScript = [[
 <Panel
    id="flip_gui"
-   active="false"
-   position="0 0 0"
+   active="true"
+   position="0 0 -11"
    rotation="0 0 180"
    rectAlignment="MiddleCenter"
    width="128"
@@ -672,17 +578,33 @@ playmatGUIXMLScript = [[
 <Text
    id="attack_underline"
    offsetXY="0 0"
-   scale="1.5 1.5"
+   scale="1 1"
    fontStyle="Bold"
-   fontSize="72"
+   fontSize="30"
    color="#FFFFFF"
 ></Text>
 <Text
    id="attack"
    offsetXY="0 0"
-   scale="1.5 1.5"
+   scale="1 1"
    fontStyle="Bold"
-   fontSize="72"
+   fontSize="30"
+   color="#FFFFFF"
+>0</Text>
+<Text
+   id="defense_underline"
+   offsetXY="0 30"
+   scale="1 1"
+   fontStyle="Bold"
+   fontSize="30"
+   color="#FFFFFF"
+></Text>
+<Text
+   id="defense"
+   offsetXY="0 30"
+   scale="1 1"
+   fontStyle="Bold"
+   fontSize="30"
    color="#FFFFFF"
 >0</Text>
 </Panel>
