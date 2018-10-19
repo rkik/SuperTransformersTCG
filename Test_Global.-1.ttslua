@@ -286,6 +286,19 @@ end
 
 
 --------------------------------------------------------------------------------
+-- GUI Visibility
+--------------------------------------------------------------------------------
+function showPlaymatGui(playerColor, showGui)
+  print(playerColor)
+  if showGui == true then
+    -- Show the gui for the playerColor
+  else
+    -- Hide the gui for the playerColor
+  end
+end
+
+
+--------------------------------------------------------------------------------
 -- Bot Search
 --------------------------------------------------------------------------------
 function searchCardInBotsList(params)
@@ -325,20 +338,28 @@ function onChat(message, chatPlayer)
     printToColor("", chatPlayer.color, {1,1,1})
     printToColor("Chat commands:", chatPlayer.color, {1,1,1})
     printToColor("==================", chatPlayer.color, {1,1,1})
-    printToColor("!help                      Print this message", chatPlayer.color, {1,1,1})
+    printToColor("!help - Print this message", chatPlayer.color, {1,1,1})
     printToColor("", chatPlayer.color, {1,1,1})
-    printToColor("!disableBotGUI   Disables spawning of bot GUI", chatPlayer.color, {1,1,1})
-    printToColor("!enableBotGUI    Enables spawning of bot GUI", chatPlayer.color, {1,1,1})
+    printToColor("!disableScripting - Disables scripting (for deck building)", chatPlayer.color, {1,1,1})
+    printToColor("!enableScripting - Enables scripting", chatPlayer.color, {1,1,1})
+    printToColor("!hideGUI - Hide the playmat GUI", chatPlayer.color, {1,1,1})
+    printToColor("!showGUI - Show the playmat GUI", chatPlayer.color, {1,1,1})
     printToColor("", chatPlayer.color, {1,1,1})
-  elseif message == "!disableBotGUI" then
+  elseif message == "!disableScripting" then
     areBoardsZonesEnabled = false
     setBoardZoneEnabled(areBoardsZonesEnabled)
-    printToAll("Bot GUI disabled.", {0,0.8,0})
-  elseif message == "!enableBotGUI" then
+    printToAll("Scripting disabled.", {0,0.8,0})
+  elseif message == "!enableScripting" then
     areBoardsZonesEnabled = true
     setBoardZoneEnabled(areBoardsZonesEnabled)
-    printToAll("Bot GUI enabled.", {0,0.8,0})
-  else
+    printToAll("Scripting enabled.", {0,0.8,0})
+  elseif message == "!hideGUI" then
+    showPlaymatGui(chatPlayer.color, false)
+    printToAll("GUI hidden", {0,0.8,0})
+  elseif message == "!showGUI" then
+    showPlaymatGui(chatPlayer.color, true)
+    printToAll("GUI visible", {0,0.8,0})
+    else
     -- Nothing needs done.
   end
 end
@@ -407,6 +428,13 @@ function handleBotSpawn(params)
     if cardDescription == 'Bot' then
       isBotCard = true
       object.setVar("spawned", true)
+    else
+      -- Check the card list
+      botFound = Global.call("searchCardInBotsList", { object.getName() })
+      if botFound ~= false then
+        isBotCard = true
+        object.setVar("spawned", true)
+      end
     end
 
     -- For bot cards, create XML GUI

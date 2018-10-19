@@ -1,11 +1,23 @@
 Add deck and scrap zone symbols to board.
 
 Add hand counts for each player
+    - Hand count is present.  Needs to be added to GUI
 
 Add flip zone that counts attack and defense
+    - Zones added, logic works, gui needs cleanup
 
 Add full card list with details
+    - Added.  Needs testing
 
 Use card list to determine Bot status - for portability
+    - Added. Needs testing
 
 Update bot images to hi-res versions
+
+Shrink the bot zone so that it is only the top edge of the board.
+    Should help against running the bot search on every played card.
+
+Move boards so there's more room to play cards in between
+
+Add hide/show UI options to chat
+    Should only apply to the player setting the option
