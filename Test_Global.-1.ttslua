@@ -11,31 +11,34 @@ function onLoad()
 
   TRANSFORMERS_TCG_VERSION = "0.0.3"
 
-  blueMatZone = nil
-  blueMatZoneguid = 'c57486'
-  redMatZone = nil
-  redMatZoneguid = '349950'
-  areBoardsZonesEnabled = true
-
-  redBoardguid = '401f2a'
-  redBoard = nil
+  -- Blue GUI IDs
   blueBoardguid = 'd67403'
-  blueBoard = nil
-
+  blueMatZoneguid = 'c57486'
   blueFlipZoneguid = '5caf00'
-  blueFlipZone = nil
+
+  -- Red GUI IDs
+  redBoardguid = '401f2a'
+  redMatZoneguid = '349950'
   redFlipZoneguid = '4eeb2d'
+
+  -- Objects
+  blueBoard = nil
+  blueMatZone = nil
+  blueFlipZone = nil
+  redBoard = nil
+  redMatZone = nil
   redFlipZone = nil
 
-  bluePanelMaximized       = true
-  blueHandCount            = 0
-  redPanelMaximized        = true
-  redHandCount             = 0
+  areBoardsZonesEnabled   = true
+  bluePanelMaximized      = true
+  redPanelMaximized       = true
+  blueHandCount           = 0
+  redHandCount            = 0
 
   startLuaCoroutine(self, 'modernSetupCoroutine')
 
-  -- Start a repeating function to check hand counts.
-  Wait.time(periodicHandCheck, 0.5)
+  -- Start a repeating function to check things.
+  Wait.time(periodicStatusUpdate, 0.5)
 
   -- Use a small startup delay that blocks things from spawning.
   loadDelayFinished        = false
@@ -63,7 +66,7 @@ function modernSetupCoroutine()
   blueBoard = getObjectFromGUID(blueBoardguid)
   blueBoard.setName('Blue')
   blueBoard.setLuaScript(playerPlaymatScript)
-  blueBoard.interactable = true
+  blueBoard.interactable = false
 
   redFlipZone = getObjectFromGUID(redFlipZoneguid)
   redMatZone = getObjectFromGUID(redMatZoneguid)
@@ -79,10 +82,9 @@ end
 
 
 --------------------------------------------------------------------------------
--- Periodic Update
+-- Periodic Update - The onUpdate event is called once per frame
 --------------------------------------------------------------------------------
 function onUpdate()
-  --[[ The onUpdate event is called once per frame. --]]
 end
 
 
@@ -98,9 +100,6 @@ function onObjectDrop(playerColor, dropObject)
       blueBoard.call('handleBotSpawn', {cardObject=dropObject})
     elseif (dropObject.getVar("curMatZone") == "Red") then
       redBoard.call('handleBotSpawn', {cardObject=dropObject})
-    --elseif (dropObject.getVar("curMatZone") == "BlueFlip") then
-    --  blueBoard.call('handleCardFlip', {cardObject=dropObject, zone=blueFlipZone})
-    --  print("flip on drop")
     else
       -- Nothing needs done.
     end
@@ -137,12 +136,6 @@ function onObjectEnterScriptingZone(zone, enterObject)
     elseif (zone == redMatZone) then
       enterObject.setVar("curMatZone", "Red")
       spawnRedPerspective = true
-    --elseif (zone == blueFlipZone) then
-    --  enterObject.setVar("curMatZone", "BlueFlip")
-    --  if (enterObject.getVar("curLiftingPlayer") == nil) then
-    --    blueBoard.call('handleCardFlip', {cardObject=enterObject, zone=blueFlipZone})
-    --    print("flip on")
-    --  end
     end
 
     -- Only check for spawning here if no one is currently lifting the card.
@@ -177,11 +170,6 @@ function onObjectLeaveScriptingZone(zone, leaveObject)
         linkedGUIHolder.UI.setAttribute("card_gui", "active", false)
         linkedGUIHolder.UI.setAttribute("opponent_card_gui", "active", false)
       end
-
-    --elseif ((zone == blueFlipZone)) then
-    --  leaveObject.setVar("curMatZone", nil)
-    --  blueBoard.call('handleCardFlip', {cardObject=leaveObject, zone=blueFlipZone})
-    --  print("flip off")
     end
   end
 end
@@ -236,18 +224,18 @@ end
 --------------------------------------------------------------------------------
 -- Hand Check
 --------------------------------------------------------------------------------
-function periodicHandCheck()
+function periodicStatusUpdate()
   -- Use a coroutine to avoid synchronization problems.
-  startLuaCoroutine(self, "periodicHandCheckCoroutine")
+  startLuaCoroutine(self, "periodicStatusUpdateCoroutine")
 
-  Wait.time(periodicHandCheck, 0.5)
+  Wait.time(periodicStatusUpdate, 0.5)
 end
 
 
 --------------------------------------------------------------------------------
 -- Hand Check Coroutine
 --------------------------------------------------------------------------------
-function periodicHandCheckCoroutine()
+function periodicStatusUpdateCoroutine()
   -- Scan for cards.
   if Player["blue"] != nil then
     blueHandCount = #(Player["blue"].getHandObjects())
@@ -387,6 +375,7 @@ function onload()
   end
 
   self.UI.setXml(Global.getVar("playmatGUIXMLScript"))
+  Wait.time(finishInitPlaymatGUI, 0.2)
 end
 
 function onCollisionEnter(collision_info)
@@ -477,7 +466,7 @@ function initGUIHolder(cardObject, holderObject)
   holderObject.setVar("damage", 0)
   holderObject.setVar("owner", owner)
 
-  holderObject.setLuaScript(Global.getVar("characterGUILuaScript"))
+  holderObject.setLuaScript(Global.getVar("botGUILuaScript"))
   Wait.time(function() finishInitGUIHolder(cardObject, holderObject) end, 0.2)
 
   cardObject.setVar("linkedGUIHolder", holderObject)
@@ -500,6 +489,21 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Finish Playmat GUI Init
+--------------------------------------------------------------------------------
+function finishInitPlaymatGUI()
+  self.UI.setAttribute("playmat_gui", "visibility", owner)
+  self.UI.setAttribute("playmat_gui", "active", true)
+  if (owner == 'Blue') then
+    self.UI.setAttribute("opponent_playmat_gui", "visibility", 'Red|Grey|Black')
+  else
+    self.UI.setAttribute("opponent_playmat_gui", "visibility", 'Blue|Grey|Black')
+  end
+  self.UI.setAttribute("opponent_playmat_gui", "active", true)
+end
+
+
+--------------------------------------------------------------------------------
 -- Handle card flip
 --------------------------------------------------------------------------------
 function handleCardFlip(params)
@@ -517,11 +521,9 @@ function handleCardFlip(params)
     if obj.tag == "Card" then
       -- Make sure they are face up and not being held
       cardRotation = obj.getRotation()
-      --print("rot: " .. cardRotation.z)
       if ((obj.getVar("curLiftingPlayer") == nil) and
           ((cardRotation.z > 340) or (cardRotation.z < 20))) then
         stats = Global.call("getStatsFromBattleCardsList", { obj.getName() })
-        --print(obj.getName())
         if stats ~= false then
           flipAttack = flipAttack + stats["attack"]
           flipDefense = flipDefense + stats["defense"]
@@ -530,12 +532,10 @@ function handleCardFlip(params)
       end
     end
   end
-  --print("Atk: " .. flipAttack)
-  --print("Def: " .. flipDefense)
-  --print("Spc: " .. flipSpecial)
 
   self.UI.setAttribute("attack", "text", flipAttack)
   self.UI.setAttribute("defense", "text", flipDefense)
+  self.UI.setAttribute("special", "text", flipSpecial)
 end
 
 
@@ -545,19 +545,15 @@ end
 function updateFlipGuiNumberValue(value, gui_element)
   local gui_element_underline = gui_element .. "_underline"
 
-  if blueBoard ~= nil then
+  self.UI.setAttribute(gui_element, "text", value)
+  --self.UI.setAttribute("opponent_view_damage", "text", value)
 
-    print(gui_element .. value)
-    self.UI.setAttribute(gui_element, "text", value)
-    --self.UI.setAttribute("opponent_view_damage", "text", value)
-
-    if ((value == 6) or (value == 9)) then
-      blueBoard.UI.setAttribute("gui_element_underline", "text", "_")
-      --self.UI.setAttribute("opponent_view_damage_underline", "text", "_")
-    else
-      blueBoard.UI.setAttribute("gui_element_underline", "text", "")
-      --self.UI.setAttribute("opponent_view_damage_underline", "text", "")
-    end
+  if ((value == 6) or (value == 9)) then
+    self.UI.setAttribute(gui_element_underline, "text", "_")
+    --self.UI.setAttribute("opponent_view_damage_underline", "text", "_")
+  else
+    self.UI.setAttribute(gui_element_underline, "text", "")
+    --self.UI.setAttribute("opponent_view_damage_underline", "text", "")
   end
 end
 ]=]
@@ -566,8 +562,8 @@ end
 
 playmatGUIXMLScript = [[
 <Panel
-   id="flip_gui"
-   active="true"
+   id="playmat_gui"
+   active="false"
    position="0 0 -11"
    rotation="0 0 180"
    rectAlignment="MiddleCenter"
@@ -593,7 +589,7 @@ playmatGUIXMLScript = [[
 >0</Text>
 <Text
    id="defense_underline"
-   offsetXY="0 30"
+   offsetXY="0 -30"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
@@ -601,7 +597,23 @@ playmatGUIXMLScript = [[
 ></Text>
 <Text
    id="defense"
-   offsetXY="0 30"
+   offsetXY="0 -30"
+   scale="1 1"
+   fontStyle="Bold"
+   fontSize="30"
+   color="#FFFFFF"
+>0</Text>
+<Text
+   id="special_underline"
+   offsetXY="0 -60"
+   scale="1 1"
+   fontStyle="Bold"
+   fontSize="30"
+   color="#FFFFFF"
+></Text>
+<Text
+   id="special"
+   offsetXY="0 -60"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
@@ -610,7 +622,7 @@ playmatGUIXMLScript = [[
 </Panel>
 
 <Panel
-   id="opponent_flip_gui"
+   id="opponent_playmat_gui"
    active="false"
    position="0 0 0"
    rotation="0 0 180"
@@ -646,7 +658,7 @@ playmatGUIXMLScript = [[
 --------------------------------------------------------------------------------
 -- Bot GUI Local Script
 --------------------------------------------------------------------------------
-characterGUILuaScript = [[
+botGUILuaScript = [[
 function onload()
   -- Load inside the script since global images do not work for players who join late.
   local resourceAssets = {
@@ -715,7 +727,7 @@ function damagePlus(buttonObject, playerColor, altClick)
   end
 end
 ]]
--- END characterGUILuaScript
+-- END botGUILuaScript
 
 characterGUIXMLScript = [[
 <Panel
