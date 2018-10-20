@@ -277,7 +277,9 @@ function setBoardZoneEnabled(boardZoneEnabled)
     redMatZone.setPosition({-4.00, 1.00, -9.00})
     blueMatZone.setPosition({4.00, 1.00, 9.00})
     redFlipZone.setPosition({21.14, 3.50, -7.39})
+    redFlipZone.setScale({4.50, 5.00, 5.00})
     blueFlipZone.setPosition({-21.14, 3.50, 7.39})
+    blueFlipZone.setScale({4.50, 5.00, 5.00})
   else
     -- Move zone below table to disable
     redMatZone.setPosition({-4.00, -2.00, -9.00})
@@ -336,14 +338,10 @@ end
 function getStatsFromBattleCardsList(params)
   local cardname = params[1]
 
-  print(cardname)
-
   -- check for any fixed card names for compatibility
   local fix_cardname = getFixedCardName(cardname)
   if fix_cardname ~= false then
     cardname = fix_cardname
-
-      print("fixed " .. cardname)
   end
 
   local databank = Global.getTable("battleCardsTable")
@@ -608,31 +606,36 @@ function handleCardFlip(params)
     end
   end
 
-  self.UI.setAttribute("attack", "text", flipAttack)
-  self.UI.setAttribute("defense", "text", flipDefense)
-  self.UI.setAttribute("special", "text", flipSpecial)
+  updateFlipGuiNumberValue("attack", flipAttack)
+  updateFlipGuiNumberValue("defense", flipDefense)
+  updateFlipGuiNumberValue("special", flipSpecial)
+  --self.UI.setAttribute("attack", "text", flipAttack)
+  --self.UI.setAttribute("defense", "text", flipDefense)
+  --self.UI.setAttribute("special", "text", flipSpecial)
 
-  self.UI.setAttribute("opponent_view_attack", "text", flipAttack)
-  self.UI.setAttribute("opponent_view_defense", "text", flipDefense)
-  self.UI.setAttribute("opponent_view_special", "text", flipSpecial)
+  --self.UI.setAttribute("opponent_view_attack", "text", flipAttack)
+  --self.UI.setAttribute("opponent_view_defense", "text", flipDefense)
+  --self.UI.setAttribute("opponent_view_special", "text", flipSpecial)
 end
 
 
 --------------------------------------------------------------------------------
 -- Display GUI value
 --------------------------------------------------------------------------------
-function updateFlipGuiNumberValue(value, gui_element)
+function updateFlipGuiNumberValue(gui_element, value)
   local gui_element_underline = gui_element .. "_underline"
+  local opponent_view_gui_element = "opponent_view_" .. gui_element
+  local opponent_view_gui_element_underline = opponent_view_gui_element .. "_underline"
 
   self.UI.setAttribute(gui_element, "text", value)
-  --self.UI.setAttribute("opponent_view_damage", "text", value)
+  self.UI.setAttribute(opponent_view_gui_element, "text", value)
 
   if ((value == 6) or (value == 9)) then
     self.UI.setAttribute(gui_element_underline, "text", "_")
-    --self.UI.setAttribute("opponent_view_damage_underline", "text", "_")
+    self.UI.setAttribute(opponent_view_gui_element_underline, "text", "_")
   else
     self.UI.setAttribute(gui_element_underline, "text", "")
-    --self.UI.setAttribute("opponent_view_damage_underline", "text", "")
+      self.UI.setAttribute(opponent_view_gui_element_underline, "text", "")
   end
 end
 ]=]
@@ -654,7 +657,7 @@ playmatGUIXMLScript = [[
 >
 <Text
    id="attack_underline"
-   offsetXY="0 0"
+   offsetXY="-60 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="20"
@@ -670,7 +673,7 @@ playmatGUIXMLScript = [[
 >0</Text>
 <Text
    id="defense_underline"
-   offsetXY="-10 0"
+   offsetXY="-9 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="20"
@@ -686,7 +689,7 @@ playmatGUIXMLScript = [[
 >0</Text>
 <Text
    id="special_underline"
-   offsetXY="-9 0"
+   offsetXY="43 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="20"
@@ -716,7 +719,7 @@ playmatGUIXMLScript = [[
 >
 <Text
    id="opponent_view_attack_underline"
-   offsetXY="0 0"
+   offsetXY="-60 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="20"
@@ -732,7 +735,7 @@ playmatGUIXMLScript = [[
 >0</Text>
 <Text
    id="opponent_view_defense_underline"
-   offsetXY="-10 0"
+   offsetXY="-9 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="20"
@@ -748,7 +751,7 @@ playmatGUIXMLScript = [[
 >0</Text>
 <Text
    id="opponent_view_special_underline"
-   offsetXY="-9 0"
+   offsetXY="43 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="20"
