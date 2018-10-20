@@ -371,8 +371,16 @@ playerPlaymatScript = [=[
 function onload()
   local resourceAssets = {
     {
-      name = "ingame_playmat_gui_overlay",
-      url = "http://cloud-3.steamusercontent.com/ugc/955219426330365274/56E5B53E0A0411B368760D72A62CB6C5E677B8BD/"
+      name = "ingame_deck_gui_overlay",
+      url = "http://cloud-3.steamusercontent.com/ugc/955219426330239417/7F064DFC082E82F9AFC6A3BF30C813602FAF2122/"
+    },
+    {
+      name = "ingame_battle_icons_gui_overlay",
+      url = "http://cloud-3.steamusercontent.com/ugc/955219426330423624/E01E6329BA7D889F436714EE0EF5F804F7CF6F10/"
+    },
+    {
+      name = "ingame_flipzone_gui_overlay",
+      url = "http://cloud-3.steamusercontent.com/ugc/955219426330423994/3656222438B24E5A0515B95027D2BDCFE713CB35/"
     }
   }
   self.UI.setCustomAssets(resourceAssets)
@@ -513,6 +521,10 @@ end
 function finishInitPlaymatGUI()
   self.UI.setAttribute("playmat_gui", "visibility", owner)
   self.UI.setAttribute("playmat_gui", "active", true)
+    self.UI.setAttribute("playmat_deck_gui", "visibility", owner)
+  self.UI.setAttribute("playmat_deck_gui", "active", true)
+    self.UI.setAttribute("playmat_flip_gui", "visibility", owner)
+  self.UI.setAttribute("playmat_flip_gui", "active", true)
   if (owner == 'Blue') then
     self.UI.setAttribute("opponent_playmat_gui", "visibility", 'Red|Grey|Black')
   else
@@ -583,13 +595,13 @@ playmatGUIXMLScript = [[
 <Panel
    id="playmat_gui"
    active="false"
-   position="0 0 -11"
+   position="-250 -90 -11"
    rotation="0 0 180"
    rectAlignment="MiddleCenter"
    width="155"
-   height="250"
+   height="16"
    scale=".6 .6"
-   image="ingame_playmat_gui_overlay"
+   image="ingame_battle_icons_gui_overlay"
    raycastTarget="false"
 >
 <Text
@@ -641,6 +653,32 @@ playmatGUIXMLScript = [[
    color="#FFFFFF"
 >0</Text>
 </Panel>
+
+<Panel
+   id="playmat_deck_gui"
+   active="false"
+   position="-250 90 -11"
+   rotation="0 0 180"
+   rectAlignment="MiddleCenter"
+   width="155"
+   height="125"
+   scale=".6 .6"
+   image="ingame_deck_gui_overlay"
+   raycastTarget="false"
+></Panel>
+
+<Panel
+   id="playmat_flip_gui"
+   active="false"
+   position="-250 -50 -11"
+   rotation="0 0 180"
+   rectAlignment="MiddleCenter"
+   width="155"
+   height="170"
+   scale=".6 .6"
+   image="ingame_flipzone_gui_overlay"
+   raycastTarget="false"
+></Panel>
 
 <Panel
    id="opponent_playmat_gui"
