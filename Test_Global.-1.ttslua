@@ -14,12 +14,12 @@ function onLoad()
   -- Blue GUI IDs
   blueBoardguid = 'd67403'
   blueMatZoneguid = 'c57486'
-  blueFlipZoneguid = '5caf00'
+  blueFlipZoneguid = 'e2c47b'
 
   -- Red GUI IDs
   redBoardguid = '401f2a'
   redMatZoneguid = '349950'
-  redFlipZoneguid = '4eeb2d'
+  redFlipZoneguid = 'd0af11'
 
   -- Objects
   blueBoard = nil
@@ -245,9 +245,6 @@ function periodicStatusUpdateCoroutine()
     redHandCount = #(Player["red"].getHandObjects())
   end
 
-  blueBoard.call('handleCardFlip', {cardObject=dropObject, zone=blueFlipZone})
-  redBoard.call('handleCardFlip', {cardObject=dropObject, zone=redFlipZone})
-
   -- Update UI elements.
   --UI.setAttribute("blue_panel_blue_cards", "text", blueHandCount)
   --UI.setAttribute("blue_panel_red_cards", "text", redHandCount)
@@ -256,11 +253,13 @@ function periodicStatusUpdateCoroutine()
   --UI.setAttribute("red_panel_red_cards", "text", redHandCount)
 
   if blueBoard != nil then
+    blueBoard.call('handleCardFlip', {cardObject=dropObject, zone=blueFlipZone})
     --blueBoard.UI.setAttribute("blue_panel_blue_cards", "text", blueHandCount)
     --blueBoard.UI.setAttribute("blue_panel_red_cards", "text", redHandCount)
   end
 
   if redBoard != nil then
+    redBoard.call('handleCardFlip', {cardObject=dropObject, zone=redFlipZone})
     --redBoard.UI.setAttribute("red_panel_blue_cards", "text", blueHandCount)
     --redBoard.UI.setAttribute("red_panel_red_cards", "text", redHandCount)
   end
@@ -372,16 +371,8 @@ playerPlaymatScript = [=[
 function onload()
   local resourceAssets = {
     {
-      name = "ingame_gui_background",
-      url = "http://cloud-3.steamusercontent.com/ugc/948454725666385380/A47369F346253BDE02F44153C4940D47AA0E6E67/"
-    },
-    {
-      name = "ingame_blue_panel_overlay",
-      url = "http://cloud-3.steamusercontent.com/ugc/948454725666384731/E921F14A80CFA7C3BC20C7D7C61D7319443D0169/"
-    },
-    {
-      name = "ingame_red_panel_overlay",
-      url = "http://cloud-3.steamusercontent.com/ugc/948454725666389779/69DCF9BD43E89F93351F7F2F8E87D5CFFD7E3EF7/"
+      name = "ingame_playmat_gui_overlay",
+      url = "http://cloud-3.steamusercontent.com/ugc/955219426330365274/56E5B53E0A0411B368760D72A62CB6C5E677B8BD/"
     }
   }
   self.UI.setCustomAssets(resourceAssets)
@@ -595,8 +586,10 @@ playmatGUIXMLScript = [[
    position="0 0 -11"
    rotation="0 0 180"
    rectAlignment="MiddleCenter"
-   width="128"
-   height="128"
+   width="155"
+   height="250"
+   scale=".6 .6"
+   image="ingame_playmat_gui_overlay"
    raycastTarget="false"
 >
 <Text
@@ -609,7 +602,7 @@ playmatGUIXMLScript = [[
 ></Text>
 <Text
    id="attack"
-   offsetXY="0 0"
+   offsetXY="-60 110"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
@@ -617,7 +610,7 @@ playmatGUIXMLScript = [[
 >0</Text>
 <Text
    id="defense_underline"
-   offsetXY="0 -30"
+   offsetXY="-10 110"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
@@ -625,7 +618,7 @@ playmatGUIXMLScript = [[
 ></Text>
 <Text
    id="defense"
-   offsetXY="0 -30"
+   offsetXY="-9 110"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
@@ -641,7 +634,7 @@ playmatGUIXMLScript = [[
 ></Text>
 <Text
    id="special"
-   offsetXY="0 -60"
+   offsetXY="43 110"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
