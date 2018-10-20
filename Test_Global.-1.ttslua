@@ -376,7 +376,7 @@ function onload()
     },
     {
       name = "ingame_battle_icons_gui_overlay",
-      url = "http://cloud-3.steamusercontent.com/ugc/955219426330423624/E01E6329BA7D889F436714EE0EF5F804F7CF6F10/"
+      url = "http://cloud-3.steamusercontent.com/ugc/955219426330626895/0DA2B5DCA276A2EBCCA9488FC627522C2214F5E8/"
     },
     {
       name = "ingame_flipzone_gui_overlay",
@@ -595,12 +595,12 @@ playmatGUIXMLScript = [[
 <Panel
    id="playmat_gui"
    active="false"
-   position="-250 -90 -11"
+   position="-265 -85 -11"
    rotation="0 0 180"
    rectAlignment="MiddleCenter"
    width="155"
-   height="16"
-   scale=".6 .6"
+   height="15"
+   scale="0.6 0.6"
    image="ingame_battle_icons_gui_overlay"
    raycastTarget="false"
 >
@@ -614,7 +614,7 @@ playmatGUIXMLScript = [[
 ></Text>
 <Text
    id="attack"
-   offsetXY="-60 110"
+   offsetXY="0 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
@@ -622,7 +622,7 @@ playmatGUIXMLScript = [[
 >0</Text>
 <Text
    id="defense_underline"
-   offsetXY="-10 110"
+   offsetXY="-10 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
@@ -630,7 +630,7 @@ playmatGUIXMLScript = [[
 ></Text>
 <Text
    id="defense"
-   offsetXY="-9 110"
+   offsetXY="-9 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
@@ -638,7 +638,7 @@ playmatGUIXMLScript = [[
 >0</Text>
 <Text
    id="special_underline"
-   offsetXY="0 -60"
+   offsetXY="-9 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
@@ -646,7 +646,7 @@ playmatGUIXMLScript = [[
 ></Text>
 <Text
    id="special"
-   offsetXY="43 110"
+   offsetXY="43 0"
    scale="1 1"
    fontStyle="Bold"
    fontSize="30"
@@ -657,11 +657,11 @@ playmatGUIXMLScript = [[
 <Panel
    id="playmat_deck_gui"
    active="false"
-   position="-250 90 -11"
+   position="-265 55 -11"
    rotation="0 0 180"
    rectAlignment="MiddleCenter"
    width="155"
-   height="125"
+   height="100"
    scale=".6 .6"
    image="ingame_deck_gui_overlay"
    raycastTarget="false"
@@ -670,11 +670,11 @@ playmatGUIXMLScript = [[
 <Panel
    id="playmat_flip_gui"
    active="false"
-   position="-250 -50 -11"
+   position="-265 -25 -11"
    rotation="0 0 180"
    rectAlignment="MiddleCenter"
    width="155"
-   height="170"
+   height="150"
    scale=".6 .6"
    image="ingame_flipzone_gui_overlay"
    raycastTarget="false"
